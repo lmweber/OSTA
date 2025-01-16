@@ -50,10 +50,15 @@ Imports:
     rtracklayer, 
     scater, 
     scran, 
+    SFEData,
     SpatialExperiment, 
+    SpatialFeatureExperiment,
+    spatialFDA,
+    spatstat,
     STexampleData, 
     spatialLIBD,
     tidyr,
+    Voyager,
     zoo
 Suggests: 
     BiocManager, 

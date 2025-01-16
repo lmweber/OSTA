@@ -1,0 +1,163 @@
+## Lattice data analysis
+
+### Introduction
+
+In this chapter we will use `r BiocStyle::Biocpkg("SpatialFeatureExperiment")` which is a Bioconductor package that integrates the `SpatialExperiment` with geometric annotations that are represented as Simple Features in the `r BiocStyle::CRANpkg('sf') `.
+
+Again, we will use the human breast cancer Xenium data set [@Janesick2023] in a `SpatialFeatureExperimen` object available through the `r BiocStyle::Biocpkg("SFEData")`. 
+
+We will use the `Voyager` @mosesVoyagerExploratorySinglecell2023 package that provides convenient wrappers around classic geospatial R packages such as `spdep` @pebesmaSpatialDataScience2023. For more details please consult their [comprehensive vignettes](https://pachterlab.github.io/voyager/index.html). 
+
+This part is based on the following vignette of the [pasta resource](https://robinsonlabuzh.github.io/pasta/00-overview-latSOD.html) @emons2024pasta.
+
+## The spatial weight matrix
+
+Lattice based spatial methods rely on the concept of neighbourhood. The neighbourhood defines the spatial dependency between locations. Therefore, the first step of lattice based spatial analysis is the construction of a spatial weight matrix. Here we will use a nearest-neighbourb based approach.
+
+::: {.callout-note collapse="true" title="Spatial weight matrix"}
+
+Different methods for the construction of the weight matrix exist, such as
+
+* contiguity-based neighbours (neighbours in direct contact),
+* graph-based neighbours (e.g., k-nearest neighbours),
+* distance-based neighbours,
+* higher order neighbours.
+
+A detailed overview can be found in the [documentation](https://r-spatial.github.io/spdep/articles/nb.html) of the package `spdep`.
+
+As different weight matrices  influence downstream results, anlysts should justify their choice of the weight matrix. A more detailed overview can be found in @pebesmaSpatialDataScience2023.
+:::
+
+```{r weight matrix, warning = FALSE, fig.width=25, fig.height=10}
+colGraph(sfe, "knn6") <-
+  findSpatialNeighbors(
+    sfe,
+    type = "cellSeg",
+    method = "knearneigh",
+    k = 6
+  )
+
+plotColGraph(sfe,
+  colGraphName = "knn6",
+  colGeometryName = "cellSeg"
+) + theme_void()
+```
+
+## Spatial autocorrelation
+
+Spatial autocorrelation measures similarity between spatial units (e.g., cells) while recognise that the units are not independent due to their spatial context. Spatial autocorrelation metrics can be global (summarising the entire study area) of view or local (provide statistic for each unit). In addition, there exist methods for univariate and multivariate comparisons of continous and categorical data @pebesmaSpatialDataScience2023.
+
+### Univariate measures - Moran's $I$
+
+Moran’s $I$ can be interpreted as the Pearson correlation between the value at a certain location and the average values of its neigbours. The global value is a weighted average of the respective local values @moranNotesContinuousStochastic1950.
+
+```{r calculate global moran, warning=FALSE}
+# get all gene probes
+geneProbes <- rowData(sfe)[rowData(sfe)$Type == "Gene Expression", "Symbol"]
+
+sfe <- runUnivariate(sfe,
+  type = "moran",
+  features = geneProbes,
+  colGraphName = "knn6",
+  BPPARAM = MulticoreParam(2)
+)
+```
+
+We can output and plot the three genes with highest Moran's $I$.
+
+```{r plot moran genes, fig.width=25, fig.height=10}
+topGenes <- rownames(sfe)[order(rowData(sfe)$moran_sample01, decreasing = TRUE)[1:3]]
+plotSpatialFeature(sfe, topGenes, ncol = 3)
+```
+
+We can further visualize this using when calculating and plotting local Moran's $I$ values @anselinLocalIndicatorsSpatial1995. The interpretation is analoug to the global counterpart. The higher the value the more similar is expression amongst neighbours of a cell. Negative values indicate local dissimilarity in expression.
+ 
+```{r local moran, fig.width=25, fig.height=10}
+sfe <- runUnivariate(sfe,
+  type = "localmoran",
+  features = topGenes,
+  colGraphName = "knn6",
+  BPPARAM = MulticoreParam(2)
+)
+
+plotLocalResult(sfe,
+                name = "localmoran",
+                features = topGenes,
+                colGeometryName = "centroids",
+                divergent = TRUE,
+                diverge_center = 0,
+                ncol = 3)
+```
+
+
+::: {.callout-note collapse="true" title="Statistical interpretation of autocorrelation"}
+During the interpretation of local autocorrelation measures, both the effect size (the value of the statistic) and the siginifiance level should be considered. Because we calculate significance on each spot individually, values should be corrected for multiple testing.
+
+```{r local moran pvals, fig.width=25, fig.height=10}
+plotLocalResult(sfe,
+                name = "localmoran",
+                features = topGenes,
+                attribute = "-log10p_adj",
+                colGeometryName = "centroids",
+                divergent = TRUE,
+                diverge_center = 0,
+                ncol = 3)
+```
+:::
+
+Multivariate measures – Lee's L
+
+Lee's $L$ combines the Pearson correlation coefficient and Moran's $I$ @leeDevelopingBivariateSpatial2001. This unified metric allows to evaluate how two continuous variables are related while accounting for their spatial dependencies. We will calculate the global metric on the 20 most highly (non-spatial)
+variable features.
+
+```{r lees l}
+hvgs <- getTopHVGs(sfe, n = 20)
+
+res <- calculateBivariate(sfe,
+                          type = "lee",
+                          feature1 = geneProbes,
+                          colGraphName =  "knn6"
+)
+```
+
+We will identify the gene pairs with highest Lee's $L$ value and then calculate and visualize the respective local measure.
+
+```{r select lees l}
+# select the 20 highest values in the res matrix
+genePairs <- which(res >= tail(sort(res), n=20)[1], arr.ind=TRUE)
+# take only pair of two genes
+genePairs <- genePairs[genePairs[,1] != genePairs[,2],]
+# 
+data.frame(i = rownames(res)[genePairs[,1]], j = colnames(res)[genePairs[,2]],
+           val = res[genePairs])
+```
+```{r local lees l, fig.width=20, fig.height=10}
+sfe <- runBivariate(
+  sfe,
+  "locallee",
+  colGraphName =  "knn6",
+  feature1 = c("EPCAM", "KRT7")
+)
+
+plotLocalResult(
+  sfe,
+  name = "locallee",
+  features = "KRT7__EPCAM",
+  colGeometryName = "centroids",
+  divergent = TRUE,
+  diverge_center = 0
+)
+```
+
+## Join count statistics
+
+> TODO with cluster labels
+
+```{r}
+resJc <- joincount.multi(as.factor(colData(sfe)$Cluster), colGraph(sfe, "knn6"))
+resJc[order(resJc[,"z-value"], decreasing = TRUE),]
+resJc[grepl("Invasive", rownames(resJc)),]
+```
+
+
+

@@ -1,6 +1,87 @@
-# Spatial statistics
+# Spatial Statistics
 
-- `r BiocStyle::Githubpkg("mjemons/spatialFDA")`
-- `r BiocStyle::Githubpkg("sgunz/sosta")`
+## Preamble
 
-## References {.unnumbered}
+### Introduction
+
+> Start with some words on what motivates this chapter.
+
+### Dependencies
+
+```{r loading, message = FALSE, warning = FALSE}
+library("SpatialFeatureExperiment")
+library("SFEData")
+library("Voyager")
+library("ggplot2")
+library("scran")
+library("BiocParallel")
+library("dplyr")
+library("spdep")
+library("openxlsx")
+library("spatialFDA")
+library("spatstat")
+
+bp <- MulticoreParam(10)
+set.seed(77)
+
+sfe <- JanesickBreastData()
+
+# load the official 10X annotations 
+labels <- read.xlsx("https://cdn.10xgenomics.com/raw/upload/v1695234604/Xenium%20Preview%20Data/Cell_Barcode_Type_Matrices.xlsx", sheet = 4)
+
+# add cell id to label dataframe
+labels$Barcode <- rownames(labels)
+# add the cell type labels to the spe
+matchedDf <- as.data.frame(colData(sfe)) |>
+  left_join(as.data.frame(labels), by = join_by("Barcode"))
+
+colData(sfe) <- DataFrame(matchedDf)
+
+sfe <- sfe[, colSums(counts(sfe)) > 0]
+sfe <- sfe[, !is.na(colData(sfe)[["Cluster"]])]
+sfe <- logNormCounts(sfe)
+
+xy <- spatialCoords(sfe)
+# basic theme for spatial plots
+theme_xy <- list(
+    coord_equal(expand=FALSE), 
+    theme_void(), theme(
+        plot.margin=margin(l=5),
+        legend.key=element_blank(),
+        panel.background=element_rect(fill="black")))
+```
+
+
+{{< include crs-spat-stat-lattice.qmd >}}
+
+{{< include crs-spat-stat-pp.qmd >}}
+
+> To keep things concise, use a collapsed box when you see fit (e.g., more details, advanced content, etc.):
+
+::: {.callout-note collapse="true" title="itbeme"}
+
+Anything can go in here (text/math, code chunks)...
+
+```r
+# do some fancy things
+```
+
+:::
+
+## Appendix
+
+### Saving {.unnumbered}
+
+> If applicable, save objects for downstream.
+
+```{r saving upstream}
+#saveRDS(obj, "xxx-foo.rds")
+```
+
+### Benchmarks {.unnumbered}
+
+> Bullet list of benchmark papers, ideally giving a 1-2 sentence summary of what's being compared (e.g., how many methods/datasets, which technologies, etc.).
+
+### References {.unnumbered}
+
+> Auto-populated; add nothing.
