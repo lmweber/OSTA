@@ -1,5 +1,61 @@
 # Sub-cellular analysis
 
+## Introduction
+
+### Data structure
+
+transcripts, segmentations of cells, MoleculeExperiment
+
+### Motivation
+
+Subcellular could follow real biology https://www.nature.com/articles/s41467-022-34004-2
+
+## Testing for subcellular localisation and colocalisation
+
+### Density testing
+
+### CellSP
+
+### Subcellular colocalisation
+
+e.g. SpaGNN
+
+## Quantifying cell compartments
+
+### Nucleus versus cell
+
+Many platforms provide nucleus and cell level data
+
+### Bento
+
+Converts cell x gene matrix into a cell x gene x compartment tensor/array. 
+You can perform downstream analysis (e.g. DE testing) for specific compartments, e.g. differential nuclear expression
+
+### SpatialFeatures
+
+Converts cell x gene counts matrix into cell x features matrix as informed by entropy of trancsriptcs according to subconcentric, superconcentric, subsector and supersector breakdowns of each cell.
 - `r BiocStyle::Githubpkg("SydneyBioX/SpatialFeatures")`
+
+## Factor modelling
+
+### FISHFactor
+
+Decomposition of cells and transcript patterns using spatial Poisson point processes.
+
+## Considerations
+
+### 2D versus 3D
+
+Majority of data is 2D projection of 3D structures.
+
+### Sample sizes for inference
+
+Tests for each cell - Does this cell have significant subcellular localisation for a gene?
+
+Test across multiple cells - Does this population of cells have significant subcellulsr location for a gene?
+
+Test across multiple samples - Is gene X differentially localised in cell type A versus cell type B?
+
+## Conclusion
 
 ## References {.unnumbered}
