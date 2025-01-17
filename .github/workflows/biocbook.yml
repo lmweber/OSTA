@@ -65,7 +65,7 @@ jobs:
           load: true
           tags: ${{ steps.meta.outputs.tags }}
           build-args: |
-            BIOC_VERSION="devel"
+            BIOC_VERSION=devel
 
       - name: 🚀 Push local Docker image to ghcr.io
         uses: docker/build-push-action@v4
@@ -74,7 +74,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           build-args: |
-            BIOC_VERSION="devel"
+            BIOC_VERSION=devel
 
       - name: 📚 Recover pkg artifacts generated during build in local Docker container (pkg bundle and book) 
         env:

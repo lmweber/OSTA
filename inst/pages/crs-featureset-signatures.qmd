@@ -1,4 +1,53 @@
 # Gene/feature-set signatures
 
+## Preamble
+
+### Introduction
+
+### Dependencies
+
+```{r deps, message=FALSE, warning=FALSE}
+library(AUCell)
+library(jsonlite)
+library(STexampleData)
+spe <- STexampleData::CosMx_lungCancer()
+spe <- spe[, colSums(assay(spe)) > 0]
+```
+
+## Feature set scoring
+
+The Molecular Signatures Database ([MSigDB](https://www.gsea-msigdb.org/gsea/msigdb)) is a resource of tens of thousands of annotated gene set.
+Here, we programmatically retrieve a list of hallmark gene sets:
+
+```{r MSigDB}
+# hallmark gene sets (H)
+pws <- paste0("HALLMARK_", c(
+    apoptosis="APOPTOSIS",
+    angiogenesis="ANGIOGENESIS",
+    EMT="EPITHELIAL_MESENCHYMAL_TRANSITION",
+    FA_metabolism="FATTY_ACID_METABOLISM",
+    glycolysis="GLYCOLYSIS",
+    hypoxia="HYPOXIA",
+    infl_resp="INFLAMMATORY_RESPONSE",
+    IFNa="INTERFERON_ALPHA_RESPONSE",
+    IFNg="INTERFERON_GAMMA_RESPONSE",
+    myogenesis="MYOGENESIS",
+    STAT3="IL6_JAK_STAT3_SIGNALING",
+    TNFa="TNFA_SIGNALING_VIA_NFKB",
+    WNT="WNT_BETA_CATENIN_SIGNALING"))
+set <- lapply(pws, \(.) {
+    tf <- tempfile(fileext=".json")
+    url <- sprintf("https://www.gsea-msigdb.org/gsea/msigdb/human/download_geneset.jsp?geneSetName=%s&fileType=json", .)
+    download.file(url, destfile=tf, mode="wb", quiet=TRUE)
+    jsonlite::fromJSON(tf)[[1]]$geneSymbols
+})
+sapply(set <- lapply(set, intersect, rownames(spe)), length)
+```
+
+```{r AUCell}
+mtx <- normalizeCounts(spe)
+rnk <- AUCell_buildRankings(mtx, plotStats=FALSE, verbose=FALSE)
+auc <- AUCell_calcAUC(set, rnk, verbose=FALSE)
+```
 
 ## References {.unnumbered}
