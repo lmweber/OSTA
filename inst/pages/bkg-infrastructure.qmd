@@ -1,5 +1,10 @@
 # Infrastructure {#sec-bkg-infrastructure}
 
+```{r setup, include=FALSE}
+# needed for `r BiocStyle::Biocpkg("<package_name>") etc.
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 ## Introduction
 
 Bioconductor provides several data classes for storing and manipulating spatial (transcript)omics datasets. 
@@ -24,7 +29,7 @@ Here, we give an overview of frequently encountered file formats, and their hand
 Data from sequencing-based assays typically include (cell) barcodes and metadata, and a matrix where rows/columns correspond to features/observations.
 These are typically provided as a set of *.csv* and *.mtx* files, or compressed versions thereof (e.g., *.gz*).
 For data from 10x Genomics, count data can be read into R using `r BiocStyle::Biocpkg("DropletUtils")`'s `read10xCounts()` function; data from other provides should be realizable using standard R readers.
-For large-scale datasets (say, 100,000s of cells), *.h5* files allow for out-of-memory representation of count matrices, represented as `r BiocStyle::Biocpkg("DelayedArray")`s in R.
+For large-scale datasets (say, 100,000s of cells), *.h5* files allow for out-of-memory representation of count matrices, represented as `r BiocStyle::Biocpkg("DelayedArray")`s in R (see `r BiocStyle::Biocpkg("HDF5Array")`).
 
 ### *.parquet*
 
@@ -36,7 +41,7 @@ Notably, `arrow`'s `read_parquet()` functions allows for delayed `r BiocStyle::C
 
 *.zarr* stores can be used to store N-dimensional arrays as a grid of "chunks", enabling parallelizable accession.
 For (bio)imaging data, different image scales (or resolutions) can be stored as different layers of a "pyramid", where the base/tip represents the full/lowest resolution.
-R-interfaces to *.zarr* are provided through `r BiocStyle::Biocpkg("Rarr")` (Bioc) and `r BiocStyle::CRANpkg("pizarr")` (CRAN).
+R-interfaces to *.zarr* are provided through `r BiocStyle::Biocpkg("Rarr")` (Bioc) and `r BiocStyle::CRANpkg("pizzarr")` (CRAN). 
 
 ## Data classes
 
@@ -61,13 +66,15 @@ For instance, `reducedDims` for low-dimensional embeddings of observations like 
 This class allows us to store datasets at the spot or cell level, i.e. data from sequencing-based platforms at the spot level, or data from imaging-based platforms aggregated to the cell level.
 
 SPE extends SCE with additional customizations to store spatial information, such as spatial coordinates and image files.
-A summary of the `SpatialExperiment` object structure is shown in the Figure \@ref(fig:spe). 
+A summary of the `SpatialExperiment` object structure is shown in the @fig-spe. 
 Briefly, a SPE object consists of (i) `assays` containing expression counts, (ii) `rowData` containing information on features, i.e. genes, (iii) `colData` containing information on spots or cells, including non-spatial and spatial metadata, (iv) `spatialCoords` containing spatial coordinates, and (v) `imgData` containing image data. 
 For spot-based data, a single `assay` named `counts` is used.
 
-```{r spe, echo = FALSE, out.width = "100%", fig.cap = "Overview of the `SpatialExperiment` data class for storing and manipulating spatial transcriptomics datasets within the Bioconductor framework."}
-knitr::include_graphics("../images/SpatialExperiment.png")
-```
+![Overview of the `SpatialExperiment` data class for storing and manipulating spatial transcriptomics datasets within the Bioconductor framework.](../images/SpatialExperiment.png){#fig-spe}
+
+<!-- # ```{r spe, echo = FALSE, out.width = "80%", fig.cap = "Overview of the `SpatialExperiment` data class for storing and manipulating spatial transcriptomics datasets within the Bioconductor framework."} -->
+<!-- # knitr::include_graphics("../images/SpatialExperiment.png") -->
+<!-- # ``` -->
 
 ### `SpatialFeatureExperiment`
 
@@ -84,14 +91,25 @@ Analyses at the aggregated cell level may, in turn, be carried out using an ME-d
 
 ### Other frameworks
 
-`r BiocStyle::Githubpkg("satijalab/seurat")` and `scanpy` [@Wolf2018-scanpy] provide purportedly comprehensive single-cell analysis pipelines in R and Python, respectively.
-Similarly, `r BiocStyle::Githubpkg("drieslab/Giotto")` [@Chen2023-Giotto] and `squidpy` [@Palla2022-squidpy] provide all-in-one frameworks for analyzing spatial omics data.
+There are other existing frameworks outside the scope of BioConductor that support spatially-aware analysis for both sequencing and imaging based platforms. `r BiocStyle::Githubpkg("satijalab/seurat")` and `scanpy` [@Wolf2018-scanpy] provide purportedly comprehensive single-cell analysis pipelines in R and Python, respectively, and incorporate few features to visualize and analyze spatial omic datasets. More recently developed packages such as `r BiocStyle::Githubpkg("drieslab/Giotto")` [@Chen2023-Giotto] (R), `r BiocStyle::Githubpkg("BIMSBbioinfo/VoltRon")` (R) [@Manukyan2023-VoltRon] and  `squidpy` (Python) [@Palla2022-squidpy] support all-in-one frameworks for analyzing spatial omics data and contain extensive sets of spatially aware algorithms. 
 
-The [`SpatialData`](https://spatialdata.scverse.org) [@Marconato2025-SpatialData] framework offers a suit of modules for loading, handling, as well as (static and interactive) visualization of divers spatial omics data (spanning imaging- and sequencing based data and different modalities).
+#### `Giotto`
+
+`r BiocStyle::Githubpkg("drieslab/Giotto")` [@Chen2023-Giotto] (or Giotto Suite) provides tools to process, analyze and visualize spatial multi-omics data at multiple scales and resolutions. The package supports the analysis of an extensive set of sequencing and imaging-based platforms with either transcriptomics and proteomics modailities such as Xenium, VisiumHD and CODEX (Akoya). `Giotto` provides utilities to manipulate spatial objects and images, detect spatial patterns and spatially aware clusters, and support database-based backed data using `r BiocStyle::Githubpkg("drieslab/dbverse")` for scalability.
+
+#### `VoltRon`
+
+`r BiocStyle::Githubpkg("BIMSBbioinfo/VoltRon")` package incorporates a framework that allows spatially aware alignment between datasets with observations that span across regions of interests (ROIs) and image tiles in addition to cells, spots and molecules. Shiny applications are provided to conduct both automated and manual spatial alignment across adjacent tissue sections where users can interactively manage images and choose landmarks points for co-registeration. `VoltRon` is also an end-to-end spatial omic analysis package, and support ondisk representations of spatially resolved datasets using *.zarr* and *.h5* backed `r BiocStyle::Biocpkg("DelayedArray")` objects. 
+
+#### `SpatialData` 
+
+The [`SpatialData`](https://spatialdata.scverse.org) [@Marconato2025-SpatialData] framework (@fig-spd) offers a suit of modules for loading, handling, as well as (static and interactive) visualization of divers spatial omics data (spanning imaging- and sequencing based data and different modalities).
 In essence, the container relies on 5 types of elements (images, labels, shapes, points, tables), which are represented on-disk using standardizes, OME-NGFF compliant file formats (*.zarr* for images, labels, and tables; *.parquet* for shapes and polygons), enabling unified and memory-efficient data representation and handling.
 
-```{r spd, echo = FALSE, out.width = "100%", fig.cap = "Overview of the scverse/Python `SpatialData` framework."}
-knitr::include_graphics("../images/SpatialData.png")
-```
+![Overview of the `SpatialExperiment` data class for storing and manipulating spatial transcriptomics datasets within the Bioconductor framework.](../images/SpatialData.png){#fig-spd}
+
+<!-- # ```{r spd, echo = FALSE, out.width = "80%", fig.cap = "Overview of the scverse/Python `SpatialData` framework."} -->
+<!-- # knitr::include_graphics("../images/SpatialData.png") -->
+<!-- # ``` -->
 
 ## References {.unnumbered}

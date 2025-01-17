@@ -1,6 +1,8 @@
 # Quality control {#sec-seq-quality-control}
 
-## Introduction
+## Preamble
+
+### Introduction
 
 Quality control (QC) procedures at the spot level aim to remove low-quality spots before further analysis. Low-quality spots can occur due to problems during library preparation or other experimental procedures. Examples include large proportions of dead cells due to cell damage during library preparation, and low mRNA capture efficiency due to inefficient reverse transcription or PCR amplification.
 
@@ -21,25 +23,33 @@ Low library size or low number of expressed features can indicate poor mRNA capt
 The first three characteristics listed above are also used for QC in scRNA-seq data. However, the expected distributions for high-quality spots are different (compared to high-quality cells in scRNA-seq), since spots may contain zero, one, or multiple cells.
 
 
-## Load previously saved data
+### Dependencies
 
-We start by loading the previously saved data object(s) (see @sec-seq-load-data-save-objects).
+Load packages for this chapter:
+
+```{r, message=FALSE}
+library(SpatialExperiment)
+library(ggspavis)
+library(scater)
+```
+
+Load previously saved data object (see @sec-seq-load-data-save-objects).
 
 ```{r, message=FALSE, results='hide'}
-library(SpatialExperiment)
 spe <- readRDS("seq-spe_load.rds")
 ```
 
 
-## Plot data
+## Methods adapted from single-cell RNA-seq
+
+In this section, we demonstrate QC methods adapted from single-cell RNA sequencing (scRNA-seq) workflows. These methods are applied at the spot level in the ST data.
+
+
+### Plot data
 
 As an initial check, plot the spatial coordinates (spots) in x-y dimensions on the tissue slide, to check that the object has loaded correctly and that the orientation is as expected.
 
 We use visualization functions from the [ggspavis](https://bioconductor.org/packages/ggspavis) package to generate plots.
-
-```{r, message=FALSE}
-library(ggspavis)
-```
 
 ```{r, fig.height=3.5}
 # plot spatial coordinates (spots)
@@ -47,17 +57,13 @@ plotSpots(spe)
 ```
 
 
-## Calculate QC metrics
+### Calculate QC metrics
 
 We calculate the QC metrics described above with a combination of methods from the `scater` [@McCarthy2017] package (for metrics that are also used for scRNA-seq data, where we treat spots as equivalent to cells) and our own functions.
 
 The QC metrics from `scater` can be calculated and added to the `SpatialExperiment` object as follows. Here, we also identify mitochondrial reads using their gene names, and pass these as an argument to `scater`.
 
 First, we subset the object to keep only spots over tissue. The remaining spots are background spots, which we are not interested in.
-
-```{r, message=FALSE}
-library(scater)
-```
 
 ```{r}
 # subset to keep only spots over tissue
@@ -77,7 +83,7 @@ head(colData(spe))
 ```
 
 
-## Selecting thresholds
+### Selecting thresholds
 
 The simplest option to apply the QC metrics is to select thresholds for each metric, and remove any spots that do not meet the thresholds for one or more metrics. Exploratory visualizations can be used to help select appropriate thresholds, which may differ depending on the dataset.
 
@@ -310,7 +316,7 @@ dim(spe)
 ```
 
 
-## Zero-cell and single-cell spots
+### Zero-cell and single-cell spots
 
 A particular characteristic of Visium data is that spots can contain zero, one, or multiple cells.
 
@@ -332,16 +338,23 @@ Only 6% of spots contain a single cell. If we restricted the analysis to these s
 Removing the spots containing zero cells (2% of spots) would also be problematic, since these spots can also contain biologically meaningful information. For example, in this brain dataset, the regions between cell bodies consists of neuropil (dense networks of axons and dendrites). In our paper [@Maynard2021], we explore the information contained in these neuropil spots.
 
 
-## Quality control at gene level
+## SpotSweeper
+
+<!-- New section for SpotSweeper -->
+
+
+## Gene-level quality control
 
 The sections above consider quality control at the spot level. In some datasets, it may also be appropriate to apply quality control procedures or filtering at the gene level. For example, certain genes may be biologically irrelevant for downstream analyses.
 
-However, here we make a distinction between quality control and feature selection. Removing biologically uninteresting genes (such as mitochondrial genes) may also be considered as part of feature selection, since there is no underlying experimental procedure that has failed. Therefore, we will discuss gene-level filtering in the @sec-seq-feature-selection chapter.
+However, here we make a distinction between quality control and feature selection. Removing biologically uninteresting genes (such as mitochondrial genes) may also be considered as part of feature selection, since there is no underlying experimental procedure that has failed. Therefore, we will discuss gene-level filtering in the @sec-seq-normalize-featselect-dimred chapter.
 
 
-## Save objects for later chapters {#sec-seq-quality-control-save-objects}
+## Appendix
 
-We also save the object(s) in `.rds` format for re-use within later chapters to speed up the build time of the book.
+### Saving {.unnumbered}
+
+Save object(s) in `.rds` format for re-use within later chapters to speed up the build time of the book.
 
 ```{r}
 # save object(s)
@@ -349,4 +362,9 @@ saveRDS(spe, file = "seq-spe_qc.rds")
 ```
 
 
-## References {.unnumbered}
+### Benchmarks {.unnumbered}
+
+<!-- Any benchmark papers to list -->
+
+
+### References {.unnumbered}
