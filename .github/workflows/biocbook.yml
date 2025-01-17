@@ -56,7 +56,7 @@ jobs:
         with:
           images: ghcr.io/${{ env.owner }}/${{ env.pkgname }}
           tags: |
-            $ver
+            ${{ env.ver }}
             ${{ env.pkgversion }}
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'devel') }}
 
