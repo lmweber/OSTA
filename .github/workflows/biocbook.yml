@@ -3,13 +3,13 @@ name: biocbook
 on:
   push:
     branches:
-      - devel
+      - sandbox
       - RELEASE_**
 
 jobs:
   build-push:
     runs-on: ubuntu-latest
-    name: build-book (${{ github.ref_name }})
+    name: build-book (devel)
     permissions:
       contents: write
       packages: write
@@ -53,7 +53,7 @@ jobs:
         with:
           images: ghcr.io/${{ env.owner }}/${{ env.pkgname }}
           tags: |
-            ${{ github.ref_name }}
+            "devel"
             ${{ env.pkgversion }}
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'devel') }}
 
@@ -65,7 +65,7 @@ jobs:
           load: true
           tags: ${{ steps.meta.outputs.tags }}
           build-args: |
-            BIOC_VERSION=${{ github.ref_name }}
+            BIOC_VERSION="devel"
 
       - name: 🚀 Push local Docker image to ghcr.io
         uses: docker/build-push-action@v4
@@ -74,7 +74,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           build-args: |
-            BIOC_VERSION=${{ github.ref_name }}
+            BIOC_VERSION="devel"
 
       - name: 📚 Recover pkg artifacts generated during build in local Docker container (pkg bundle and book) 
         env:
@@ -88,7 +88,7 @@ jobs:
 
       - name: 🏷 Get gh-branch directory to deploy to
         run: |
-          echo target_folder=$(echo ${{ github.ref_name }} | sed 's,RELEASE_,,' | tr '_' '.') >> "${GITHUB_ENV}"
+          echo target_folder=$(echo "devel" | sed 's,RELEASE_,,' | tr '_' '.') >> "${GITHUB_ENV}"
 
       - name: 🚀 Deploy book to Github Pages on versioned branch
         uses: JamesIves/github-pages-deploy-action@v4.4.3
