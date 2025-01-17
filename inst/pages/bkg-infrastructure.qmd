@@ -1,10 +1,5 @@
 # Infrastructure {#sec-bkg-infrastructure}
 
-```{r setup, include=FALSE}
-# needed for `r BiocStyle::Biocpkg("<package_name>") etc.
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 ## Introduction
 
 Bioconductor provides several data classes for storing and manipulating spatial (transcript)omics datasets. 
@@ -66,15 +61,13 @@ For instance, `reducedDims` for low-dimensional embeddings of observations like 
 This class allows us to store datasets at the spot or cell level, i.e. data from sequencing-based platforms at the spot level, or data from imaging-based platforms aggregated to the cell level.
 
 SPE extends SCE with additional customizations to store spatial information, such as spatial coordinates and image files.
-A summary of the `SpatialExperiment` object structure is shown in the @fig-spe. 
+A schematic of the `SpatialExperiment` object structure is shown in @fig-spe. 
 Briefly, a SPE object consists of (i) `assays` containing expression counts, (ii) `rowData` containing information on features, i.e. genes, (iii) `colData` containing information on spots or cells, including non-spatial and spatial metadata, (iv) `spatialCoords` containing spatial coordinates, and (v) `imgData` containing image data. 
 For spot-based data, a single `assay` named `counts` is used.
 
-![Overview of the `SpatialExperiment` data class for storing and manipulating spatial transcriptomics datasets within the Bioconductor framework.](../images/SpatialExperiment.png){#fig-spe}
-
-<!-- # ```{r spe, echo = FALSE, out.width = "80%", fig.cap = "Overview of the `SpatialExperiment` data class for storing and manipulating spatial transcriptomics datasets within the Bioconductor framework."} -->
-<!-- # knitr::include_graphics("../images/SpatialExperiment.png") -->
-<!-- # ``` -->
+```{r fig-spe, echo = FALSE, out.width = "80%", fig.cap = "Overview of the `SpatialExperiment` data class for storing and manipulating spatial transcriptomics datasets within the Bioconductor framework."}
+knitr::include_graphics("../images/SpatialExperiment.png")
+```
 
 ### `SpatialFeatureExperiment`
 
@@ -106,10 +99,8 @@ There are other existing frameworks outside the scope of BioConductor that suppo
 The [`SpatialData`](https://spatialdata.scverse.org) [@Marconato2025-SpatialData] framework (@fig-spd) offers a suit of modules for loading, handling, as well as (static and interactive) visualization of divers spatial omics data (spanning imaging- and sequencing based data and different modalities).
 In essence, the container relies on 5 types of elements (images, labels, shapes, points, tables), which are represented on-disk using standardizes, OME-NGFF compliant file formats (*.zarr* for images, labels, and tables; *.parquet* for shapes and polygons), enabling unified and memory-efficient data representation and handling.
 
-![Overview of the `SpatialExperiment` data class for storing and manipulating spatial transcriptomics datasets within the Bioconductor framework.](../images/SpatialData.png){#fig-spd}
-
-<!-- # ```{r spd, echo = FALSE, out.width = "80%", fig.cap = "Overview of the scverse/Python `SpatialData` framework."} -->
-<!-- # knitr::include_graphics("../images/SpatialData.png") -->
-<!-- # ``` -->
+```{r fig-spd, echo = FALSE, out.width = "80%", fig.cap = "Overview of the scverse/Python `SpatialData` framework."}
+knitr::include_graphics("../images/SpatialData.png")
+```
 
 ## References {.unnumbered}
