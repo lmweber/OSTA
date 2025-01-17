@@ -1,4 +1,55 @@
-# Dimensionality reduction
+# Dimensionality reduction for imaging-based ST data
 
+## Assumed data structure
+
+## Types of dimensionality reduction
+
+### Ignoring spatial coordinates
+
+#### PCA
+
+#### Autoencoders
+
+#### GLM-PCA (specific models)
+
+#### Feature selection
+
+p \< n
+
+### Utilising spatial information
+
+#### Augmenting X
+
+e.g. smoothing
+
+#### Constraining PCA
+
+e.g. GraphPCA
+
+#### Direct modelling of X and Y
+
+e.g. wSIR, partial least squares
+
+## Visualisation
+
+### UMAP
+
+### Side by side interactive visualisation
+
+### Visualising multiple samples at once
+
+## Considerations
+
+### Segmentation errors, "doublets"
+
+### Dealing with transcripts outside of cells
+
+e.g. segmentation free approaches like FICTURE
+
+### Influence of gene panel selection
+
+Prior selection of genes can prioritise different biological programs
+
+## Conclusion
 
 ## References {.unnumbered}
