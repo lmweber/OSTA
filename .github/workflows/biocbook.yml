@@ -68,7 +68,7 @@ jobs:
           load: true
           tags: ${{ steps.meta.outputs.tags }}
           build-args: |
-            BIOC_VERSION=$ver
+            BIOC_VERSION=devel
 
       - name: 🚀 Push local Docker image to ghcr.io
         uses: docker/build-push-action@v4
