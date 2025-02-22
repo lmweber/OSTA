@@ -23,6 +23,7 @@ book:
         - pages/seq-workflow-dlpfc.qmd
         - pages/seq-workflow-visium-crc.qmd
         - pages/seq-workflow-spatialibd.qmd
+        - pages/seq-workflow-visium-coloncancer.qmd
     - part: "Imaging-based platforms"
       chapters:
         - pages/img-introduction.qmd
@@ -32,7 +33,7 @@ book:
         - pages/img-neighbors.qmd
         - pages/img-cell-comm.qmd
         - pages/img-sub-cellular.qmd
-        - pages/img-workflow-xenium.qmd
+        - pages/img-workflow-xenium-coloncancer.qmd
         - pages/img-workflow-cosmx.qmd
     - part: "Technology-agnostic/cross-platform/downstream analyses"
       chapters:

@@ -1,5 +1,9 @@
 Version: 1.0
+<<<<<<< HEAD:PrinciplesSTA.Rproj
+ProjectId: 7d14cd64-6391-408a-b5d3-f48e76f22c07
+=======
 ProjectId: 4ea60cd0-d14d-49e4-89bb-ab9438af61b0
+>>>>>>> 834bd90a7b55c29a73206fb95a13e5273a830580:OSTA.Rproj
 
 RestoreWorkspace: Default
 SaveWorkspace: Default

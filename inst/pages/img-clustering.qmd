@@ -286,6 +286,9 @@ pbs <- aggregateAcrossCells(spe,
 pheatmap(mat=t(assay(pbs)), scale="column")
 ```
 
+
+## References {.unnumbered}
+=======
 <!-- I would do this for one of the results only, as to not make it overly complicated for the less proficient readers out there... I think doing a comparison is interesting as well, but might be best to have in a collapsed box, i.e., independent of the main content. The goal being not so much science (e.g., benchmarking), but providing a resource for others.
 
 ```{r DEG analysis, eval=FALSE, fig.width=8, fig.height=4}

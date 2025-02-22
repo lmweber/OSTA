@@ -8,29 +8,144 @@ Note that this is also a characteristic of ST data that is distinct from single-
 
 In this section, we will demonstrate methods to deconvolve cell types per spot.
 
+## Dependencies
+
+```{r deps, message=FALSE, warning=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)
+library(RColorBrewer)
+library(SpatialExperiment)
+library(STexampleData)
+library(ggspavis)
+
+# devtools::install_github("dmcable/spacexr", build_vignettes = FALSE)
+library(spacexr)
+
+# BiocManager::install("STdeconvolve")
+library(STdeconvolve)
+
+resultpath <- "~/Downloads"
+
+
+# basic theme for spatial plots
+theme_xy <- list(
+    coord_equal(expand=FALSE), 
+    theme_void(), theme(
+        plot.margin=margin(l=5),
+        legend.key=element_blank(),
+        panel.background=element_rect(fill="black")))
+```
+
+
+## Number of cells per spot
+
+The following figure provides an overview of why deconvolution is needed for Visium data. The number of cells per spot is a known metadata stored in a column in `colData()` in the DLPFC human prefrontal cortex (TODO: cite DLPFC) `SpatialExperiment` of object. We use a visualization function from [ggspavis](https://bioconductor.org/packages/ggspavis) to generate the plot.
+
+```{r, message=FALSE, results='hide'}
+vis_dlpfc <- STexampleData::Visium_humanDLPFC()
+head(colData(vis_dlpfc))
+```
+
+We see that spots in this human brain Visium dataset contain around 0-27 cells, with a median of 4. Therefore, it is plausible that some spots contain multiple cell types, and spot-level deconvolution could improve downstream analyses by deconvolving these cell types.
+
+```{r, message=FALSE, warnings=FALSE, fig.width=5, fig.height=4}
+# plot number of cells per spot
+plotSpotQC(vis_dlpfc, plot_type = "histogram", x_metric = "cell_count") + 
+  geom_vline(xintercept = median(na.omit(vis_dlpfc$cell_count)), lty = "dashed") +
+  xlab("number of cells") + 
+  ggtitle("Number of cells per spot")
+```
+
+In this example of consecutive slices of breast cancer data (TODO: Janesick), we perform Visium cell-type deconvolution with Chromium reference.
+
 
 ## Load previously saved data
 
 We start by loading the previously saved data object(s).
 
 ```{r, message=FALSE, results='hide'}
-library(SpatialExperiment)
-spe <- readRDS("seq-spe_clustering.rds")
+vis_dlpfc <- STexampleData::Visium_humanDLPFC()
 ```
 
+# RCTD
 
-## Number of cells per spot
+## Run RCTD
 
-The following figure provides an overview of the number of cells per spot in this dataset, which is known in this dataset and stored in a column in `colData` in the `SpatialExperiment` object. We use a visualization function from [ggspavis](https://bioconductor.org/packages/ggspavis) to generate the plot.
+First, we create the reference single-cell matrix and the `spatialRNA` objects needed for running RCTD. We
 
-We see that spots in this dataset contain around 0-10 cells, with a mode of 3. Therefore, it is plausible that some spots contain multiple cell types, and spot-level deconvolution could improve downstream analyses by deconvolving these cell types.
+```{r}
+chrom <- readRDS(file.path())
 
-```{r, message=FALSE, warnings=FALSE, fig.width=5, fig.height=4}
-library(ggspavis)
+# Reference Chromium, unnormalized counts
+chrom_mat <- GetAssayData(chrom, slot = "counts")
+cell_types <- as.factor(chrom$Annotation); names(cell_types) <- colnames(chrom)
 
-# plot number of cells per spot
-plotSpotQC(spe, plot_type = "histogram", x_metric = "cell_count") + 
-  xlab("number of cells") + 
-  ggtitle("Number of cells per spot")
+ref <- Reference(chrom_mat, cell_types)
+
+# Visium to be deconvolved, unnormalized counts
+coords <- GetTissueCoordinates(vis)
+counts <- GetAssayData(vis, slot = "counts")
+
+puck <- SpatialRNA(coords, counts)
 ```
 
+We specify "full" mode here to indicate there can be many cells in a spot, and save RCTD results.
+
+```{r, warning=FALSE, eval = FALSE}
+# DO NOT RUN - TAKING TOO LONG
+myRCTD <- create.RCTD(puck, ref, max_cores = 4)
+myRCTD <- run.RCTD(myRCTD, doublet_mode = 'full')
+# saveRDS(myRCTD, "./intermediate_data/vis_RCTD.rds")
+```
+
+Organize cell-type deconvolution results, the weights should be normalized so the proportion of each cell type in a spot sums up to 1.
+
+```{r}
+myRCTD <- readRDS(file.path(resultpath, "vis_RCTD.rds"))
+results <- myRCTD@results
+norm_weights <- normalize_weights(results$weights)
+cell_type_names <- myRCTD@cell_type_info$info[[2]]
+spatialRNA <- myRCTD@spatialRNA
+barcodes <- colnames(myRCTD@spatialRNA@counts)
+```
+
+## Plot cell-type deconvolution
+
+Plot cell-type deconvolution result. We first check the deconvolution result for one cell-type. Here we set the intensity range based on the probability score range of this cell-type across all spots.
+
+```{r, message=FALSE, fig.width=5, fig.height=4.5}
+
+```
+
+10X Genomics implemented a speed-up verison of RCTD in a pull request. It can be installed via TODO. This version has been in the preprint TODO: Oliveria, 2024. 
+
+
+# STdeconvolve
+Another deconvolution tool is 
+
+## Run STdeconvolve
+```{r}
+
+```
+
+Other available tools include: 
+
+- R tools:
+  - [CARD](https://github.com/YMa-lab/CARD), 
+- Python tools:
+  - Cell2Location
+
+
+# Appendix
+
+## Saving {.unnumbered}
+
+## Benchmarks {.unnumbered}
+
+http://dx.doi.org/10.1093/bioinformatics/btz363
+http://dx.doi.org/10.1038/s41467-020-19015-1
+
+
+## References {.unnumbered}

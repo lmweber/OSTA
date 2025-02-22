@@ -64,31 +64,10 @@ rownames(vis) <- make.unique(rowData(vis)$Symbol)
 rownames(xen) <- make.unique(rowData(xen)$Symbol)
 ```
 
-## Alignment
 
-There are many ways of registering images in R and Python, or using external plug-ins. 
-
-`SpatialData` [@Marconato2025-SpatialData] is a Python package that requires 
-user-selected landmarks to align images; here we show the registration of 
-Visium onto Xenium in *napari* interface:
-
-![](../images/xenvis-napari.png){width=50%}
-
-R packages `r BiocStyle::CRANpkg("RNiftyReg")` [@Clayden2015-RNiftyReg] can be 
-combined with `r BiocStyle::CRANpkg("mmand")` for automated image registration.
-After alignment, we will obtain the registered images with a transformation matrix. 
-Here is a demonstration with external data, before and after registration of the two slices.
-However, the automation does not work well on images with very different orientation, 
-scale, and intensity, such as in this use case of Xenium and Visium.
-
-<center>
-![](../images/xenvis-RNiftyReg1.png){width=66%}
-![](../images/xenvis-RNiftyReg2.png){width=33%}
-</center>
-
-Therefore, we use the affine transformation matrix provided by 10x Genomics, 
-which was obtained by registration of Xenium onto Visium in Python with the 
-Fiji [@10xGenomics2023-Fiji] Java plug-in.
+To align Xenium and Visium, we use the affine transformation matrix provided by 
+10x Genomics, which was obtained by registering Xenium onto Visium in Python 
+with Fiji [@10xGenomics2023-Fiji] Java plug-in.
 
 An affine map is generally composed of a linear map (scaling and rotation) 
 and a translation, and can be apply using basic matrix multiplication and 
@@ -122,9 +101,10 @@ spatialCoords(xen) <- new
 ```{r plt-xy, fig.width=3, fig.height=3}
 df <- data.frame(spatialCoords(vis))
 fd <- data.frame(spatialCoords(xen))
-ggplot() + coord_equal() + theme_void() +
-    geom_point(aes(x, y), df, col="grey", stroke=0, size=1) +
-    geom_point(aes(x, y), fd, col="blue", stroke=0, size=0.1) 
+ggplot() + coord_equal() + theme_void() + 
+  scale_y_reverse() + 
+  geom_point(aes(x, y), df, col="grey", stroke=0, size=1) +
+  geom_point(aes(x, y), fd, col="blue", stroke=0, size=0.1) 
 ```
 
 ## Aggregation
@@ -228,16 +208,20 @@ gs <- intersect(rownames(vis), rownames(xem))
 cs <- intersect(colnames(vis), colnames(xem))
 .vis <- vis[gs, cs]
 .xem <- xem[gs, cs]
+.xem$array_col <- .vis$array_col
+.xem$array_row <- .vis$array_row
 .vis$sample_id <- "Visium"
 .xem$sample_id <- "Xenium"
 cd <- intersect(
-    names(colData(vis)), 
-    names(colData(xem)))
+    names(colData(.vis)), 
+    names(colData(.xem)))
 colData(.vis) <- colData(.vis)[cd]
 colData(.xem) <- colData(.xem)[cd]
 rowData(.vis) <- NULL
 rowData(.xem) <- NULL
 assay(.vis) <- as(assay(.vis), "dgCMatrix")
+# offset the spatial location for clustering in Xenium pseudo-spot
+.xem$array_col <- 100 + .xem$array_col
 dim(obj <- cbind(.vis, .xem))
 ```
 
@@ -280,24 +264,26 @@ labels to the object. The authors recommend running with at least 10,000 iterati
 that a random seed must be set (`set.seed()`) for the results to be reproducible.)
 
 ```{r clu, message=FALSE}
-xy <- c("array_row", "array_col")
-colData(obj)[xy] <- spatialCoords(obj)
-# 'BayesSpace' clustering
-res <- spatialCluster(obj, q=10, burn.in=100, nrep=1e3)
+# 'BayesSpace' clustering with c("array_row", "array_col") in colData()
+res <- spatialCluster(obj, q=10, burn.in=100, nrep=1e3) 
 table(res$k <- factor(res$spatial.cluster))
 ```
 
 We see high concordance between the two modalities, although the 
-aggregated Xenium data appears to yield slightly higher granularity:
+aggregated Xenium data appears to yield slightly higher granularity, when using 
+the default `BayesSpace::spatialCluster(burn.in=1000, nrep=1e4)` parameters:
 
 ```{r plt-clu, collapse=TRUE, fig.width=4, fig.height=2.5}
-plotVisium(res, 
+# plot use spatialCoord()
+plotVisium(res,
     image=FALSE, annotate="k") +
-    theme(legend.key.size=unit(0, "pt"))
+    theme(legend.key.size=unit(0, "pt")) 
 ```
 
 From here on out, both datasets could be analyzed together and/or independently, 
 e.g., in order to identify cluster markers, annotate cell subpopulations etc.
+
+
 
 ## Appendix
 

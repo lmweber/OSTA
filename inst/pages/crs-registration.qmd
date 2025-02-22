@@ -181,15 +181,26 @@ p + geom_point(
     col="red", inherit.aes=FALSE)
 ```
 
-### Spatial Alignment Algorithms
+### Other Spatial Alignment Algorithms
 
 Alternatively, we can use other R/Python frameworks to automatically or manually align spatial omic datasets across tissue sections. Some of these methods could be used through R using BiocManager packages such as `r BiocStyle::Biocpkg("reticulate")` and `r BiocStyle::Biocpkg("basilisk")`
 
-- **NiftyReg**: available from the R wrapper package `r BiocStyle::CRANpkg("RNiftyReg")` [@Clayden2015-RNiftyReg] in CRAN. The tool performs image registration using both rigid and non-rigid approaches where users can extract and apply the resulting transformation matrix on spatial coordinates of a `SpatialExperiment` object.  
+- **NiftyReg**: available from the R wrapper package `r BiocStyle::CRANpkg("RNiftyReg")` [@Clayden2015-RNiftyReg] in CRAN can be 
+combined with `r BiocStyle::CRANpkg("mmand")` for automated image registration. The tool performs image registration using both rigid and non-rigid approaches where users can extract and apply the resulting transformation matrix on spatial coordinates of a `SpatialExperiment` object. However, the automation does not work well on images with very different orientation, scale, and intensity, such as in this use case of Xenium cell spatial coordinates to Visium H&E in Workflow: Xenium + Visium. Here is a demonstration with external data, before and after registration of the two slices.
+
+<center>
+![](../images/xenvis-RNiftyReg1.png){width=66%}
+![](../images/xenvis-RNiftyReg2.png){width=33%}
+</center>
 
 - **STAlign**: available as a Python module from [GitHub](https://github.com/JEFworks-Lab/STalign) [@clifton2023-stalign]. The tool performs optimal transport across two sets of spatial coordinates with or without associated microscopy images.
 
-- **SpatialData**: maintained by the [scverse](https://scverse.org/) consortium and available as a Python module from [GitHub](https://github.com/scverse/spatialdata) [@Marconato2025-SpatialData]. Combined with the [napari](https://napari.org/stable/) platform, SpatialData allows users to manually select landmark points before performing rigid alignment between two SpatialData objects. 
+- **SpatialData**: maintained by the [scverse](https://scverse.org/) consortium and available as a Python module from [GitHub](https://github.com/scverse/spatialdata) [@Marconato2025-SpatialData]. Combined with the [napari](https://napari.org/stable/) platform, SpatialData allows users to manually select landmark points before performing rigid alignment between two SpatialData objects. Here we show the registration of Xenium onto Visium image in *napari* interface:
+
+![](../images/xenvis-napari.png){width=50%}
+
+
+
 
 ### References {.unnumbered}
 
