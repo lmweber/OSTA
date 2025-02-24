@@ -42,7 +42,7 @@ saveRDS(spe, file = "seq-spe_load.rds")
 Alternatively, reader functions from several packages can be used to import data from raw files and create a `SpatialExperiment` object, including:
 
 - The `read10xVisium()` function from the `SpatialExperiment` package can be used to import Visium data from raw data files from the 10x Genomics Space Ranger pipeline
-- The [VisiumIO](http://bioconductor.org/packages/VisiumIO) package provides updated functions to import Visium data from raw data files from the 10x Genomics Space Ranger pipeline
+- The [VisiumIO](http://bioconductor.org/packages/VisiumIO) and [XeniumIO](https://bioconductor.org/packages/XeniumIO) packages provide functions to import Visium and Xenium data, respectively
 - The [SpatialExperimentIO](http://bioconductor.org/packages/SpatialExperimentIO) package provides functions to import imaging-based spatial transcriptomics data (Xenium, CosMx, MERSCOPE, and STARmapPLUS platforms) from raw data files (see also @sec-img-introduction)
 
 
