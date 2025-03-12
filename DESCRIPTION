@@ -100,7 +100,6 @@ Suggests:
     xml2
 Remotes:
     drisso/SpaceTrooper@devel_spatialBook,
-    estellad/OSTA.data,
     ggrajeda/spacexr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -33,8 +33,8 @@ library(VisiumIO)
 ```
 
 In this demo, we perform deconvolution on 16 µm bins and compare 
-the concordance with result on 8 µm bins, provided by 10x Genomics.
-[Here, we only demonstrate the analysis for patient 2. Other patients, 
+the concordance with results on 8 µm bins, provided by 10x Genomics.
+[Here, we only demonstrate the analysis for patient 2 (P2). Other patients, 
 such as P1 and P5, also have public Chromium, Visium HD, and Xenium 
 data available for the CRC group (see @sec-bkg-datasets). It would be 
 interesting to investigate the differences in malignant cells/bins 
@@ -62,7 +62,7 @@ vhd8
 ```
 
 These data come with bin-level annotations from deconvolution estimates
-by `RCDT`, implemented in `r BiocStyle::Githubpkg("ggrajeda/spacexr")`. 
+by `RCTD`, implemented in `r BiocStyle::Githubpkg("ggrajeda/spacexr")`. 
 Specifically, two sets of labels are available that correspond to the 
 most and second most frequent of 38 cell types per bin, respectively:
 
@@ -95,7 +95,7 @@ To keep runtimes low, our downstream analysis will be performed on a subset
 area of 16 µm bins (1/64 of the data coverage area), which we read in here; 
 there are no annotations available for this resolution in the public domain.
 [Note that 8 and 16 µm binned Visium HD data share the 
-same full-res. H&E image and scaling factor.]{.aside}
+same full-resolution H&E image and scaling factor.]{.aside}
 
 ```{r load-vhd16, message=FALSE}
 # read 16um bins into 'SpatialExperiment'
@@ -163,7 +163,7 @@ Subset the 16 µm object to bins in the black box:
 dim(.vhd16)
 ```
 
-From now one, we are operating on `r ncol(.vhd16)` 16 µm bins.
+From now on, we are operating on `r ncol(.vhd16)` 16 µm bins.
 
 ## Quality control
 
@@ -305,7 +305,7 @@ wrap_plots(ps, nrow=1) & theme(
 
 We will now perform deconvolution on the 16 µm binned Visium HD data. First, 
 we retrieve matching (Chromium) scRNA-seq data, which includes low- (`Level1`)
-and high-res. (`Level2`) annotations of cells into 9 respective 31 clusters.
+and high-resolution (`Level2`) annotations of cells into 9 respectively 31 clusters.
 In order to ensure similar transcriptional profile across technologies,
 we filter the reference population to patient 2 only.
 
@@ -335,7 +335,7 @@ sce
 
 ::: {.callout-note title="Single-cell reference annotation mapping" collapse="true"}
 
-We can visualize the mapping between low- and high-res. annotations 
+We can visualize the mapping between low- and high-resolution annotations 
 in the single-cell reference data with a contingency table:
 
 ```{r sce-heatmap-level12, fig.width=6.5, fig.height=3.5}
@@ -345,7 +345,7 @@ pheatmap(fq, cellwidth=10, cellheight=10, treeheight_row=5, treeheight_col=5)
 ```
 
 Note that `"Proliferating Immune II"` spans evenly between `"B cells"` and `"Tumor"`, 
-so we will make it a separate class, `"Prolif. Immune"` in the low-res. annotations:
+so we will make it a separate class, `"Prolif. Immune"` in the low-resolution annotations:
 
 ```{r sce-level1addprolifimmune}
 sce$Level1 <- ifelse(grepl("Prolif", sce$Level2), "Prolif. Immune", sce$Level1)
@@ -353,7 +353,7 @@ table(sce$Level1) # tabulate low-res. labels
 ```
 
 There are some differences in the provided deconvolution labels 
-at 8 µm resolution and the high-res. single-cell reference labels:
+at 8 µm resolution and the high-resolution single-cell reference labels:
 
 ```{r diff-labs-lvl2}
 # all single-cell reference labels 
@@ -405,7 +405,7 @@ head(sort(table(ij), decreasing=TRUE))
 ```
 
 We can see that myeloid are commonly co-localized with fibroblasts and tumor cells;
-most doublets are homotypic, i.e., they are (mostly) composed of one low-res. type.
+most doublets are homotypic, i.e., they are (mostly) composed of one low-resolution type.
 
 ::: {.callout-note title="Subset 8um bins within black bounding box" collapse="true"}
 
@@ -569,7 +569,7 @@ df$CT <- .vhd16$.DeconLabel1
 df[1:5, 1:5]
 ```
 
-Now, we filter to only *T cells*, *B cells* and *Myeloid* bins, and investigate -- within their neighbourhood -- the spatial proximity differences to *Fibroblast* or *Tumor* bins in terms of abundance.
+Now, we filter to only *T cells*, *B cells* and *Myeloid* bins, and investigate -- within their neighborhood -- the spatial proximity differences to *Fibroblast* or *Tumor* bins in terms of abundance.
 
 ```{r Statial-fd}
 source <- df$CT %in% c("T cells", "B cells", "Myeloid")
@@ -614,14 +614,14 @@ In this workflow, we demonstrated how to perform a standard analysis pipeline
 on a subset of Visium HD data binned at 16 µm. Most methods and visualization 
 techqniues developed for Visium can be applied to Visium HD. 
 However, more sparsity is expected, as each data point (e.g. 2, 8, or 16 µm) 
-has smaller area compared to Visium (55µm).
+has smaller area compared to Visium (55 µm).
 Each bin cannot be interpreted as a cell, but rather, a segmentation-free 
 approach is applied here. Below are some resources and news for Visium HD 
 to consider and incorporate into your pipeline:
 
-- GitHub repository of `bin2cell` for H&E segmentation and obtaining cell boundaries: https://github.com/Teichlab/bin2cell
+- [GitHub repository of `bin2cell`](https://github.com/Teichlab/bin2cell) for H&E segmentation and obtaining cell boundaries.
 
-- [Analysis pipeline](https://www.10xgenomics.com/analysis-guides/segmentation-visium-hd) by 10x Genomics (2024 April). The analysis consists of three steps: run `StarDist` nuclei segmentation in Python, sum gene expression into nuclei based on segmentation mask, and downstream analysis with `scanpy` and `anndata`. 
+- [Analysis pipeline](https://www.10xgenomics.com/analysis-guides/segmentation-visium-hd) by 10x Genomics (April 2024). The analysis consists of three steps: run `StarDist` nuclei segmentation in Python, sum gene expression into nuclei based on segmentation mask, and downstream analysis with `scanpy` and `anndata`. 
 
 - 10x Genomics [news](https://www.prnewswire.com/news-releases/10x-genomics-unveils-innovation-roadmap-at-agbt-general-meeting-advancing-leadership-in-large-scale-single-cell-and-spatial-analysis-302382827.html) on morphology-driven segmentation from H&E enabled in CytAssist for Visium HD, by assigning transcripts to individual cells.
 

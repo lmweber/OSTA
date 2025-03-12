@@ -137,7 +137,7 @@ plotSpots(spe,
     scale_color_manual(values=unname(pals::trubetskoy()))
 ```
 
-```{r svg-DESpace}
+```{r svg-DESpace, message=FALSE}
 # run DESpace
 res <- DESpace_test(spe, spatial_cluster="BayesSpace")
 head(res_DESpace <- res$gene_results)

@@ -125,14 +125,16 @@ rownames(sce) <- make.unique(rowData(sce)$Symbol)
 csv <- grep("csv$", fs, value=TRUE)
 cd <- read.csv(csv, row.names=1)
 
+# ignore mixtures
+lab <- cd$Annotation
+lab[grepl("Hyb", lab)] <- NA 
+
 # simplify annotations
 pat <- c(
     "B Cell"="B", "T Cell"="T", "Mac"="macro", "Mast"="mast", "DCs"="dendritic", 
     "Peri"="perivas", "End"="endo", "Str"="stromal", "Inv"="tumor", "Myo"="myoepi")
-lab <- cd$Annotation
 for (. in names(pat)) 
     lab[grep(., lab)] <- pat[.]
-lab[grepl("Hyb", lab)] <- NA
 lab <- gsub("\\s", "", lab)
 
 # add as cell metadata

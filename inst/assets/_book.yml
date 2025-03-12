@@ -29,19 +29,22 @@ book:
         - pages/img-processing.qmd
         - pages/img-neighbors.qmd
         - pages/img-cell-comm.qmd
-        - pages/img-sub-cellular.qmd
+        #- pages/img-sub-cellular.qmd
         - pages/img-workflow-xenium.qmd
         - pages/img-workflow-cosmx.qmd
-    - part: "Technology-agnostic/cross-platform/downstream analyses"
+    - part: "Platform-agnostic analyses"
       chapters:
-        - pages/crs-introduction.qmd
         - pages/crs-dimension-reduction.qmd
         - pages/crs-clustering.qmd
         - pages/crs-spatially-variable.qmd
         - pages/crs-signatures.qmd
         - pages/crs-spat-stat.qmd
-        - pages/crs-registration.qmd
         - pages/crs-multi-sample.qmd
+    - part: "Cross-platform analyses"
+      chapters:
+        - pages/crs-introduction.qmd
+        - pages/crs-registration.qmd
+        - pages/crs-imputation.qmd
         - pages/crs-workflow-xenvis.qmd
   appendices:
     - pages/apx-acknowledgments.qmd

@@ -1,4 +1,3 @@
-# Multiple-sample differential expression
-
+# Multi-sample {#sec-crs-multi-sample}
 
 ## References {.unnumbered}

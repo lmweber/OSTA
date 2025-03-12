@@ -1,4 +1,3 @@
-# Workflow: CosMx
-
+# Workflow: CosMx {#sec-img-workflow-cosmx}
 
 ## References {.unnumbered}

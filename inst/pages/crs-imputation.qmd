@@ -1,0 +1,272 @@
+# Imputation {#sec-crs-imputation}
+
+## Preamble
+
+### Introduction
+
+As was previously discussed, most commonly employed imaging-based ST assays can resolve 100s to 1000s features. Meanwhile, non-spatially resolved single-cell assays are able to capture transcripts across 10,000 gene features. To allow estimating the expression of genes that may not be available in a ST assay, we would like to integrate spatially resolved data with scRNA-seq data using common features, in order to predict missing features using nearest neighbors (i.e., transcriptionally similar) cells.
+
+### Dependencies
+
+```{r deps, message=FALSE, warning=FALSE}
+library(DropletUtils)
+library(ggspavis)
+library(harmony)
+library(igraph)
+library(OSTA.data)
+library(patchwork)
+library(RANN)
+library(scran)
+library(scater)
+library(SpatialExperiment)
+library(SpatialExperimentIO)
+```
+
+## Data import
+
+The analyses demonstrated here will use 313-plex Xenium data (10x Genomics) of a human breast cancer biopsy section and the Chromium Single Cell Gene Expression Flex applied to FFPE tissues (scFFPE-Seq) assay with around 18,000 features [@Janesick2023].
+
+### Xenium
+
+```{r load-spe, message=FALSE, warning=FALSE}
+id <- "Xenium_HumanBreast1_Janesick"
+pa <- OSTA.data_load(id)
+dir.create(td <- tempfile())
+unzip(pa, exdir=td)
+spe <- readXeniumSXE(td)
+spe$sample_id <- "Xenium"
+spe
+```
+
+### Chromium
+
+We now load the single cell FFPE RNA-Seq assay. To streamline the demonstration, we consolidate some of the cell type annotations provided by 10x Genomics (i.e., `Annotation`) into the scRNA-seq assay. The single-cell assay has 18,082 features, some of which are available in the Xenium assay as well.
+
+```{r load-sce, message=FALSE, warning=FALSE}
+id <- "Chromium_HumanBreast_Janesick"
+pa <- OSTA.data_load(id)
+dir.create(td <- tempfile())
+unzip(pa, exdir=td)
+h5 <- file.path(td, "filtered_feature_bc_matrix.h5")
+sce <- read10xCounts(h5, col.names=TRUE)
+sce$sample_id <- "Chromium"
+# set gene symbols as feature names
+rownames(sce) <- make.unique(rowData(sce)$Symbol)
+# retrieve cell type labels
+fs <- list.files(td, full.names=TRUE)
+csv <- grep("csv$", fs, value=TRUE)
+cd <- read.csv(csv, row.names=1)
+colData(sce)[names(cd)] <- cd[colnames(sce), ]
+sce
+```
+
+## Analysis
+
+### Integration
+
+To accomplish data transfer across cells of either two assays (scRNA-seq and imaging-based ST), we first need to find cells that are similar between the two datasets. To this end, we use the common genes of both assays to integrate both datasets into a joint embedding space. Here, the objective is to find the nearest scRNA-seq cell neighbors of each Xenium cell in the joint embedding space, assuming that these cells will have similar transcriptional profiles. 
+
+We can integrate them on a transcriptional level; here, using `r BiocStyle::Biocpkg("harmony")`. 
+To this end, we first consolidate the scRNA-seq and Xenium data into one object:
+
+```{r obj}
+# concatenate objects
+gs <- intersect(rownames(spe), rownames(sce))
+cd <- intersect(names(colData(spe)), names(colData(sce)))
+obj <- lapply(list(spe, sce), \(obj) {
+    obj <- obj[gs, ]
+    y <- as(assay(obj), "dgCMatrix")
+    SingleCellExperiment(
+        assays=list(counts=y),
+        colData=colData(obj)[cd])
+}) |> do.call(what=cbind)
+# add single-cell annotations
+lab <- match(colnames(obj), colnames(sce))
+obj$Annotation <- sce$Annotation[lab]
+```
+
+We now filter out cells with too few counts, and then perform PC-based `harmony` integration:
+
+```{r int, message=FALSE}
+# minimal filtering
+obj <- obj[, colSums(counts(obj)) > 20]
+# log-library size normalization 
+obj <- logNormCounts(obj)
+# principal component analysis
+# (w/o additional feature selection)
+obj <- runPCA(obj, name=".PCA")
+# 'harmony' integration
+# (keeping uncorrected PCs)
+pcs <- RunHarmony(
+    data_mat=reducedDim(obj, ".PCA"), 
+    meta_data=obj$sample_id, 
+    verbose=FALSE)
+reducedDim(obj, "PCA") <- pcs
+# dimensionality reduction before/after 
+# integration (for visualization only)
+obj <- runUMAP(obj, dimred=".PCA", name=".UMAP")
+obj <- runUMAP(obj, dimred="PCA", name="UMAP")
+```
+
+Let us now visualize the embedding of both Xenium and scRNA-seq cells to assess 
+the mixing of observations from both datasets. We also check if scRNA-seq cells 
+are well-partitioned given their annotations: 
+
+```{r plt-map, fig.width=12, fig.height=4}
+#| code-fold: true
+.obj <- obj[, obj$sample_id == "Chromium"]
+plotUMAP(obj, colour_by="sample_id", point_size=0, dimred=".UMAP") + ggtitle("uncorrected") +
+plotUMAP(obj, colour_by="sample_id", point_size=0) + ggtitle("corrected") +
+plotUMAP(.obj, colour_by="Annotation", point_size=0) + ggtitle("Chromium") +
+plot_layout(nrow=1, guides="collect") &
+    guides(col=guide_legend(override.aes=list(alpha=1, size=2))) &
+    theme_void() & theme(
+        aspect.ratio=1, 
+        legend.key.size=unit(0, "pt"),
+        plot.title=element_text(hjust=0.5))
+```
+
+### Selection
+
+Here, we choose a small subset of features to transfer onto the Xenium assay. 
+For this purpose, we test for differentially expressed genes (DEGs) between 
+cell types (`Annotation` column), and select the top-20 markers for each:
+
+```{r mgs}
+# normalize
+sce <- logNormCounts(sce)
+# test for differentially expressed genes 
+# (DEGs) to identify subpopulation markers
+colLabels(sce) <- sce$Annotation
+mgs <- findMarkers(sce, test="wilcox", direction="up")
+# get top markers per cell type
+top <- lapply(names(mgs), \(k) {
+    df <- mgs[[k]][, c("FDR", "summary.AUC")]
+    g <- head(rownames(df), 20)
+    data.frame(k, g, df[g, ])
+}) |> do.call(what=rbind)
+rownames(top) <- NULL
+head(top)
+```
+
+### Aggregation
+
+Now that we have shown there is a correction for batch effects between Xenium and Chromium assays, we can transfer counts from single-cell onto Xenium data by identifying the k-nearest neighbors (kNNs) of each Xenium cell in the Chromium data, and imputing missing genes by aggregating their profile across kNNs (here, using mean expression). 
+
+```{r imp}
+# find k-nearest neighbors across embeddings
+# (from Xenium to Chromium cells)
+idx <- split(colnames(obj), obj$sample_id)
+pcs <- reducedDim(obj, "PCA")
+ref <- pcs[idx$Chromium, ]
+que <- pcs[idx$Xenium, ]
+knn <- nn2(data=ref, query=que, k=k <- 20)
+# create adjacency matrix
+el <- cbind(
+    rep(idx$Xenium, each=k), 
+    idx$Chromium[c(t(knn$nn.idx))])
+g <- graph_from_edgelist(el, directed=TRUE)
+A <- as_adjacency_matrix(g)
+# average Chromium across Xenium neighbors
+gs <- unique(top$g)
+cs <- intersect(rownames(A), idx$Chromium)
+ws <- A[idx$Xenium, cs]*(1/k)
+y <- logcounts(sce)[gs, cs] %*% t(ws)
+```
+
+## Downstream
+
+### Visualization
+
+We now create two new `SpatialExperiment` objects by 
+i) subsetting cells that passed our minimal filtering, and 
+ii) replacing observed by imputed counts in one object:
+
+```{r new-spe}
+spe <- spe[, idx$Xenium]
+spe <- logNormCounts(spe)
+sqe <- SpatialExperiment(
+    assays=list(logcounts=y), 
+    spatialCoords=spatialCoords(spe))
+# needed for 'ggspavis' visualization
+spe$in_tissue <- sqe$in_tissue <- 1
+```
+
+We can now compare imputed to observed counts.
+Here, we visualize ACTA2, which is included in both assays, 
+as well as KRT17, which also marks myoepithelial cells:
+
+```{r plt-xy-one, fig.width=12, fig.height=3, message=FALSE}
+#| code-fold: true
+.p <- \(obj, col) {
+    plotSpots(obj, 
+        point_size=0,
+        annotate=col, 
+        assay_name="logcounts")
+}
+pal <- scale_color_gradient2("obs.", high="red")
+qal <- scale_color_gradient2("imp.", high="blue")
+.p(spe, "ACTA2") + pal +
+.p(sqe, "ACTA2") + qal +
+.p(sqe, "KRT17") + qal +
+    plot_layout(nrow=1) 
+```
+
+### Comparison
+
+As a more systematic comparison, we can visualize the correlation of cell-wise 
+expression values (using shared features only) between observed and imputed data:
+
+```{r plt-cor, fig.width=6, fig.height=3}
+#| code-fold: true
+gs <- intersect(rownames(spe), rownames(sqe))
+imp <- as.matrix(t(logcounts(sqe[gs, ])))
+obs <- as.matrix(t(logcounts(spe[gs, ])))
+cm <- cor(imp, obs, method="pearson")
+df <- data.frame(g=gs, p=diag(cm))
+df$g <- factor(df$g, df$g[order(-df$p)])
+ggplot(df, aes(g, p, fill=p > 0.5)) + geom_col() +
+    labs(x="correlation (observed vs. imputed)", y=NULL) +
+    geom_hline(yintercept=0.5) +
+    theme_minimal() + theme(
+        legend.position="none",
+        panel.grid=element_blank(),
+        axis.text.x=element_text(angle=90, vjust=0.5, hjust=1))
+```
+
+We observe the highest correlation between observed and imputed data for 
+KRT7; let's confirm this by visualizing the gene's expression in space:
+
+```{r plt-xy-two, fig.width=9, fig.height=3, message=FALSE}
+#| code-fold: true
+.p(spe, "KRT7") + pal +
+.p(sqe, "KRT7") + qal +
+    plot_layout(nrow=1) 
+```
+
+Genes that exhibit the lowest correlation tend to be rarely expressed. 
+This arguably makes it difficult to identify similar Chromium cells and, 
+in turn, accurately transfer information between both assays. By contrast, 
+highly correlated genes are detected in a decent proportion of cells:
+
+```{r bad-gs}
+# quantify proportion of cells for which
+# lowly/highly correlated genes are detected
+fq <- \(gs) {
+    y <- counts(spe[gs, ])
+    round(rowMeans(y > 0), 2)
+}
+gs <- names(sort(diag(cm)))
+fq(tail(gs)) # high corr.
+fq(head(gs)) # low corr.
+```
+
+## Other methods
+
+Alternatively, we can use other R/Python frameworks to integrate imaging-based ST assays with scRNA-seq datasets, and impute missing features. Some of these methods could be used through R using packages such as `r BiocStyle::Biocpkg("reticulate")` and `r BiocStyle::Biocpkg("basilisk")`; see @sec-bkg-interoperability.
+
+- **Tangram**: is available as a Python module through [scvi-tools](https://docs.scvi-tools.org/en/latest/user_guide/models/tangram.html) [@biancalani2021-tangram]. The tool performs a softmax optimization to generate a probabilistic mapping between cells of scRNA-seq data and voxels (cells or spots) of ST data, which is then used to transfer labels or feature profiles across datasets.
+
+- **LIGER**: is available in R via `r BiocStyle::CRANpkg("rliger")` [@welch2019-liger], and incorporates a similar workflow performed in this chapter using `r BiocStyle::Biocpkg("harmony")`. The only difference between these approaches is how the joint embedding is obtained; here, LIGER uses non-negative matrix factorization (NMF). LIGER has been originally proposed to perform this task for scRNA-seq and scATAC-seq assays.
+
+## References {.unnumbered}
