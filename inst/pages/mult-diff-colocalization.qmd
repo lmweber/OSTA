@@ -30,7 +30,7 @@ For this example, we use a dataset on type I diabetes (T1D) [@damondMapHumanType
 # load data from full dataset (not run due to computational limitations)
 spe <- .loadExample(full = TRUE)
 # subset data to smaller example
-spe <- subset(spe, , patient_id %in% c(6089, 6180, 6126, 6134, 6228, 6414))
+spe <- subset(diabetesData, , case %in% c(6134, 6228, 6414, 6126))
 # remove assays (for smaller object size)
 assays(spe) <- list()
 ```
@@ -45,27 +45,33 @@ osf_download(osf_files, path = td)
 spe <- readRDS(file.path(td, list.files(td, ".rds")))
 
 # subset patient IDs
-spe <- subset(spe, , patient_id %in% c(6089, 6180, 6126, 6134, 6228, 6414))
-
-colData(spe)$cell_type <- as.factor(colData(spe)$cell_type)
-colData(spe)$patient_stage <- as.factor(colData(spe)$patient_stage) |> 
-                              relevel("Non-diabetic")
+spe = subset(diabetesData, , case %in% c(6134, 6228, 6414, 6126))
 ```
 
 
 ## spicyR
 
-First, we show the functionality of `r BiocStyle::Biocpkg("spicyR")`. This package condenses the information of a spatial statistics curve to a scalar value and models this continuous value as the response in a linear (mixed) effects model [@Canete2022].
+First, we show the functionality of `r BiocStyle::Biocpkg("spicyR")`. This package condenses the information of a spatial statistics curve to a scalar value and models this continuous value as the response in a linear (mixed) effects model [@Canete2022]. By default, spicyR chooses the first lebel of the `condition` factor as the base condition and the second level as the comparison condition. 
+
+```{r}
+# reorder levels 
+spe$stage <- droplevels(spe$stage)
+levels(spe$stage) <- c("Non-diabetic", "Onset", "Long-duration")
+
+spe$stage |> unique()
+```
+
 
 ```{r, spicyR}
-colData(spe)$cellType <- colData(spe)$cell_type
-colData(spe)$cell_type <- as.factor(colData(spe)$cell_type)
+# colData(spe)$cellType <- colData(spe)$cell_type
+# colData(spe)$cell_type <- as.factor(colData(spe)$cell_type)
 
 # note runtime: ~5 min
 spicyTestPair <- spicy(
   spe, 
-  condition = "patient_stage", 
-  imageID = "image_number", 
+  condition = "stage", 
+  subject = "case", 
+  imageID = "imageID", 
   window = "square", 
   cores = 4
 )
@@ -74,15 +80,59 @@ out <- topPairs(spicyTestPair, n = 27)
 out
 ```
 
-We can plot the results as a heatmap.
+The results can be represented as a bubble plot using the `signifPlot` function.
 
 ```{r, spicyR-heatmap, warning=FALSE, message=FALSE, fig.width=7}
-signifPlot(
-  spicyTestPair, 
-  breaks = c(-3, 3, 1)
-)
+signifPlot(spicyTestPair)
 ```
 
+Here, we can observe that the most significant relationship occurs between cytotoxic T cells (Tc) and the beta cells of the pancreas. Tc and beta cells appear to be significantly more co-localized in patients with onset diabetes compared to non-diabetic patients, indicated by the positive coefficient.
+
+We can use `spicyBoxPlot` to examine a cell type-cell type relationship closely.
+
+```{r}
+spicyBoxPlot(spicyTestPair,
+             from = "Tc",
+             to = "beta") 
+```
+
+We can investigate individual images to ensure our results reflect biologically meaningful relationships. We can extract the individual co-localization metrics from the `spicyTest` object using the `bind` function.
+
+```{r}
+# extract co-localization metrics
+bind(spicyTest) |> 
+  # merge with metadata
+  merge(colData(spe) |> as.data.frame() |> distinct(stage, imageID, case), by = "imageID", all = FALSE) |>
+  # select columns of interest
+  dplyr::select(c(imageID, Tc__beta, stage, case)) |>
+  dplyr::filter(imageID %in% c("L29", "O02", "E17", "G17"))
+```
+
+
+We can then visualize the spatial relationship between a pair of cell types in the original image using the `plotImage` function.
+
+The image below (L29) comes from a non-diabetic patient. We can see that beta and Tc cells appear to be dispersed, which is reflected in the co-localization metric.
+
+```{r}
+plotImage(spe,
+          imageToPlot = "L29",
+          from = "Tc",
+          to = "beta",
+          imageID = "imageID",
+          cellType = "cellType")
+```
+The image below (O02) comes from a patient with early onset diabetes. We can see that beta and Tc cells are far more co-localized, with Tc cells even infiltrating the pancreatic islets in some cases.
+
+```{r}
+plotImage(spe,
+          imageToPlot = "O02",
+          from = "Tc",
+          to = "beta",
+          imageID = "imageID",
+          cellType = "cellType")
+```
+
+spicyR can also be used with custom distance metrics and to perform survival analysis, which are outlined in the [spicyR vignette](https://www.bioconductor.org/packages/devel/bioc/vignettes/spicyR/inst/doc/spicyR.html).
 
 ## spatialFDA
 
