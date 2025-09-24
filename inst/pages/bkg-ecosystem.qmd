@@ -1,0 +1,179 @@
+# Ecosystem {#sec-bkg-ecosystem}
+
+## Introduction
+
+This chapter is not directly aimed at users, but aims at exploring the space of 
+packages available through Bioconductor that revolve around spatial and single
+cell omics data. We deliberately include the latter, since many tools developed
+for single cell data are either applicable to, or lay the foundation for tools
+developed for spatial data.
+
+Here, we will rely on `r BiocStyle::Biocpkg("biocViews")` [@Carey2006-BiocViews] 
+that are provided in the `DESCRIPTION` of each package. These may be browsed 
+online -- in a non-programmatic manner -- on the [Bioconductor BiocViews 
+website](https://www.bioconductor.org/packages/release/BiocViews.html).
+
+::: aside
+Note that the data reported herein are likely inaccurate, since packages might
+provide inaccurate/incomplete `biocViews`. Especially the "Spatial" term relied 
+upon here was added fairly recently and might be missing from elderly packages.
+:::
+
+### Exploratory
+
+The `r BiocStyle::Biocpkg("BiocPkgTools")` package [@Su2018-BiocPkgTools]
+provides tools to access and explore Bioconductor package metadata in R, 
+including their details (e.g., authors) and (monthly) download statistics.
+
+`biocExplore()` provides an interactive way to explore the package space:
+
+```{r message=FALSE}
+library(BiocPkgTools)
+biocExplore()
+```
+
+`biocPkgList()` retrieves the full Bioconductor software package listing
+(at the time of calling the function), including associated metadata.
+These include `biocViews`, which we can use to identify packages of interest:
+
+```{r message=FALSE, echo=-1}
+options(width = 100)
+# retrieve current package record
+df <- biocPkgList()
+# helper function to get indices of packages
+# that contain 'biocViews' specified by 'x'
+.f <- \(x, y=df) vapply(y$biocViews, \(.) all(x %in% .), logical(1))
+# view "Spatial" packages
+df$Package[.f("Spatial")]
+```
+
+We can also browse for packages that also include more specific terms, for example:
+
+```{r}
+# view "Spatial Clustering" packages
+df$Package[.f(c("Spatial", "Clustering"))]
+```
+
+### Metrics
+
+We will now have a look at the package ecosystem in a more quantitative manner.
+Specifically, we will investigate how the number of available packages evolves
+over time, and how long individual packages remain available (their "lifetime").
+
+#### Number of packages
+
+Let's first summarize the number of packages available over time,
+focusing specifically on "SingleCell" and "Spatial" packages.
+
+::: aside
+Note that we here rely on the first and last date at which a package was
+available through Bioconductor; some packages might have been depracated
+at one point or another.
+:::
+
+```{r echo=FALSE, message=FALSE, fig.width=5, fig.height=4}
+# dependencies
+library(dplyr)
+library(ggplot2)
+# specify 'biocViews' of interest
+names(ids) <- ids <- c("SingleCell", "Spatial")
+now <- as.Date(format(Sys.Date(), "%Y-%m-%d"))
+gg <- lapply(ids, \(id) {
+    # get metadata & simplify naming
+    nm <- df$Package[.f(id)]
+    ys <- BiocPkgTools:::getPkgYearsInBioc(nm) |>
+        mutate(first=first_version_release_date) |>
+        mutate(last=last_version_release_date) |>
+        mutate(last=case_when(is.na(last)~now, TRUE~last)) |>
+        filter(!is.na(first))
+    # complete months between first/last dates
+    ys <- lapply(split(ys, ys$package), \(.) {
+        data.frame(
+            package=.$package, 
+            date=seq(.$first, .$last))
+    }) |> do.call(what=rbind) 
+    # get cumulative number of packages available each month
+    ys |> group_by(date) |> count()
+}) |> bind_rows(.id="biocViews")
+ggplot(gg, aes(date, n, col=biocViews)) + 
+    geom_line(linewidth=0.8) +
+    geom_smooth(data=filter(gg, n >= 5), 
+        method="lm", se=FALSE, linewidth=1) +
+    scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
+    scale_color_manual(values=c("orange", "cornflowerblue")) +
+    labs(x=NULL, y="# packages") +
+    theme_bw() + theme(
+        aspect.ratio=1, 
+        panel.grid.minor=element_blank(),
+        axis.text.x=element_text(angle=45, hjust=1))
+# NOTE: 'getYearsInBioc()' function 
+# will be added in the next release
+```
+
+To get an idea of the projects' "growth" in this space, we can regress the 
+number of packages against time using a linear model (LM). We here skip 
+dates at which very few packages were availabile/being developed:
+
+```{r echo=-c(3, 4)}
+#| code-fold: true
+# fit linear model where x = 'date', y = # packages
+# (starting at 'date' where at least 5 packages exist)
+.gg <- filter(gg, n >= 5)
+# get shift in years between "SingleCell" and "Spatial"
+dy <- round(as.integer(diff(slice_min(group_by(.gg, biocViews), date)$date))/365, 2)
+(bs <- .gg |>
+    group_by(biocViews) |>
+    group_split() |>
+    # return coefficients = # packages 
+    # added each month (on average)
+    sapply(\(.) coef(lm(n~date, .))[[2]]) |>
+    setNames(sort(unique(gg$biocViews))))
+```
+
+The resulting coefficients tell us that about `r round(bs["SingleCell"]*12, 2)` 
+single cell and `r round(bs["Spatial"]*12, 2)` spatial packages are being added
+each year (on average), and there is a delay of about `r dy` years between them.
+
+#### Package lifetimes
+
+Finally, we can inspect the "lifetime" of packages, i.e., how long they remain 
+(installable) on Bioconductor:
+
+::: aside
+A package will be depracated if it fails to build and/or pass checks on the 
+Bioconductor Build System (BBS), provided its maintainer is unresponsive and 
+does not take action to fix the package before the next (six-monthly) release. 
+:::
+
+```{r results="hold", message=FALSE, fig.width=5, fig.height=4}
+#| code-fold: true
+gg <- lapply(ids, \(id) {
+    nm <- df$Package[.f(id)]
+    ys <- BiocPkgTools:::getPkgYearsInBioc(nm)
+}) |> bind_rows(.id="biocViews") |>
+    mutate(years=approx_years_in) |>
+    filter(!is.na(years))
+mu <- gg |>
+    group_by(biocViews) |>
+    summarise_at("years", mean)
+# print
+cat("years in Bioconductor:\n")
+summary(gg$approx_years_in)
+# plot
+ggplot(gg, aes(years, fill=biocViews)) + 
+    geom_histogram(alpha=1/3, binwidth=0.5) +
+    geom_vline(
+        linewidth=1, data=mu,
+        aes(xintercept=years, col=biocViews)) +
+    scale_x_continuous(breaks=seq(0, 100, 2)) +
+    labs(x="lifetime (years)", y="# packages") +
+    theme_bw() + theme(
+        aspect.ratio=1, 
+        panel.grid.minor=element_blank(),
+        axis.text.x=element_text(angle=45, hjust=1))
+```
+
+## Appendix
+
+### References {.unnumbered}
+

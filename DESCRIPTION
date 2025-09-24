@@ -99,6 +99,7 @@ Imports:
     zoo
 Suggests: 
     BiocManager, 
+    BiocPkgTools,
     BiocStyle, 
     BiocVersion, 
     downlit,
