@@ -110,7 +110,7 @@ table(spe$Banksy)
 #### Encoder-based
 
 Another category of spatially-aware clustering method uses encoder architectures to generate a latent embedding incorporating both spatial and transcriptomics information, which is then clustered using standard algorithms. 
-One typical example is `r BiocStyle::Githubpkg("CSOgroup/cellcharter")` [@Varrone2024-CellCharter], which uses a variational auto-encoder to generate a latental feature space and aggregate the features of each spot across its neighbors to preserve their spatial context. 
+One typical example is `r BiocStyle::Githubpkg("CSOgroup/cellcharter")` [@Varrone2024-CellCharter], which uses a variational auto-encoder to generate a latent feature space and aggregate the features of each spot across its neighbors to preserve their spatial context. 
 
 ::: {.callout-note title="Other methods" collapse="true"}
 Several other published methods have also adopted encoder architectures in different ways to perform spatially-aware clustering. 
@@ -347,24 +347,28 @@ publications or via centralized data portals that harmonize datasets from
 multiple studies. Below, we highlight several widely known resources, 
 including ongoing efforts towards spatial and multi-modal ones.
 
+- **CELLxGENE** (Chan Zuckerberg Initiative) is a data portal and explorer 
+that provides standardized access to thousands of datasets [@Megill2021-cellxgene]. 
+These can be interactively queried and filtered for downstream tasks including,
+e.g., reference-based annotation, benchmarking, and cross-study integration.
+[The Bioconductor package `r BiocStyle::Biocpkg("cellxgenedp")` provides an 
+alternative, R-based interface, allowing programmatic discovery and retrieval
+of >2000 datasets from 100s of studies as H5AD files, which can be read as 
+`SingleCellExperiment` objects using `r BiocStyle::Biocpkg("anndataR")` 
+[@Deconinck2026-anndataR]; see @sec-bkg-python-interoperability.]{.aside}
+
 - "The **Human Cell Atlas (HCA)** is a global consortium that is mapping 
 every cell type in the human body" across health and disease [@Regev2017-HCA]. 
 As part of this effort, multi-organ atlases such as *Tabula Muris* 
 [@TabulaMuris2018] and *Tabula Sapiens* [@TabulaSapiens2022] provide 
 high-resolution references for mouse and human, respectively.
 
+- The **Human Protein Atlas (HPA)** integrates transcriptomics and proteomics
+data to map their spatial distributions in human tissues and cells [@Thul2018-HPA].
+
 - Still work in progress, the **Spatial Atlas of Human Anatomy (SAHA)** is 
 an effort to generate a multi-modal, subcellular-resolution spatial reference 
 map for millions of cells in their native 3D tissue context [@Park2025-SAHA].
-
-- **CELLxGENE** (Chan Zuckerberg Initiative) is a data portal and explorer 
-that provides standardized access to thousands of datasets and their 
-associated expression matrices [@Megill2021-cellxgene]. The Bioconductor
-package `r BiocStyle::Biocpkg("cellxgenedp")` provides an alternative, 
-R-based interface, allowing programmatic data discovery and retrieval.
-
-- The **Human Protein Atlas (HPA)** integrates transcriptomics and proteomics
-data to map their spatial distributions in human tissues and cells [@Thul2018-HPA].
 
 ## Appendix
 
