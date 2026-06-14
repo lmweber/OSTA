@@ -357,7 +357,7 @@ of >2000 datasets from 100s of studies as H5AD files, which can be read as
 `SingleCellExperiment` objects using `r BiocStyle::Biocpkg("anndataR")` 
 [@Deconinck2026-anndataR]; see @sec-bkg-python-interoperability.]{.aside}
 
-- "The **Human Cell Atlas (HCA)** is a global consortium that is mapping 
+- The **Human Cell Atlas (HCA)** is a global consortium that is mapping 
 every cell type in the human body" across health and disease [@Regev2017-HCA]. 
 As part of this effort, multi-organ atlases such as *Tabula Muris* 
 [@TabulaMuris2018] and *Tabula Sapiens* [@TabulaSapiens2022] provide 
