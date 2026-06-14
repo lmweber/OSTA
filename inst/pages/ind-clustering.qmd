@@ -183,23 +183,9 @@ label_df[["label"]].value_counts()
 spe$CellCharter <- unlist(py$label_df)
 ```
 
-<!--
-#### Other methods: Probability statistics-based methods 
-
-* BASS
-* DR.SC
--->
-
-## Label transfer
-
 ## Downstream
 
 ### Visualization
-
-<!--Jieran:
-* Visualization (Align the cluster labels before running it)
-* Smoothness entropy checking
--->
 
 Let's visualize the assignment obtains from non-spatial and spatially-aware clustering:
 
