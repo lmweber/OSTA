@@ -81,6 +81,16 @@ theme_xy <- list(
 
 ## Appendix
 
+::: {.callout-tip icon="false" title="Further reading"}
+- This chapter has been adapted from the [*pasta* resource](https://robinsonlabuzh.github.io/pasta) 
+[@Emons2025-pasta], which more comprehensively covers point pattern- and 
+lattice-based uni- and multi-variate methods for img- and seq-based ST data.
+Notably, *pasta* also includes Python examples and more statistical detail,
+e.g., formal definitions and equations for different models and statistics.
+
+- Point pattern-based content is largely based on the [Spatial Point Patterns: Methodology and Applications with R](https://book.spatstat.org/) textbook [@Baddeley2015-book-point-patterns].
+:::
+
 ### References {.unnumbered}
 
 {{< include _stop.qmd >}}
