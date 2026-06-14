@@ -1,7 +1,3 @@
-```{r}
-knitr::opts_chunk$set(eval=FALSE)
-```
-
 # Clustering {#sec-ind-clustering}
 
 {{< include _start.qmd >}}
