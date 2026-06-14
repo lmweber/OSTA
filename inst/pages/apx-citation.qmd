@@ -395,16 +395,19 @@ benchmark, or other, references and resources mentioned throughout the book.
 | `r CRANpkg("scType")` | @Ianevski2022-ScType |
 | `r Biocpkg("SingleR")` | @Aran2019-SingleR |
 | `r Githubpkg("satijalab/azimuth")` | @Hao2021-Seurat |
-|  `r BiocStyle::Githubpkg("scverse/scvi-tools")`'s `scANVI` | [@Xu2021-scANVI] |
+| `r BiocStyle::Githubpkg("scverse/scvi-tools")`'s `scANVI` | [@Xu2021-scANVI] |
+| `r Githubpkg("Teichlab/celltypist")` | @DominguezConde2022-CellTypist |
 | `scFoundation` | @Hao2024-scFoundation |
 | `scGPT` | @Cui2024-scGPT |
 | `Geneformer` | @Theodoris2023-Geneformer |
 | HCA | @Regev2017-HCA |
-| Tabula Muris | @TabulaMuris2018 |
 | Tabula Sapiens | @TabulaSapiens2022 |
+| Tabula Muris | @TabulaMuris2018 |
+| Tabula Muris Senis | @TabulaSenis2020 |
 | SAHA | @Park2025-SAHA |
 | CELLxGENE | @Megill2021-cellxgene |
 | HPA | @Uhlen2015-HPA |
+| `r Biocpkg("scDiagnostics")` | @Christidis2026-scDiagnostics |
 | review | @Wang2024-review-spatial-domain |
 | benchmarks | @Chen2025-benchmark-clustering; @Sun2025-benchmark-clustering |
 | | @Cheng2022-benchmark-clustering; @Hu2024-benchmark-clustering |

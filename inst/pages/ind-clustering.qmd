@@ -323,12 +323,13 @@ spatial data. Popular R-based tools include `r BiocStyle::Biocpkg("SingleR")`
 [@Aran2019-SingleR] (Bioconductor), and `r BiocStyle::Githubpkg("satijalab/azimuth")` 
 [@Hao2021-Seurat] (implemented as part of Seurat v5+).
 
-- **Deep learning**:
-These approaches use neural network architectures, such as variational autoencoders 
-(VAEs) or graph neural networks (GNNs), to learn complex cellular representations 
-for annotation. For instance, `r BiocStyle::Githubpkg("scverse/scvi-tools")`'s 
-`scANVI` [@Xu2021-scANVI] leverages semi-supervised learning to project cells 
-onto a latent space for label prediction.
+- **Machine & deep learning**:
+These methods leverage either high-capacity statistical models or multi-layered 
+neural networks (e.g., VAEs, GNNs) to learn complex cellular representations. 
+`r BiocStyle::Githubpkg("Teichlab/CellTypist")` [@DominguezConde2022-CellTypist],
+for instance, uses a logistic regression framework and provides a variety of 
+pre-trained models; `r BiocStyle::Githubpkg("scverse/scvi-tools")`'s `scANVI` 
+[@Xu2021-scANVI] employs semi-supervised deep learning for label prediction.
 
 - **Foundation models**:
 More recently, foundation models (FMs) pretrained on very many single cells have emerged. 
@@ -336,7 +337,7 @@ Such models (e.g., `scFoundation` [@Hao2024-scFoundation], `scGPT` [@Cui2024-scG
 and `Geneformer` [@Theodoris2023-Geneformer]) can be used zero-shot or fine-tuned 
 to classify cell types across diverse tissues and platforms with high accuracy.
 
-## References
+### References
 
 Some annotation approaches rely on high-quality single-cell reference datasets. 
 In this context, so-called *atlas* efforts aim to generate expert-curated, 
@@ -359,9 +360,14 @@ of >2000 datasets from 100s of studies as H5AD files, which can be read as
 
 - The **Human Cell Atlas (HCA)** is a global consortium that is mapping 
 every cell type in the human body" across health and disease [@Regev2017-HCA]. 
-As part of this effort, multi-organ atlases such as *Tabula Muris* 
-[@TabulaMuris2018] and *Tabula Sapiens* [@TabulaSapiens2022] provide 
-high-resolution references for mouse and human, respectively.
+As part of this effort, multi-organ atlases such as *Tabula Muris* [@TabulaMuris2018],
+*Tabula Muris Senis* [@TabulaSenis2020] and *Tabula Sapiens* [@TabulaSapiens2022] 
+provide high-resolution references for mouse and human, respectively.
+[There are several R/Bioconductor `ExperimentHub` packages that provide programmatic
+access to these atlases, e.g., `r BiocStyle::Biocpkg("TabulaMurisData")` and 
+`r BiocStyle::Biocpkg("TabulaMurisSenisData")`. The `ExperimentHub::query()` 
+command (R) or the [BiocViews browser](https://bioconductor.posit.co/packages/release/BiocViews.html#___ExperimentData) (online)
+can be used to explore current datasets -- for annotation or otherwise.]{.aside}
 
 - The **Human Protein Atlas (HPA)** integrates transcriptomics and proteomics
 data to map their spatial distributions in human tissues and cells [@Thul2018-HPA].
@@ -369,6 +375,26 @@ data to map their spatial distributions in human tissues and cells [@Thul2018-HP
 - Still work in progress, the **Spatial Atlas of Human Anatomy (SAHA)** is 
 an effort to generate a multi-modal, subcellular-resolution spatial reference 
 map for millions of cells in their native 3D tissue context [@Park2025-SAHA].
+
+### Evaluation
+
+While automated annotation can greatly accelerate analysis, the quality of labels 
+obtained through such methods depends heavily on the alignment between query and 
+reference. Misalignment can arise from technical effects, biological differences 
+(e.g., healthy vs. diseased), or the presence of "out-of-reference" cell types. 
+Evaluating **reference suitability** and **prediction reliability** is crucial. 
+The `r BiocStyle::Biocpkg("scDiagnostics")` [@Christidis2026-scDiagnostics] 
+R/Bioconductor package provides a systematic framework for this task, e.g.:
+
+- **Assessing distributional congruence** by projecting query data into 
+the reference's subspace to check global alignment between datasets.
+
+- **Marker gene validation** by quantitatively comparing the expression 
+profiles of canonical markers between query and reference clusters to 
+detect gene-level discrepancies.
+
+- **Detection of annotation anomalies** by identifying cells that do not fit 
+the reference; these may represent novel cell states or technical artifacts.
 
 ## Appendix
 
