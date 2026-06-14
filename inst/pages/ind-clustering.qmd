@@ -332,7 +332,7 @@ onto a latent space for label prediction.
 
 - **Foundation models**:
 More recently, foundation models (FMs) pretrained on very many single cells have emerged. 
-Such models, (e.g., `scFoundation` [@Hao2024-scFoundation], `scGPT` [@Cui2024-scGPT], 
+Such models (e.g., `scFoundation` [@Hao2024-scFoundation], `scGPT` [@Cui2024-scGPT], 
 and `Geneformer` [@Theodoris2023-Geneformer]) can be used zero-shot or fine-tuned 
 to classify cell types across diverse tissues and platforms with high accuracy.
 
