@@ -1,3 +1,7 @@
+```{r}
+knitr::opts_chunk$set(eval=FALSE)
+```
+
 # Clustering {#sec-ind-clustering}
 
 {{< include _start.qmd >}}
@@ -190,6 +194,8 @@ spe$CellCharter <- unlist(py$label_df)
 * DR.SC
 -->
 
+## Label transfer
+
 ## Downstream
 
 ### Visualization
@@ -203,7 +209,7 @@ Let's visualize the assignment obtains from non-spatial and spatially-aware clus
 
 ```{r plot-xy-k-joint, message=FALSE, fig.width=11, fig.height=6}
 #| code-fold: true
-ks <- c("Label", "Leiden", "Banksy")#, "CellCharter")
+ks <- c("Label", "Leiden", "Banksy")
 lapply(ks, \(.) {
     plt <- plotCoords(spe, annotate=.)
     plt$layers[[1]]$aes_params$stroke <- 0
@@ -301,29 +307,97 @@ mtx <- sweep(assay(pbs, "sums"), 2, pbs$counts, `/`)
 pheatmap(mat=t(mtx), scale="column", breaks=seq(-2, 2, length=101))
 ```
 
+## Annotation
+
+Following clustering and marker gene identification, the next step is the 
+biological interpretation of identified subpopulations, typically by 
+assigning them cell type or -- in spatial context -- tissue domain labels. 
+Depending on data characteristics (e.g., spatial resolution, molecular coverage), 
+and the availability of a suitable single-cell reference dataset, annotation 
+can be performed using a range of approaches, ranging from manual to automated 
+marker-based annotation, reference mapping, deep learning, or foundation models. 
+Several common annotation strategies are outlined below.
+
+- **Deconvolution**: 
+For spot-based ST (e.g., Visium) where spots contain multiple cells, it is
+typically required to estimate the proportions of different cell types within 
+each spot through reference-based deconvolution (see @sec-seq-deconvolution).
+
+- **Manual**: 
+Clusters can be labeled based on the expression of canonical marker genes and 
+results from DE analysis (as shown above). While highly accurate when performed 
+by experts, this process is labor-intensive and arguably subjective.
+
+- **Marker-based**: 
+To reduce manual effort and improve reproducibility, clusters can be scored 
+against predefined marker gene signatures (see @sec-ind-feature-set-signatures)
+using tools such as `r BiocStyle::Biocpkg("CellAssign")` [@Zhang2019-CellAssign]
+and `r BiocStyle::CRANpkg("scType")` [@Ianevski2022-ScType].
+
+- **Reference-based**:
+For imaging-based ST data in particular (e.g., Xenium, MERFISH), labels from a 
+high-quality, annotated scRNA-seq reference atlas can be "projected" onto the 
+spatial data. Popular R-based tools include `r BiocStyle::Biocpkg("SingleR")` 
+[@Aran2019-SingleR] (Bioconductor), and `r BiocStyle::Githubpkg("satijalab/azimuth")` 
+[@Hao2021-Seurat] (implemented as part of Seurat v5+).
+
+- **Deep learning**:
+These approaches use neural network architectures, such as variational autoencoders 
+(VAEs) or graph neural networks (GNNs), to learn complex cellular representations 
+for annotation. For instance, `r BiocStyle::Githubpkg("scverse/scvi-tools")`'s 
+`scANVI` [@Xu2021-scANVI] leverages semi-supervised learning to project cells 
+onto a latent space for label prediction.
+
+- **Foundation models**:
+More recently, foundation models (FMs) pretrained on very many single cells have emerged. 
+Such models, (e.g., `scFoundation` [@Hao2024-scFoundation], `scGPT` [@Cui2024-scGPT], 
+and `Geneformer` [@Theodoris2023-Geneformer]) can be used zero-shot or fine-tuned 
+to classify cell types across diverse tissues and platforms with high accuracy.
+
+## References
+
+Some annotation approaches rely on high-quality single-cell reference datasets. 
+In this context, so-called *atlas* efforts aim to generate expert-curated, 
+standardized resources that serve as biological anchors across diverse species, 
+tissues, developmental stages, and disease states. These resources typically 
+provide large collections of molecular profiles, either through dedicated 
+publications or via centralized data portals that harmonize datasets from 
+multiple studies. Below, we highlight several widely known resources, 
+including ongoing efforts towards spatial and multi-modal ones.
+
+- "The **Human Cell Atlas (HCA)** is a global consortium that is mapping 
+every cell type in the human body" across health and disease [@Regev2017-HCA]. 
+As part of this effort, multi-organ atlases such as *Tabula Muris* 
+[@TabulaMuris2018] and *Tabula Sapiens* [@TabulaSapiens2022] provide 
+high-resolution references for mouse and human, respectively.
+
+- Still work in progress, the **Spatial Atlas of Human Anatomy (SAHA)** is 
+an effort to generate a multi-modal, subcellular-resolution spatial reference 
+map for millions of cells in their native 3D tissue context [@Park2025-SAHA].
+
+- **CELLxGENE** (Chan Zuckerberg Initiative) is a data portal and explorer 
+that provides standardized access to thousands of datasets and their 
+associated expression matrices [@Megill2021-cellxgene]. The Bioconductor
+package `r BiocStyle::Biocpkg("cellxgenedp")` provides an alternative, 
+R-based interface, allowing programmatic data discovery and retrieval.
+
+- The **Human Protein Atlas (HPA)** integrates transcriptomics and proteomics
+data to map their spatial distributions in human tissues and cells [@Thul2018-HPA].
+
 ## Appendix
 
 ::: {.callout-tip icon="false" title="Further reading"}
 
 - The [single-cell best practices](https://www.sc-best-practices.org/spatial/domains) chapter on spatial domains divides methods into two broad categories: (i) methods that identify spatial domains using gene expression together with spatial coordinates, and (ii) methods that additionally incorporate features extracted from histological images.
+Previous chapters also cover single-cell clustering and annotation using Python/scverse.
 
-- The [OSCA](https://bioconductor.org/books/release/OSCA.basic/clustering.html) chapter on clustering provides an overview of graph-based, hierarchical, and centroid-based clustering methods for scRNA-seq data. Together with the preceding chapter on dimensionality reduction, these concepts underpin many spatial clustering approaches.
+- The [OSCA](https://bioconductor.org/books/release/OSCA.basic/clustering.html) chapter on clustering provides an overview of graph-based, hierarchical, and centroid-based clustering methods for scRNA-seq data. Together with the preceding chapter on dimensionality reduction, these concepts underpin many spatial clustering approaches. Marker gene detection and cell type annotation are covered in the following couple chapters.
 
 - @Wang2024-review-spatial-domain categorize ST clustering approaches into probability statistics-, graph neural network- and contrastive learning-based approaches, and review their advantages and limitations for clustering of data from seq- and img-based assays.
-  
-**Benchmarks**
 
-- @Chen2025-benchmark-clustering compare 14 methods across ~600 datasets from 10 technologies.
-  
-- @Sun2025-benchmark-clustering compare 22 methods across 15 datasets spanning 9 technologies and diverse tissue types.
+- @Sun2025-benchmark-clustering compare 22 methods across 15 datasets spanning 9 technologies and diverse tissue types. Notably, the authors also propose a "consensus-guided workflow [...] to generate consensus representations", moving beyond traditional scoring and comparison of methods based on ground truths.
 
-- @Xiong2025-benchmark-clustering compare 10 methods across 2 simulated and 3 real multi-slide datasets.
-
-- @Hu2024-benchmark-clustering compare 16 graph- and statistic-based approaches, including `BayesSpace` and `BANKSY`, across 10 (mostly seq-based) datasets.
-
-- @Liu2024-network-clustering compare 8 GNN-based approaches, including `SpaceFlow`, across 4 seq- and one img-based dataset.
-
-- @Cheng2022-benchmark-clustering compare 15 methods (from 7 frameworks) across 7 datasets (5 seq- and 2 img-based). 
+- @Chen2025-benchmark-clustering compare 14 methods across ~600 datasets from 10 technologies. Several other benchmarking studies have also compared different subsets of methods across different subsets of  platforms and tissue types [@Cheng2022-benchmark-clustering; @Hu2024-benchmark-clustering; @Liu2024-network-clustering; @Xiong2025-benchmark-clustering].
  
 :::
 

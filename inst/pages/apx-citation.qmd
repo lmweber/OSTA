@@ -383,14 +383,32 @@ benchmark, or other, references and resources mentioned throughout the book.
 
 | | |
 |-|-|
-`r Biocpkg("BANKSY")` | @Singhal2024-BANKSY |
-`r Biocpkg("BayesSpace")` | @Zhao2021-BayesSpace |
-`r Githubpkg("CellCharter")` | @Varrone2024-CellCharter | 
-Leiden | @Traag2019-Louvain-to-Leiden |
-`r CRANpkg("PRECAST")` | @Liu2023-PRECAST | 
-`r Githubpkg("Tang-Lab-super/PROST")` | @Liang2024-PROST |
-`r Githubpkg("SpaceFlow")` | @Ren2022-SpaceFlow |
-`r Githubpkg("zhanglabtools/STAGATE")` | @Dong2022-STAGATE |
+| `r Biocpkg("BANKSY")` | @Singhal2024-BANKSY |
+| `r Biocpkg("BayesSpace")` | @Zhao2021-BayesSpace |
+| `r Githubpkg("CellCharter")` | @Varrone2024-CellCharter | 
+| Leiden | @Traag2019-Louvain-to-Leiden |
+| `r CRANpkg("PRECAST")` | @Liu2023-PRECAST |
+| `r Githubpkg("Tang-Lab-super/PROST")` | @Liang2024-PROST |
+| `r Githubpkg("SpaceFlow")` | @Ren2022-SpaceFlow |
+| `r Githubpkg("zhanglabtools/STAGATE")` | @Dong2022-STAGATE |
+| `r Biocpkg("CellAssign")` | @Zhang2019-CellAssign |
+| `r CRANpkg("scType")` | @Ianevski2022-ScType |
+| `r Biocpkg("SingleR")` | @Aran2019-SingleR |
+| `r Githubpkg("satijalab/azimuth")` | @Hao2021-Seurat |
+|  `r BiocStyle::Githubpkg("scverse/scvi-tools")`'s `scANVI` | [@Xu2021-scANVI] |
+| `scFoundation` | @Hao2024-scFoundation |
+| `scGPT` | @Cui2024-scGPT |
+| `Geneformer` | @Theodoris2023-Geneformer |
+| HCA | @Regev2017-HCA |
+| Tabula Muris | @TabulaMuris2018 |
+| Tabula Sapiens | @TabulaSapiens2022 |
+| SAHA | @Park2025-SAHA |
+| CELLxGENE | @Megill2021-cellxgene |
+| HPA | @Uhlen2015-HPA |
+| review | @Wang2024-review-spatial-domain |
+| benchmarks | @Chen2025-benchmark-clustering; @Sun2025-benchmark-clustering |
+| | @Cheng2022-benchmark-clustering; @Hu2024-benchmark-clustering |
+| | @Liu2024-network-clustering; @Xiong2025-benchmark-clustering |
 
 : {.striped tbl-colwidths="[33,66]"}
 
