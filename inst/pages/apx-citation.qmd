@@ -186,7 +186,7 @@ benchmark, or other, references and resources mentioned throughout the book.
 | | |
 |-|-|
 | `r Githubpkg("scverse/anndata")`` | @Virshup2024-anndata | 
-| `r Githubpkg("scverse/anndataR")` | @Deconinck2025-anndataR |
+| `r Biocpkg("anndataR")` | @Deconinck2026-anndataR |
 | `r Biocpkg("basilisk")` | @Lun2022-basilisk |
 | [reticulate](https://rstudio.github.io/reticulate/) | @Ushey2017-reticulate |
 | `r Biocpkg("zellkonverter")` | @Zappia2020-zellkonverter |
