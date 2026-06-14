@@ -30,6 +30,19 @@ stress signatures that alter molecular profiles within minutes.
 During sectioning, tissue folds or tears can create "hot spots" of 
 aggregated transcripts, or "cold spots" where tissue is lost.
 
+::: {#fig-hne fig-align="center"}
+
+::: {.layout-ncol=3}
+![](../images/bkg-exp-design-he1.png){width=25%}
+![](../images/bkg-exp-design-he2.png){width=25%}
+![](../images/bkg-exp-design-he3.png){width=25%}
+:::
+
+Exemplary **histology artifacts** from knife chatter, tissue folding, and 
+physical tearing (there are many, many more!) *[source: arXiv:1903.07011, 
+https://labstore.com, and https://www.leicabiosystems.com]*
+:::
+
 ### Fixation modalities: FF vs. FFPE
 
 The choice between fixation modalities is often dictated by clinical 
