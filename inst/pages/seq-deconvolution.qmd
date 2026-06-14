@@ -22,9 +22,13 @@ To help understand these mixtures, at least 20 deconvolution techniques have bee
   - `r BiocStyle::Githubpkg("SpatialTranscriptomicsResearch/std-poisson")` [@Berglund2018-std-poisson]
   - `r BiocStyle::Githubpkg("almaan/stereoscope")` [@Andersson2020-stereoscope]
   - `r BiocStyle::Githubpkg("DongqingSun96/STRIDE")` [@Sun2022-STRIDE]  in Python.
+  
 - **non-negative matrix factorization (NMF)-based**: decompose gene expression data into latent components representing different cell types. Available tools include `r BiocStyle::Githubpkg("drieslab/Giotto")`'s `SpatialDWLS` [@Chen2025-Giotto-Suite] and `r BiocStyle::Biocpkg("SPOTlight")` [@ElosuaBayes2021-SPOTlight] in R, and `r BiocStyle::Githubpkg("tudaga/NMFreg_tutorial")` in Python.
+
 - **graph-based**: use graph neural networks or graph-based optimization to model spatial relationships. Available tools include `r BiocStyle::Githubpkg("leihouyeung/SD2")` [@Li2022-SD2] in R, and `r BiocStyle::Githubpkg("Su-informatics-lab/DSTG")` [@Song2021-DSTG] and `r BiocStyle::Githubpkg("ma-compbio/SpiceMIx")` [@Chidester2023-SpiceMix] in Python.
+
 - **optimal transport (OT)-based**: infer spatial gene expression distributions by mapping scRNA-seq and ST data. Available tools include `r BiocStyle::Githubpkg("zcang/SpaOTsc")` [@Cang2020-SpaOTsc] and `r BiocStyle::Githubpkg("rajewsky-lab/novosparc")` [@Nitzan2019-novoSpaRc] in Python.
+
 - **deep learning-based**: align and integrate single-cell and spatial transcriptomics data with neural networks. For example, `r BiocStyle::Githubpkg("broadinstitute/Tangram")` [@Biancalani2021-Tangram] in Python.
 
 Among these, `std-poisson`, `STdeconvolve`, and `SpiceMix` are reference-free methods. Methods that incorporate spatial location information are `CARD`, `DSTG`, `SD2`, `Tangram`, `cell2location`, `DestVI`, `std-poisson`, and `SpiceMix`.

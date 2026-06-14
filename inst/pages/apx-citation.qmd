@@ -389,6 +389,13 @@ benchmark, or other, references and resources mentioned throughout the book.
 :::
 
 - @sec-ind-dimensionality-reduction: Dim. reduction
+
+| | |
+|-|-|
+| quick tips | @Nguyen2019-DR |
+| perspective | @Chari2023-specious |
+| benchmarks | @Xiang2021-benchmark-dimred; @Pandit2022-benchmark-dimred |
+
 - @sec-ind-clustering: Clustering
 
 ::: {.tbl}

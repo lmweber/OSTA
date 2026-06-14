@@ -160,6 +160,28 @@ ggplot(df, aes(x_centroid, y_centroid, col=rgb)) +
 
 ## Appendix
 
+::: {.callout-tip icon="false" title="Further reading"}
+ 
+- @Chari2023-specious's "The Specious Art of Single-Cell Genomics" perspective
+examines practical implications of DR embeddings, suggesting that "distortions 
+[...] make such embeddings counter-productive", and exploring alternatives.
+ 
+- @Nguyen2019-DR's
+"Ten Quick Tips for Effective Dimensionality Reduction" are a nice and brief read,
+providing guidelines for correctly performing, interpreting, and communicating DR.
+
+- The [OSCA](https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html) 
+chapter on dimensionality reduction of scRNA-seq data covers PCA as well as 
+non-linear techniques, including t-SNE and UMAP, in must greater detail.
+
+- The [single-cell best practices](https://www.sc-best-practices.org/preprocessing_visualization/dimensionality_reduction.html)
+chapter covers the complementary Python implementations of PCA, t-SNE, and UMAP.  
+
+- There are several works benchmarking DR methods of single-cell transcriptomics 
+data (e.g., [@Xiang2021-benchmark-dimred; @Pandit2022-benchmark-dimred])
+
+:::
+
 ### References {.unnumbered}
 
 {{< include _stop.qmd >}}
