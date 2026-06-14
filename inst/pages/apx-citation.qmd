@@ -75,8 +75,20 @@ benchmark, or other, references and resources mentioned throughout the book.
 
 | | |
 |-|-|
-| 3D ST | @Vickovic2022-three-dimensional |
+| 3D ST | @Vickovic2022-3D |
 | Open-ST | @Schott2024-Open-ST; @Schott2025-protocol |
+| PASTE | @Zeira2022-PASTE |
+| PASTE2 | @Liu2023-PASTE2 |
+| STalign | @Clifton2023-STalign |
+| STARmap | @Wang2018-STARmap |
+| Deep-STARmap | @Sui2025-Deep-STARmap |
+| 3D MERFISH | @Fang2024-3D-MERFISH |
+| C3PO | @Cotterell2024-C3PO
+| CLARITY | @Tomer2014-CLARITY |
+| 3DISCO | @Erturk2012-3DISCO |
+| DISCO-MS | @Bhatia2022-DISCO-MS |
+| sc4D | @Rao2025-sc4D |
+| MOSAICA | @Vu2022-MOSAICA |
 | scMAGS | @Baran2023-marker | 
 | CITE-seq | @Liu2023-spatial-CITE-seq |
 | spatial omics | @Moffitt2022-emerging; @Bressan2023-dawn |

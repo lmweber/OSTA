@@ -61,7 +61,6 @@ specialized capture methods, such as probe-based capture, to ensure sensitivity.
 
 While FFPE blocks are often perceived as "deteriorating" over time, biological
 macromolecules remain remarkably stable for decades if stored at room temperature. 
-However, their stability profiles differ:
 
 - **DNA** is the most resilient, and remains stable for sequencing in blocks 
 stored for **over 40-50 years** with minimal quality impact [@Kokkat2013-FFPE], 

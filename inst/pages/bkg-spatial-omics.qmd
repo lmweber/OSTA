@@ -6,7 +6,6 @@
 
 Spatial omics (or spatially-resolved omics) refers to a set of recently-developed technologies that enable molecular measurements (e.g. gene expression) with spatial resolution. Spatially-resolved transcriptomics and spatial proteomics were named the **Method of the Year 2020** [@MethodOfYear2020] and **Method of the Year 2024** [@MethodOfYear2024] by the journal *Nature Methods*, and have each become widely applied in a range of biological contexts.
 
-
 ### Data modalities and technological platforms
 
 In general, there are now a wide variety of data modalities that can be measured (e.g. gene expression, chromatin accessibility, histone modifications, and antibody-based protein abundance), with diverse measurement streams (e.g. high-throughput sequencing, imaging, and mass spectrometry), all of which give molecular measurements in a spatial context for a given tissue area.
@@ -15,13 +14,11 @@ Technological platforms differ drastically in terms of the experimental procedur
 
 Platforms may be broadly grouped into "sequencing-based" and "imaging-based" technologies; some of the latter can be further classified into "molecule-based" or not. The main platforms are described in more detail below. Sequencing-based platforms tend to provide higher gene coverage (e.g. full transcriptome), while imaging-based platforms tend to provide higher spatial resolution (e.g. single-cell or subcellular resolution).
 
-
 ### Commercially available platforms
 
 In this book, we focus on commercially available platforms, since these are the most widely used and accessible. However, the data representations are often similar for other related platforms. The initial chapters of this book are split into separate parts for sequencing-based and imaging-based platforms, since several analysis techniques are specific to each of these, followed by chapters for platform-independent and other analyses.
 
 In the sections below, we give a brief overview of several commercially available platforms. For more in-depth background, several recent reviews are available, covering available platforms, analysis methods, outstanding challenges, and additional topics [@Bressan2023-dawn; @Moses2022-museum; @Tian2023-vistas; @Lundberg2019-proteomics; @Gulati2024-profiling; @Paul2021-imaging; @Mund2022-unbiased; @Palla2022-components; @Moffitt2022-emerging; @Rao2021-exploring; @Cheng2023-comprehensive].
-
 
 ## Sequencing-based spatial transcriptomics
 
@@ -31,7 +28,6 @@ The advantage of sequencing is that typically the features represent an untarget
 
 Spatial resolution varies between platforms, and depends on the size and spacing between the spatial measurement locations. Depending on the spatial resolution and tissue cell density in a given biological sample, each spatial measurement location may contain zero, one, or multiple cells. For these platforms, the spatial measurement locations are often referred to as "spots", "beads", or "bins".
 
-
 ## Imaging-based spatial transcriptomics
 
 Imaging-based platforms (or molecule-based platforms) identify the spatial locations of individual RNA molecules by sequential in situ hybridization (ISH) or in situ sequencing (ISS), for targeted panels of up to hundreds or thousands of genes. Since transcripts are individually identified, the raw data is collected at subcellular spatial resolution.
@@ -40,28 +36,76 @@ Image segmentation is used to identify the boundaries of individual cells or nuc
 
 The selection of targeted sets of biologically informative genes for an experiment, referred to as panel design, is a key consideration during experimental design [@Baran2023-marker; @Kuemmerle2024-probe-set; @Zhang2024-panel]. Several commercially available options for targeted gene sets suitable for certain biological contexts are available.
 
-
 ## Other types of spatial omics data
 
 ### Spatial proteomics
 
 Imaging-based proteomics, also called multiplexed imaging, represents a broad array of spatial detection technologies, the vast majority of which are antibody-based. @Semba2024-multiplexed categorize these antibody-based technologies into either "single-shot" (e.g. imaging mass cytometry; IMC) or "multicycle" (e.g. Lunaphore) imaging approaches. Single-shot refers to the set of, for example, heavy metal ions (representing protein presence), resulting from a laser ablation of a pre-stained sample. Multicycle approaches refer to sets of antibodies that are sequentially stained and stripped, with an imaging step at each cycle. The two most common single-shot spatial proteomics platforms are IMC and MIBIscope, with maximum pixel resolution of 0.4 µm and 1 µm, respectively, and each platform measuring upwards of 40 channels (proteins) [@Semba2024-multiplexed].
 
-
 ### Other modalities
 
 While the focus of the data analyses in this book is primarily on spatially-resolved gene and protein expression, here we also mention other modalities or data structures that are adjacent or emerging. These will not be directly covered in the data examples in the book, but some of the analysis steps discussed in the chapters may have applications to these other contexts.
-
-Tissues are three-dimensional (3D) entities that are represented as 2D slices for many of the analyses discussed here. However, there will be various emerging datasets that have measurements made along a third dimension [@Schott2024-Open-ST; @Vickovic2022-three-dimensional], whether this is directly measured (e.g. 3D imaging) or indirectly reconstructed from multiple per-slice measurements [@Schott2025-protocol]. In some cases, the analyses discussed in this book will either still apply, or can be applied successively on multiple slices.
 
 Multi-omics datasets (e.g. RNA expression and protein abundance, or RNA expression and chromatin accessibility) that are collected in a spatial context are now emerging (e.g. [@Liu2023-spatial-CITE-seq; @Zhang2023-spatial-epigenome]). Epigenomic modalities, in particular, may require alternative preprocessing steps, but some of the analyses mentioned in the chapters here could be re-used (e.g. clustering given a low-dimensional embedding) or adapted.
 
 Another emerging modality within a spatial context is the measurement of metabolites, lipids, or proteins via mass spectrometry imaging (MSI), such as MALDI-MSI [@Zhang2024-MSI]; these assays are sometimes known as imaging mass spectrometry. MSI typically involves coating tissues with a matrix layer that promotes the ionization of analytes of interest (e.g. glycans; [@Palomino2024-mass]). Integration of MSI with other spatial modalities (e.g. to reveal cell types) may also be promising.
 
+## Beyond 2D sections
+
+Tissues are inherently three-dimensional (3D), yet most spatial omics 
+platforms currently capture molecular profiles from thin 2D sections. 
+Newer technologies try to move beyond this, either through truly volumetric 
+measurements, or by computationally reconstructing them from serial sections 
+(2.5D); prospectively, time will remain the last dimension to unlock (4D).
+
+### Reconstruction from serial sections
+
+A common strategy to capture 3D tissue architecture involves performing spatial 
+omics on multiple serial sections and computationally aligning them (sometimes 
+referred to as 2.5D or 'virtual tissue blocks'). Several frameworks have been 
+developed for this purpose (see also @sec-crs-registration). To give a few 
+examples, **PASTE** and **PASTE2** use optimal transport to align and integrate 
+adjacent slices based on transcriptional similarity and physical distances 
+[@Zeira2022-PASTE; @Liu2023-PASTE2]. **STalign** employs diffeomorphic metric 
+mapping to account for non-linear distortions across slices, enabling alignment 
+to a 3D common coordinate framework [@Clifton2023-STalign]. **Open-ST** 
+[@Schott2024-Open-ST] performs volumetric segmentation from 2D sections; 
+@Vickovic2022-3D instead align and interpolate data for a 3D view.
+
+### Volumetric measurements
+
+More recently, bona fide 3D biotechnologies have been emerging. These allow for 
+molecular profiling of intact, thick tissue volumes, typically by integrating 
+*in situ* sequencing or mass spectrometry with tissue clearing or expansion. 
+Exemplary approaches include **STARmap** and **Deep-STARmap** (spatially resolved 
+transcript amplicon readout mapping), which demonstrated *in situ* sequencing in 
+~10 and 60–200 µm thick tissue blocks, respectively [@Wang2018-STARmap; @Sui2025-Deep-STARmap]. 
+**3D MERFISH** is an advancement of MERFISH (see @sec-img-introduction) that utilizes 
+confocal microscopy to perform high-resolution transcriptome imaging across thick 
+tissue sections [@Fang2024-3D-MERFISH]. And, **C3PO** (Cell 3D Positioning by 
+Optical encoding) uses fluorescent gradients, allowing for the reconstruction of 
+3D coordinates after dissociation and molecular profiling of single cells [@Cotterell2024-C3PO]. 
+Finally, expansion and clearing techniques such as **expansion microscopy (ExM)**, 
+CLARITY [@Tomer2014-CLARITY], and 3DISCO [@Erturk2012-3DISCO] can be combined 
+with spatial omics; an exemplary approach is **DISCO-MS** [@Bhatia2022-DISCO-MS].
+
+### Spatiotemporal measurements
+
+The dimension of time (4D) is critical for understanding dynamic processes. 
+Spatiotemporal analysis frameworks such as **sc4D** [@Rao2025-sc4D] use 
+optimal transport to infer joint cellular responses across longitudinal 
+measurements. By contrast, **MOSAICA** [@Vu2022-MOSAICA] combines *in situ* 
+labeling (mRNA, protein) with spectral- and time-resolved fluorescence imaging.
+
+At present, 3D and 4D spatial omics remain an active area of research with 
+several outstanding technical challenges; a lack of standardized analysis 
+frameworks and the computational complexity of volumetric integration are among 
+them. R/Bioconductor-based methodologies for these tasks are currently 
+limited, making this a promising direction for future tool development.
 
 ## Appendix
 
-::: {.callout-tip collapse="false" title="Fruther reading"}
+::: {.callout-tip collapse="false" title="Further reading"}
 
 - @Moffitt2022-emerging and @Bressan2023-dawn 
 provide broad reviews of **spatial omics**, summarizing key technologies 
