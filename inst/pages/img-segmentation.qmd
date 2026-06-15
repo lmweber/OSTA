@@ -75,7 +75,7 @@ in spatially resolved transcriptomics, including an overview of current
 approaches (e.g., transcript-informed vs. image-only segmentation), 
 spatial bleeding correction, and effects on downstream analysis tasks.
 
-- The idea of cell segmentation-free analysis is introduced by @Park2021-SSAM,
+- The idea of cell segmentation-free analysis is introduced in @Park2021-SSAM,
 namely, by subjecting transcriptional densities to clustering as opposed 
 to transcript allocation that relies on accurate cell segmentation.
 
