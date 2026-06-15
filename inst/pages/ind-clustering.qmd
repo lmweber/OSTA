@@ -47,7 +47,7 @@ spe <- readRDS("img-spe_cl.rds")
 
 As a baseline, we will perform a standard graph-based clustering approach developed for scRNA-seq data, using molecular features (gene expression) only.
 Specifically, we construct a shared nearest neighbor (SNN) graph based on non-spatial PCs (`reducedDim` slot `"PCA_tx"`), and use the Leiden algorithm for community detection [@Traag2019-Louvain-to-Leiden].
-[The `resolution` parameter used here was selected in order to obtain a similar number of clusters annotated by the authors.]
+[The `resolution` parameter used here was selected in order to obtain a similar number of clusters annotated by the authors.]{.aside}
 
 ```{r clu-Leiden}
 # build cellular shared nearest-neighbor (SNN) graph;
