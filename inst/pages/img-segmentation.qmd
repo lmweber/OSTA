@@ -65,6 +65,22 @@ knitr::include_graphics("../images/img-seg_SSAM.jpeg")
 
 ## Appendix
 
+::: {.callout-tip icon="false" title="Further reading"}
+
+- @Mitchel2026-cellAdmix formally introduce the concept of spatial bleeding 
+in ST data, showcasing how it manifests and its effect on DE analysis, etc.
+
+- @Ishaque2026 give a perspective on challenges around segmentation 
+in spatially resolved transcriptomics, including an overview of current 
+approaches (e.g., transcript-informed vs. image-only segmentation), 
+spatial bleeding correction, and effects on downstream analysis tasks.
+
+- The idea of cell segmentation-free analysis is introduced by @Park2021-SSAM,
+namely, by subjecting transcriptional densities to clustering as opposed 
+to transcript allocation that relies on accurate cell segmentation.
+
+:::
+
 ### References {.unnumbered}
 
 {{< include _stop.qmd >}}
