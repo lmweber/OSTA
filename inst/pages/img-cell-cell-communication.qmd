@@ -396,7 +396,7 @@ of spatially resolved data with non-spatial approaches.
 
 - `r BiocStyle::Githubpkg("drieslab/Giotto")` [@Chen2025-Giotto-Suite] detects increased co-expression of LR pairs in neighboring cells of different types via comparison to randomly shuffled cell locations (permutation test).
 
-- `r BiocStyle::Githubpkg("CellChat")` [@Jin2025-CellChat] quantifies CCC signalling probability between two groups of cells using a simplified mass action-based model, which incorporates core LR interaction with potential multimeric structure and modulation by cofactors.
+- `r BiocStyle::Githubpkg("jinworks/CellChat")` [@Jin2025-CellChat] quantifies CCC signalling probability between two groups of cells using a simplified mass action-based model, which incorporates core LR interaction with potential multimeric structure and modulation by cofactors.
 
 - `r BiocStyle::Githubpkg("StatBiomed/SpatialDM")` [@Li2023-SpatialDM] uses a bivariate extension of Moran's $I$ -- a measure of spatial autocorrelation (cf., @sec-ind-spatial-statistics) -- to test LR pairs in close-range distance against independence.
 
