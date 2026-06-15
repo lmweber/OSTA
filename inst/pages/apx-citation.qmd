@@ -457,7 +457,6 @@ benchmark, or other, references and resources mentioned throughout the book.
 
 :::
 
-- @sec-ind-trajectory-inference: Trajectory inference
 - @sec-ind-feature-set-signatures: Feature-set signatures
 
 ::: {.tbl}
