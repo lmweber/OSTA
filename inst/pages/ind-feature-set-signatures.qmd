@@ -169,8 +169,8 @@ gene set activities in scRNA-seq data (using the R/Bioconductor packages
 `r BiocStyle::Biocpkg("AUCell")` and `r BiocStyle::Biocpkg("GSEA")`).
 
 - This [single-cell best practices](https://www.sc-best-practices.org/conditions/gsea_pathway.html)
-Python book chapter provides more conceptual background on and a 
-case study (using `r BiocStyle::Githubpkg("saezlab/decoupleR")`).
+Python book chapter provides more conceptual background on GSEA and 
+a case study (using `r BiocStyle::Githubpkg("saezlab/decoupleR")`).
 
 :::
 
