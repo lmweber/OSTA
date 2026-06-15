@@ -247,23 +247,25 @@ file.remove("spe.h5ad")
 
 ## Appendix
 
-Following are links to several key packages and tools relating to 
-R-Python interoperability, which were mentioned in the sections above:
+::: {.callout-tip icon="false" title="Further reading"}
+
+- This [single-cell best practices](https://www.sc-best-practices.org/introduction/interoperability.html)
+Python book chapter covers interoperability from Python/scverse's view, 
+including H5AD file handling plus a few general remarks on file formats, 
+and disk-based vs. in-memory interoperability.
 
 - `r BiocStyle::Biocpkg("anndataR")` [@Deconinck2026-anndataR]: 
 R package and community project to work with `AnnData` objects in R, including 
-conversion to and from `SingleCell/SpatialExperiment` and `Seurat` objects
-
-- `r BiocStyle::Biocpkg("zellkonverter")` [@Zappia2020-zellkonverter]: 
-R package to convert between `AnnData` and `SingleCellExperiment` objects, 
-as well as reading from and writing to H5AD
+conversion to and from `SingleCell/SpatialExperiment` and `Seurat` objects.
 
 - [reticulate](https://rstudio.github.io/reticulate/) [@Ushey2017-reticulate]: 
 R package and framework to call Python and run Python code in R, translate 
-between R and Python objects, and manage virtual and Conda environments
+between R and Python objects, and manage virtual and Conda environments.
 
 - `r BiocStyle::Biocpkg("basilisk")` [@Lun2022-basilisk]: 
-R package to install and manage Python environments in R packages and sessions
+R package to install and manage Python environments in R packages and sessions.
+
+:::
 
 ### References {.unnumbered}
 
