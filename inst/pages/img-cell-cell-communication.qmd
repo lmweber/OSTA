@@ -382,15 +382,13 @@ if (require("CCPlotR", quietly=TRUE))
     cc_circos(df, n_top_ints=100)
 ```
 
-<!-- Conclusion -->
+## Conclusion
 
 On a final note, inference is arguably much more complex (and results less straightforward to interpret) when a higher-plex panel is being considered; i.e., when overlapping and multimeric interactions are involved, which did not apply in the example provided here.
 Nevertheless, we hope that readers can appreciate the conceptual difference between expression data and CCC results, and will be able to implement similar `reticulate` approaches to incorporate methods living in Python into their analysis pipelines.
 
-## Appendix
-
-- @Liu2022 compare methods developed for CCC analysis 
-of spatially resolved data with non-spatial approaches.
+Several other methods not covered in this chapter are 
+listed below, each with its own methodological nuances:
 
 - `r BiocStyle::Biocpkg("mistyR")` [@Tanevski2022-MISTy] distinguishes between an 'intrinsic' view to capture how markers within a location influence one another; a 'juxtaview' to model local cellular niche (by relating expression between neighboring cells); and, a 'paraview' to capture tissue structure effects (by relating expression within a given radius).
 
@@ -401,6 +399,27 @@ of spatially resolved data with non-spatial approaches.
 - `r BiocStyle::Githubpkg("StatBiomed/SpatialDM")` [@Li2023-SpatialDM] uses a bivariate extension of Moran's $I$ -- a measure of spatial autocorrelation (cf., @sec-ind-spatial-statistics) -- to test LR pairs in close-range distance against independence.
 
 - `r BiocStyle::Githubpkg("zcang/SpaOTsc")` [@Cang2020-SpaOTsc] relies on optimal transport to segregate signal in a spatial region into LRs and their downstream genes, yielding information on regulatory flows between cells. 
+
+## Appendix
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- @Liu2022 compare methods developed for CCC inference from spatially resolved 
+omics data with non-spatial approaches; @Dimitrov2022 focus on scRNA-seq tools.
+
+- @Armingol2020 extensively review CCC inference from gene expression data, 
+covering different methodologies, application examples, databases, tools 
+in R and Python, as well as techniques to visualize inference results.
+
+- This [single-cell best practices](https://www.sc-best-practices.org/mechanisms/cell_cell_communication.html)
+Python book chapter covers CCC inference using `r BiocStyle::Githubpkg("saezlab/liana")`
+and [`NicheNet`](https://github.com/saeyslab/nichenetr) [@Browaeys2020-NicheNet].
+
+- The [awesome-cell-cell-communication](https://github.com/multitalk/awesome-cell-cell-communication)
+repository provides an extensive listing of CCC inference tools 
+for a variety of single-cell and spatially resolved omics.
+
+:::
 
 ### References {.unnumbered}
 
