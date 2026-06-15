@@ -1,4 +1,4 @@
-# Clustering {#sec-ind-clustering}
+# Clustering & annotation {#sec-ind-clustering}
 
 {{< include _start.qmd >}}
 

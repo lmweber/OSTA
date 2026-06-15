@@ -71,7 +71,7 @@ book:
           file: pages/ind-normalization.qmd
         - text: "⚙️ Dimensionality reduction"
           file: pages/ind-dimensionality-reduction.qmd
-        - text: "⚙️ Clustering"
+        - text: "⚙️ Clustering & annotation"
           file: pages/ind-clustering.qmd
         - text: "⚙️ Feature selection & testing"
           file: pages/ind-feature-selection-testing.qmd
