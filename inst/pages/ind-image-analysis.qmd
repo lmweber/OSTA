@@ -215,6 +215,19 @@ The `destdir` argument can be used to specify a different directory.
 
 ## Appendix
 
+::: {.callout-tip icon="false" title="Further reading"}
+
+- @Mandal2025 is an excellent piece that introduces essential histopathology 
+concepts to computational readers for applications of AI and deep learning.
+
+- The [Prov-GigaPath](https://github.com/prov-gigapath/prov-gigapath) repository includes 
+notebooks on WSI processing, and using embeddings and the pretrained model, etc. [@xu2024gigapath].
+
+- The space of bioimage analysis is vast; this [e-book](https://bioimagebook.github.io/)
+provides a nice overview of very basic image (pre)processing tasks in Python.
+
+:::
+
 ### References {.unnumbered}
 
 {{< include _stop.qmd >}}
