@@ -458,24 +458,6 @@ benchmark, or other, references and resources mentioned throughout the book.
 :::
 
 - @sec-ind-trajectory-inference: Trajectory inference
-
-::: {.tbl}
-
-| | |
-|-|-|
-| `r Biocpkg("slingshot")` | @Street2018-slingshot |
-| `r Githubpkg("cole-trapnell-lab/monocle3")` | @Trapnell2014-monocle; @Cao2019-monocle3 |
-| PAGA | @Wolf2019-PAGA |
-| `r Githubpkg("biomedical-hub/stLearn")` | @Pham2023-stLearn |
-| `spaTrack` | @Gao2024-spaTrack |
-| `SpatialPCA` | @Lu2023-SpatialPCA |
-| `SpaceFlow` | @Ren2022-SpaceFlow |
-| benchmark | @Saelens2019-benchmark-ti |
-
-: {.striped tbl-colwidths="[33,66]"}
-
-:::
-
 - @sec-ind-feature-set-signatures: Feature-set signatures
 
 ::: {.tbl}
