@@ -91,8 +91,8 @@ considerations are required [@Lundberg2019-proteomics; @Semba2024-multiplexed].
 
 #### Quality control: RIN vs. DV200
 
-The traditional **RNA Integrity Number (RIN)** metric used to scores RNA quality 
-on a scale from 1 (completely degraded) to 10 (fully intact) by analyzing the 
+The traditional **RNA Integrity Number (RIN)** metric scores RNA quality on 
+a scale from 1 (completely degraded) to 10 (fully intact) by analyzing the 
 ratio of ribosomal RNA subunits via electrophoretic traces [@Schroeder2006-RIN]. 
 However, because RNA is extensively fragmented in FFPE tissue,
 RIN is often less informative for clinical samples.
@@ -116,28 +116,41 @@ providing significantly higher sensitivity in fragmented clinical samples.
 
 ## Statistical design & power analysis
 
-### Replication: technical vs. biological
+### Replication: biological vs. technical
 
-A robust experimental design must distinguish between technical and biological 
+A robust experimental design must distinguish between biological and technical 
 replicates. This distinction is critical for correctly estimating statistical 
 power and ensuring that findings can be generalized to a broader population.
-[The goal one should have is not "I want to analyze this data." but
-"I want to learn about a fundamental biological principle."]{.aside}
 
-- **Technical replicates** are repeated measurements taken from the 
-same biological unit. In spatial omics, this commonly includes:
-  - Serial sections taken from the same tissue block.
-  - Processing the same sample across multiple slides or runs.
-  - Treating multiple cells or spots within a slice as independent.
-  
+::: {.column-margin}
+The goal one should have is not "I want to analyze this data." 
+but "I want to learn about a fundamental biological principle." 
+A few infamous quotes capture this sentiment well:
+
+*"We are drowning in a sea of data and starving for knowledge."* 
+-- Sydney Brenner (biologist)
+
+*"The purpose of computing is insight, not numbers."* 
+-- Richard Hamming (mathematician)
+
+*"The purpose of a model is not to fit the data but to sharpen the questions."* 
+-- Samuel Karlin (mathematician)
+:::
+
 - **Biological replicates** are independent samples from different 
 biological entities (e.g., different mice or patient donors). 
 They represent the experimental unit $N$ that is typically reported 
 in publications, and are used to test hypotheses about a population. 
-[Increasing $N$ serves to better estimate within-group variability, 
+Increasing $N$ serves to better estimate within-group variability, 
 thereby increasing the power of statistical tests to detect actual 
 between-group differences. In other words: accounting for biological 
-variation allows one to arrive at more generalizable findings.]{.aside}
+variation allows one to arrive at more generalizable findings.
+
+- **Technical replicates** are repeated measurements taken from 
+the same biological unit. In spatial omics, this commonly includes 
+serial sections taken from the same tissue block, 
+processing the same sample across multiple slides or runs,
+or treating multiple cells or spots within a slice as independent.
 
 While technical replicates increase the precision of an estimate for a 
 specific biological unit, they do not increase the sample size $N$ for
@@ -148,18 +161,14 @@ correlation, whereas biological replicates (e.g., different donors) do not.
 [Misunderstanding of this -- treating technical replicates as if they were 
 independent biological samples -- is called **pseudo-replication**.]{.aside}
 
-### Batch Effects
+### Units of analysis & pseudo-replication
 
 Spatial runs are often processed in small batches. Randomization of samples 
 across slides and batches is critical to avoid confounding biological signal 
-with technical variation.
-
-### Units of analysis & pseudo-replication
-
-Understanding appropriate units of analysis is critical for both (spatial)
-power analysis and downstream statistical modeling. Failing to distinguish 
-between these units can lead to pseudo-replication, where the sample size is
-artificially inflated, leading to overconfident conclusions ("over-selling").
+with technical variation. In this context, understanding appropriate units of 
+analysis is critical for both (spatial) power analysis and statistical modeling. 
+Failing to distinguish between these units can lead to pseudo-replication, where 
+the sample size is artificially inflated, leading to overconfident conclusions.
 
 - **Biological Unit (BU)** = entity of interest that provides replication 
 for the population you wish to generalize to (e.g., mouse, human donor).
@@ -181,72 +190,94 @@ the number of independent replicates $N$ is determined by the number of EUs
 data on ten million cells from ten patients does not mean clinical relevance.
 :::
 
-### Spatial power analysis
+### (Spatial) power analysis
 
-In spatial omics, we must also consider the spatial arrangement of cells 
-and features as part of a larger 3D organization (the actual tissue). 
-Spatial power analysis aims to determine a sensible sampling strategy:
+In bulk and single-cell RNA-seq, traditional power analysis estimates the 
+sample size and sequencing depth needed to reliably detect changes expression. 
+In spatial omics, we must also account for the spatial arrangement of cells. 
+Spatial power analysis aims to address this additional layer of complexity,
+e.g., by considering the following:
 
-1. **Tissue composition:** How many cells of a specific type are needed to detect a rare interaction?
-2. **Field of view (FOV) selection:** What tissue area or number of FOVs are required to capture spatial heterogeneity?
-3. **In silico tissue (IST)** can be used to simulate tissue structures and 
-optimize their design before performing the actual experiment [@Imkeller2023].
+- **Tissue architecture** and "event size" should be well understood in advance.
+For example, the size of a typical tumor or other anatomical sites being studied 
+such as tertiary lymphoid structures, brain layers, etc. [A good understanding 
+of what should be observed will help guide how to best observe it.]{.aside}
+
+- For imaging-based platforms, **fields of view (FOVs)** should fully capture
+spatial heterogeneity across a specimen; however, the size of FOVs and total 
+imaging area is either fixed or limited for current commercial platforms.
+
+- Computational models can be used to simulate **in silico tissue (IST)**,
+i.e., "virual" tissue structures that can help guide experimental design 
+*in silico* (that is, before an actual measurement is performed).
+
+### Tissue microarrays (TMAs)
+
+Dating back to the 90s, well before ST came to field, TMAs have become 
+a primary vehicle for scaling spatial studies to large-scale cohorts 
+[@Kononen1998-TMA]. There are several points of note here:
+
+- TMAs allow simultaneous processing of dozens of patient cores (**throughput**),
+usually 0.6 mm to 3 mm in diameter, on a single slide. They offer a means 
+to increase sample size while reducing intra-slide technical variability.
+
+- Then again, the primary risk of TMAs is **sampling bias**, where a small core 
+(which stems from a manual punch) may not fully capture tissue heterogeneity.
+
+- It is common practice to include **control tissue** (such as a well-known 
+reference, or cell line pellets) to support QC of staining or hybridization 
+assays (e.g., IHC/ISH), to enable normalization across slides and batches, 
+or to serve as (physical) orientation guides.
+
+::: {#fig-tma fig-align="center"}
+![](../images/bkg-exp-design-tma.png){width=75%}
+
+An exemplary **tissue microarray (TMA)** with a control core -- likely a cell 
+line pellet -- in the bottom-right corner. *[source: https://geneticistusa.com/]*
+:::
 
 ## Panel design & ROI selection
 
 ### Selecting RNA targets
 
-For imaging-based platforms (e.g., Xenium, CosMx, MERFISH), selecting the right 
-gene panel is a critical experimental step [@Baran2023-marker; @Kuemmerle2024-probe-set].
+For imaging-based platforms such as CosMx, Xenium, and MERFISH, the number of 
+molecular targets is either limited, costly to max out. This necessitates:
+selecting informative, yet minimal, targets (*gene set selection*) for which
+probes can be built (*probe design*) [@Baran2023-marker; @Kuemmerle2024-probe-set].
+For economic reasons, different vendors provide targeted panels designed for 
+particular biological contexts, e.g., mouse brain tissue or human immune-oncology. 
+These attempt to **balance exploration and discovery** (e.g., including common cell
+type markers as well as under-characterized targets to test biological hypotheses). 
 
-- **Exploratory vs. hypothesis-driven:** Panels should include "anchor" markers 
-for common cell types and "exploratory" targets for biological discovery.
-
-- **Density and bleeding:** Higher plexity can increase background noise and 
-spatial beeling [@Kuemmerle2024-probe-set] (see also @sec-img-segmentation).
+::: {.column-margin}
+In addition to higher cost, higher plexity can decrease spot-calling accuracy (due 
+to molecular crowing) and increase spatial bleeding (see also @sec-img-segmentation).
+:::
 
 ### Selection microdissection sites
 
 Some technologies like [Bruker's GeoMx](https://brukerspatialbiology.com/products/geomx-digital-spatial-profiler/) 
 require pre-selecting **regions of interest (ROIs)** for molecular profiling. 
 Unlike whole-tissue imaging, these platforms rely on **microdissection**.
-[Microdissection is typically **destructive**: techniques like traditional Laser 
-Capture Microdissection (LCM) physically cut out and destroy tissue for analysis. 
-GeoMx instead relies on UV-cleavable barcodes that are released upon UV light
-exposure, allowing for **non-destructive** "virtual" microdissection.]{.aside}
+There are different ways to define ROIs, e.g.: 
 
-- **Segmenting:** Defining Areas of Interest (AOIs) within an ROI based on 
-morphology markers. For example, using Pan-Cytokeratin (PanCK) to separate 
-the "tumor" from the "stroma" [@Beechem2020; @Merritt2020].
-
-- **Gridding:** Placing geometric shapes at regular intervals 
-for unbiased sampling across a large area.
-
-- **Contouring:** Drawing concentric bands around a landmark (e.g., a tertiary 
-lymphoid structures, blood vessel, or tumor interface) to analyze cellular
-patterns and gene expression as a function of distance [@Beechem2020].
-
-### Tissue Microarrays (TMAs)
-
-Tissue Microarrays (TMAs) have become the primary vehicle 
-for scaling ST to large clinical cohorts [@Kononen1998-TMA].
-
-- **Throughput:** TMAs allow simultaneous processing of dozens of patient cores 
-(usually 0.6 mm to 3 mm in diameter) on a single slide, offering a means to 
-increase sample size while reducing intra-slide technical variability.
-
-- **Sampling bias:** The primary risk of TMAs is sampling bias, where 
-a small core may not capture the full heterogeneity of the donor tissue.
-
-- **Control core(s):** It is common practice to include control tissues (such as
-a well-characterized reference, or cell line pellets) to support QC of staining 
-or hybridization assays (e.g., IHC/ISH), to enable normalization across slides 
-and batches, or to serve as (physical) orientation guides.
-
-::: {#fig-tma fig-align="center"}
-![](../images/bkg-exp-design-tma.png){width=50%}
-*[source: https://geneticistusa.com/]*
+::: {.column-margin}
+Microdissection is typically **destructive**. Technologies like traditional 
+Laser Capture Microdissection (LCM) physically cut out and destroy tissue for 
+analysis. GeoMx instead relies on UV-cleavable barcodes that are released upon 
+UV light exposure, allowing for **non-destructive** "virtual" microdissection.
 :::
+
+- **Segmentation** based on morphology markers such as CD45 (immune) 
+and PanCK (epithelia). This is arguably the most common approach.
+
+- **Contouring** by drawing concentric bands around a landmark (e.g., 
+a tertiary lymphoid structures or blood vessel) to analyze cellular
+patterns and gene/protein expression as a function of distance.
+
+- **Gridding** into regular intervals for unbiased sampling across an area;
+while not based on microdissection, this is done under the hood by Xenium, 
+CosMx, etc., through field of view (FOV) placement to image large tissue.
 
 ## Appendix
 
@@ -254,6 +285,16 @@ and batches, or to serve as (physical) orientation guides.
 
 - @Taqi2018 provide a comprehensive review of **artifacts in histopathology**,  
 including (pre)fixation, tissue-processing, staining artifacts, and more.
+
+- @Klaus2015 concisely review aspects of **experimental design**, including 
+replication, experimental units, batch effects, and randomization.
+
+- @Baran2023-marker and @Kuemmerle2024-probe-set present **panel design**
+strategies for targeted ST through gene set selection from scRNA-seq data.
+
+- @Lim2025 give **guidelines on choosing** a (commercial) ST platform based 
+on a variety of aspects that include molecular coverage, spatial resolution, 
+suitable species, capture area, acquisition time, and experimental cost.
 
 :::
 
