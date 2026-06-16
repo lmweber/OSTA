@@ -1,3 +1,8 @@
+---
+execute:
+  eval: false
+---
+
 # Normalization {#sec-ind-normalization}
 
 {{< include _start.qmd >}}
@@ -52,6 +57,24 @@ spe <- normalizeRnaCounts.se(spe)
 spe$sf_lib <- sizeFactors(spe)
 assayNames(spe)
 ```
+
+::: {.callout-tip title="Log-library size normalization" collapse="true"}
+Log-library size normalization is the simplest normalization strategy and the default option in several single-cell RNA-seq workflows. It normalizes the data by dividing each count by the column sums and rescaling them so that the original scale of the counts is preserved. Finally, the resulting normalized data are log-transformed after adding a pseudo-count of one to avoid issues with the log of zero.
+
+Specifically, denoting with $y_{ij}$ the count of gene $j$ in cell $i$, with $y_{i.}$ the sum of all gene counts for cell $i$ (_library size_), and with $y_{..}$ the sum of all counts across genes and cells, we define the size factors as
+$$
+\text{sf}_i = \frac{y_{i.}}{y_{..}/n}.
+$$
+
+Note that $y_{..}/n$ corresponds to the average library size.
+
+Finally, the log-normalized data are defined as
+$$
+\tilde{y}_{ij} = \log_2\left(\frac{y_{ij}}{\text{sf}_i}+1\right).
+$$
+
+Note that more robust normalization methods are available for single-cell RNA-seq data, see e.g., @Vallejos2017-normalization and @Lun2016-scran.
+:::
 
 An alternative that has been suggested is normalization by cell area (or volume). In principle, this is equivalent to assuming a constant transcription rate across cells and focusing on transcript density, rather than transcript counts, as a measure of gene expression.
 
