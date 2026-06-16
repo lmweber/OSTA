@@ -457,6 +457,25 @@ benchmark, or other, references and resources mentioned throughout the book.
 
 :::
 
+- @sec-crs-other: Other analyses
+
+::: {.tbl}
+
+| | |
+|-|-|
+| `r Biocpkg("infercnv")` | @Patel2014-infercnv |
+| siCNV | @Erickson2022-cnv |
+| `CopyKAT` | @Gao2021-CopyKAT |
+| `r Githubpkg("kharchenkolab/numbat")` | @Weng2024-Numbat |
+| CNV benchmarks | @Jensen2025-cnv; @Schmid2025-benchmark-cnv |
+| `scGPT` | @Cui2024-scGPT |
+| `scFoundation` | @Hao2024-scFoundation |
+| `Geneformer` | @Theodoris2023-Geneformer |
+
+: {.striped tbl-colwidths="[33,66]"}
+
+:::
+
 - @sec-ind-feature-set-signatures: Feature-set signatures
 
 ::: {.tbl}

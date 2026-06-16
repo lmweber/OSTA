@@ -97,13 +97,13 @@ book:
           file: pages/crs-imputation.qmd
         - text: "🧩 Workflow: Xenium × Visium"
           file: pages/crs-workflow-xenvis.qmd
+    - pages/_beyond.qmd
   appendices:
     - pages/apx-contributing.qmd
     - pages/apx-acknowledgments.qmd
     - pages/apx-related-resources.qmd
     - pages/apx-session-info.qmd
     - pages/apx-citation.qmd
-  #cover-image: assets/cover.png
   favicon: assets/favicon.png
   sidebar: 
     title: "OSTA"
