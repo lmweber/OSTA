@@ -1,8 +1,3 @@
----
-execute:
-  eval: false
----
-
 # Normalization {#sec-ind-normalization}
 
 {{< include _start.qmd >}}
