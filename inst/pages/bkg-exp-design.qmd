@@ -104,7 +104,7 @@ are often better predictors of library success in FFPE workflows.
 While these RNA integrity metrics are essential for sequencing-based ST, their 
 relevance is reduced in imaging-based platforms that rely on targeted probe 
 hybridization, as detection depends primarily on short hybridization regions 
-rather than full-length transcript integrity [@Ke2013; @Chen2015].
+rather than full-length transcript integrity [@Ke2013; @Chen2015-MERFISH].
 
 #### Capture chemistry: poly-dT vs. probe-based
 
