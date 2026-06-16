@@ -88,13 +88,14 @@ lattice-based uni- and multi-variate methods for img- and seq-based ST data.
 Notably, *pasta* also includes Python examples and more statistical detail,
 e.g., formal definitions and equations for different models and statistics.
 
-- The documentation of the [Voyager package](https://pachterlab.github.io/voyager/index.html) offers detailed documentation for lattice-based analysis of different technologies [@Moses2023-Voyager].
+- [Voyager](https://pachterlab.github.io/voyager/index.html) offers detailed documentation for lattice-based analysis of different technologies [@Moses2023-Voyager].
 
 - Point pattern-based content is largely based on the [Spatial Point Patterns: Methodology and Applications with R](https://book.spatstat.org/) textbook [@Baddeley2015-book-point-patterns].
 
-- In a review @zormpasMappingTranscriptomeRealizing2023 discuss how methods from geographical sciences can be leveraged for the analysis of spatial transcriptomics data and where potential challenges lie.
+- @zormpasMappingTranscriptomeRealizing2023 review how methods from geographical sciences can be leveraged for the analysis of ST data and where potential challenges lie.
 
-- @bianEstimatingTumourImmune2026 discuss spatial statistics methodology in a biological use case; estimating tumor infiltration.
+- @bianEstimatingTumourImmune2026 discuss spatial statistics methodology in a biological use case: estimating tumor infiltration.
+
 :::
 
 ### References {.unnumbered}
