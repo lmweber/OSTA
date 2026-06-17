@@ -383,7 +383,7 @@ Alternatively, we can use other R/Python frameworks to integrate imaging-based S
 
 - This [OSCA](https://bioconductor.org/books/release/OSCA.multisample/)
 book part on multi-sample single-cell analyses covers batch effect 
-correction methods and quantitative diagnostics (see also @sec-beyond).
+correction methods and quantitative diagnostics (see also "Beyond this book").
 
 - This [single-cell best practices](https://www.sc-best-practices.org/spatial/imputation.html) 
 chapter provides a Python-focused complement, demonstrating how scRNA-seq 
