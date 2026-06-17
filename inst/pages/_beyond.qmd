@@ -145,7 +145,7 @@ All of these models are developed and implemented in Python, although R
 infrastructure to interface with pre-trained models are underway, i.e.,
 making use of model weights and embeddings for downstream analysis.
 
-Examples (mostly )mentioned across different chapters include 
+Examples (mostly) mentioned across different chapters include 
 Prov-GigaPath [@xu2024gigapath] (histopathology; @sec-ind-image-analysis); 
 Geneformer [@Theodoris2023-Geneformer], scGPT [@Cui2024-scGPT], scFoundation 
 [@Hao2024-scFoundation], and Novae [@Blampey2025-Novae] (omics; @sec-ind-clustering). 
