@@ -379,6 +379,27 @@ More case studies will also be available at https://github.com/ChenLaboratory/sc
 
 ## Appendix
 
+::: {.callout-tip icon="false" title="Further reading"}
+
+- The [single-cell best practices](https://www.sc-best-practices.org/spatial/neighborhood.html#)
+Python book chapter on neighborhood analysis demonstrates how to quantify
+cluster enrichment and co-occurrence from a proximity-based cellular graph
+using `squidpy` [@Palla2022-Squidpy] and `anndata` [@Virshup2024-anndata]
+for analysis and data representation, respectively.
+
+- @Schiller2026 compare methods to quantifying pairwise co-localization
+of cell subpopulations, including `r BiocStyle::Biocpkg("imcRtools")` 
+[@Windhager2023-imcRtools] (R/Bioc) and `squidpy` (Python/scverse); 
+while focused on imaging mass cytometry (IMC) data, general concepts
+around cellular neighborhoods and graphs are described as well.
+
+- @Summers2022 explore spatial statistics for cellular analysis from tissue; 
+and, @Behanova2022 review spatial statistics to quantify patterns in tissue 
+(e.g., random *versus* non-random distributions) as well as different data views 
+(i.e., points, graphs, densities, lattices); see also @sec-ind-spatial-statistics.
+
+:::
+
 ### References {.unnumbered}
 
 {{< include _stop.qmd >}}

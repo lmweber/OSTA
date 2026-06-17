@@ -99,9 +99,9 @@ textbook [@Baddeley2015-book-point-patterns].
 geographical sciences can be leveraged for the analysis of ST data 
 and where potential challenges lie.
 
-- @bianEstimatingTumourImmune2026 discuss spatial statistics methodology in a
-biological use case: estimating tumor infiltration; and, @Summers2022 explore 
-the use of spatial statistics for cellular analysis in tissue microscopy data.
+- @bianEstimatingTumourImmune2026 discuss spatial statistics methodology 
+around a specific biological use case: estimating tumor infiltration.
+
 
 :::
 
