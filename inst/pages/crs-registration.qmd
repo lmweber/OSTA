@@ -258,7 +258,7 @@ single-cell profiles. Some of these methods could be used through R using packag
 
 - @weitz2024-acrobat report results of the **ACROBAT 2022 Challenge** on improving accuracy and robustness of alignment/registration across 4,212 histopathology whole-slide images (WSIs), and review various image registration methods using feature detection algorithms, particularly deep learning-based architectures.
 
-- Several benchmarks compare spatial alignment methods across a large selection of technologies [e.g., @hu2024-benchmarking; @dong2025-benchmarking]. Most recently, @yan2026-benchmarking compared 11 methods across 240 tissue sections from 14 technologies.
+- Several benchmarks compare spatial alignment methods across a large selection of technologies [e.g., @Hu2024-benchmark-clustering; @Dong2025-benchmark]. Most recently, @Yan2026-benchmark-alignment compared 11 methods across 240 tissue sections from 14 technologies.
 
 - 10x Genomics' [Xenium explorer tutorial](https://www.10xgenomics.com/support/software/xenium-explorer/latest/tutorials/xe-image-alignment)
 and Bruker's [CosMx analysis scratch space](https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/index.html#category=alignment)
