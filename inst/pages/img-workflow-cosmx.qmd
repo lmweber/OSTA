@@ -345,6 +345,20 @@ We only briefly discussed cell-cell interactions and spatial exploratory analyse
 
 ## Appendix
 
+::: {.callout-tip icon="false" title="Further reading"}
+
+- Bruker's [CosMx Analysis Scratch Space](https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/about.html) 
+provides a large variety of (mostly R-based) tutorial-style notebooks --
+specifically for CosMx data from AtoMx exports -- that include file handling, 
+image exploration, quality control, and a variety of downstream analysis tasks.
+
+- @He2022-CosMx (1K-plex) and @Khafizov2024-CosMx (whole-transcriptome) 
+describe the biotechnology underlying CosMx. While these studies were 
+authored by industry-affiliated researchers, they remain informative 
+references for understanding the platform (and potential data issues).
+
+:::
+
 ### References {.unnumbered}
 
 {{< include _stop.qmd >}}
