@@ -170,6 +170,47 @@ of scRNA-seq data, including transformer-based FMs, autoencoders, and more.
 
 :::
 
+## Multi-modality
+
+Paralleling past technological developments around single-cell omics, spatial 
+multi-omics approaches are sprouting by now, including spatial co-profiling of 
+RNA with proteins (e.g., spatial-CITE-seq [@Liu2023-spatial-CITE-seq]) and with
+the epigenome (e.g., spatial-ATAC-RNA-seq [@Zhang2023-spatial-ATAC-RNA-seq]). 
+
+Simultaneous capture is by now also supported by commercial *in situ* platforms, 
+such as 10x Genomics' Xenium and Bruker's CosMx, which enable co-detection of 
+RNA and a curated set of protein targets. Microfluidic-based methods like 
+DBiT-seq [@Liu2020-DBiT-seq] and SPOTS [@Ben-Chetrit2023-SPOTS] have 
+further expanded these capabilities to high-throughput sequencing.
+
+Computationally, the challenge lies in the joint latent representation of 
+disparate data types. In R/Bioconductor, `r BiocStyle::Biocpkg("MOFA2")` 
+[@Velten2022-MEFISTO] provides a factor analysis framework for multi-modal 
+integration. The `r BiocStyle::Biocpkg("MultiAssayExperiment")` class offers 
+foundational infrastructure to manage synchronicity between linked data layers.
+In Python, tools such as `r BiocStyle::Githubpkg("scverse/scvi-tools")`'s `MultiVI`
+[@Ashuach2023-MultiVI] and `r BiocStyle::Githubpkg("JinmiaoChenLab/SpatialGlue")`
+[@Long2024-SpatialGlue] use deep learning (e.g., graph neural networks) 
+to reconcile these layers while preserving spatial context. 
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- @Vandereyken2023-review-multi review biotechnology for spatial multi-omics; 
+and, @Liu2024-review-multi review multi-modal data integration. More recently, 
+@Isik2026-review-multi review the computational landscape and challenges 
+around integrating multi-modal spatial omics and biological imaging data, 
+from statistical to deep learning-based approaches.
+
+- @Argelaguet2021-review-integration nicely summarize computational concepts
+around single-cell data integration, distinguishing between horizontal (same
+features), vertical (same observations), and diagonal (both different) tasks.
+
+- The [single-cell best practices](https://www.sc-best-practices.org/multimodal_integration/paired_integration.html)
+Python book provides two chapters on multi-omics, including integration 
+of paired and unpaired datasets (same vs. different measurement entities).
+
+:::
+
 ## Appendix
 
 ### References {.unnumbered}

@@ -94,7 +94,7 @@ benchmark, or other, references and resources mentioned throughout the book.
 | spatial omics | @Moffitt2022-emerging; @Bressan2023-dawn |
 | spatial analyses | @Palla2022-components | 
 | spatial proteomics | @Semba2024-multiplexed; @Lundberg2019-proteomics |
-| spatial epigenomics | @Zhang2023-spatial-epigenome | 
+| spatial epigenomics | @Zhang2023-spatial-ATAC-RNA-seq | 
 | spatial transcriptomics | @Rao2021-exploring; @Moses2022-museum; @Cheng2023-comprehensive; @Tian2023-vistas | 
 | single-cell spatial proteomics | @Paul2021-imaging; @Mund2022-unbiased | 
 | single-cell & spatial transcriptomics | @Gulati2024-profiling | 
