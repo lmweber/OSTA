@@ -376,6 +376,48 @@ We recommend to perform such DE analyses using the `voomLmFit()` pipeline [@Bald
 Examples of DE and pathway analyses can be found in @Li2025-scider. 
 More case studies will also be available at https://github.com/ChenLaboratory/scider. 
 
+## Other methods
+
+The approaches presented here are relatively *simple* in that they are 
+straightforward to understand and interpret. Emerging Python-based frameworks 
+rely on modern **machine and deep learning-based architectures** to *learn*, 
+rather than quantitatively characterize, tissue features from data multitudes; 
+we provide a few examples here, but this is by no means a comprehensive list: 
+
+::: {.column-margin}
+Note that there is significant conceptual overlap between 
+*neighborhoods* and spatial clustering (cf., @sec-ind-clustering).
+:::
+
+- `r BiocStyle::Githubpkg("JiangBioLab/DeepST")` [@Xu2022-DeepST] 
+uses **graph convolutional networks** to integrate gene expression 
+and spatial information, learning low-dimensional representations for 
+spatial domain identification and tissue architecture characterization.
+
+- `r BiocStyle::Githubpkg("JinmiaoChenLab/GraphST")` [@Long2023-GraphST] 
+uses **graph neural networks** to model spatial relationships between 
+spots or cells, and learns spatially informed embeddings for 
+clustering and detection of spatial contexts across datasets.
+
+- [`NicheCompass`](https://github.com/Lotfollahi-lab/nichecompass) 
+[@Birk2025-NicheCompass] offers a **graph neural network** that models
+inter-cellular signaling to learn interpretable cell embeddings based 
+on which niches with coherent communication pathways are identified.
+
+- [`Novae`](https://github.com/MICS-Lab/novae) [@Blampey2025-Novae] 
+is a graph-based **foundation model** (FM) that extracts representations 
+of cells within their spatial contexts; it was original trained on ~30M 
+cells from 18 tissues, different gene panels, and technologies.
+(see also "Beyond this book" for additional details on FMs).
+
+- `r BiocStyle::Githubpkg("jianhuupenn/SpaGCN")` [@Hu2021-SpaGCN] combines gene 
+expression, spatial and histological information via a **graph convolutional 
+network** to identify spatial domains and characterize tissue organization.
+
+- `r BiocStyle::Githubpkg("zhanglabtools/STAGATE")` [@Dong2022-STAGATE] 
+relies on a **graph attention auto-encoder** to capture spatial gene expression and 
+neighborhood patterns, modeling spatial neighborhoods as graphs that can be used 
+as input for several downstream tasks, including spatial domain identification.
 
 ## Appendix
 
