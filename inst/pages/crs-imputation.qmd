@@ -390,7 +390,7 @@ chapter provides a Python-focused complement, demonstrating how scRNA-seq
 can be used to impute unmeasured genes in FISH-based ST data using 
 `r BiocStyle::Githubpkg("broadinstitute/Tangram")` [@Biancalani2021-Tangram].
  
-- @li2022-benchmarking compare methods for transcript location prediction and gene expression
+- @Li2022-benchmark compare methods for transcript location prediction and gene expression
 imputation in spatial omics, including `r BiocStyle::Githubpkg("rajewsky-lab/novosparc")`, 
 `r BiocStyle::Githubpkg("zcang/SpaOTsc")`, and `r BiocStyle::CRANpkg("rliger")`,
 using 32 simulated and 45 paired single-cell and spatial omics datasets.
