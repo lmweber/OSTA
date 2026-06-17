@@ -206,9 +206,9 @@ and, @Liu2024-review-multi review multi-modal data integration. More recently,
 around integrating multi-modal spatial omics and biological imaging data, 
 from statistical to deep learning-based approaches.
 
-- @Argelaguet2021-review-integration nicely summarize computational concepts
-around single-cell data integration, distinguishing between horizontal (same
-features), vertical (same observations), and diagonal (both different) tasks.
+- @Argelaguet2021 nicely summarize computational concepts of single-cell 
+data integration, distinguishing between horizontal (same features),
+vertical (same observations), and diagonal (both different) tasks.
 
 - The [single-cell best practices](https://www.sc-best-practices.org/multimodal_integration/paired_integration.html)
 Python book provides two chapters on multi-omics, including integration 

@@ -319,6 +319,13 @@ benchmark, or other, references and resources mentioned throughout the book.
 | `r BiocStyle::Biocpkg("scider")` | @Li2025-scider |
 | `r BiocStyle::Biocpkg("limma")` | @Baldoni2025-diffSplice |
 | `r BiocStyle::Biocpkg("edgeR")` | @Chen2025-edgeR-v4 |
+| `r Githubpkg("JiangBioLab/DeepST")` | @Xu2022-DeepST |
+| `r Githubpkg("JinmiaoChenLab/GraphST")` | @Long2023-GraphST |
+| [NicheCompass](https://github.com/Lotfollahi-lab/nichecompass) | @Birk2025-NicheCompass |
+| [Novae](https://github.com/MICS-Lab/novae) | @Blampey2025-Novae |
+| `r Githubpkg("jianhuupenn/SpaGCN")` | @Hu2021-SpaGCN |
+| `r Githubpkg("zhanglabtools/STAGATE")` | @Dong2022-STAGATE |
+| review | @Behanova2022, @Summers2022 |
 
 : {.striped tbl-colwidths="[33,66]"}
 
@@ -425,7 +432,7 @@ benchmark, or other, references and resources mentioned throughout the book.
 | Tabula Muris Senis | @TabulaSenis2020 |
 | SAHA | @Park2025-SAHA |
 | CELLxGENE | @Megill2021-cellxgene |
-| HPA | @Uhlen2015-HPA |
+| HPA | @Thul2018-HPA |
 | `r Biocpkg("scDiagnostics")` | @Christidis2026-scDiagnostics |
 | review | @Wang2024-review-spatial-domain |
 | benchmarks | @Chen2025-benchmark-clustering; @Sun2025-benchmark-clustering |
@@ -452,25 +459,6 @@ benchmark, or other, references and resources mentioned throughout the book.
 | `r Githubpkg("shanyu-stat/spVC")` | @Yu2024-spVC |
 | reviews | @Adhikari2024-advances-SVGs; @Yan2024-categorization-SVGs |
 | benchmarks | @Li2023-benchmarking-SVGs; @Chen2024-evaluating-SVGs |
-
-: {.striped tbl-colwidths="[33,66]"}
-
-:::
-
-- @sec-crs-other: Other analyses
-
-::: {.tbl}
-
-| | |
-|-|-|
-| `r Biocpkg("infercnv")` | @Patel2014-infercnv |
-| siCNV | @Erickson2022-cnv |
-| `CopyKAT` | @Gao2021-CopyKAT |
-| `r Githubpkg("kharchenkolab/numbat")` | @Weng2024-Numbat |
-| CNV benchmarks | @Jensen2025-cnv; @Schmid2025-benchmark-cnv |
-| `scGPT` | @Cui2024-scGPT |
-| `scFoundation` | @Hao2024-scFoundation |
-| `Geneformer` | @Theodoris2023-Geneformer |
 
 : {.striped tbl-colwidths="[33,66]"}
 
@@ -543,7 +531,7 @@ benchmark, or other, references and resources mentioned throughout the book.
 | `r CRANpkg("lme4")` | @Bates2015-lme4 |
 | `r CRANpkg("lmerTest")` | @Kuznetsova2017-lmerTest |
 | `r Biocpkg("sosta")` | @Gunz2025-sosta |
-| `r Biocpkg("spatialFDA")` | n/a |
+| `r Biocpkg("spatialFDA")` | @Emons2026-spatialFDA |
 | `r Biocpkg("spicyR")` | @Canete2022-spicyR |
 
 : {.striped tbl-colwidths="[33,66]"}
@@ -558,13 +546,52 @@ benchmark, or other, references and resources mentioned throughout the book.
 
 | | |
 |-|-|
-| theory | @Argelaguet2021 |
-| silhouette | @Rautenstrauch2025 |
-| benchmarks | @Tran2020; @ChazarraGil2021; @Luecken2022 |
+| silhouette width | @Rautenstrauch2025 |
 | `r Biocpkg("harmony")` | @Korsunsky2019-Harmony |
 | `r Biocpkg("CellMixS")` | @Lutge2021-CellMixS |
 | `r CRANpkg("rliger")` | @Welch2019-LIGER |
-| [scvi-tool](https://scvi-tools.org/)'s *Trangram* | @Biancalani2021-Tangram |
+| [scvi-tool](https://scvi-tools.org/)'s *Tangram* | @Biancalani2021-Tangram |
+| `r Githubpkg("gao-lab/SLAT")` | @Xia2023-SLAT |
+| `r Githubpkg("QihuangZhang/CeLEry")` | @Zhang2023-CeLEry |
+| `r Githubpkg("rajewsky-lab/novosparc")` | @Nitzan2019-novoSpaRc |
+| `r Githubpkg("zcang/SpaOTsc")` | @Cang2020-SpaOTsc |
+| imputation benchmark | @Li2022-benchmark |
+| integration review | @Argelaguet2021 |
+| integration benchmarks | @Tran2020; @ChazarraGil2021; @Luecken2022 |
+| registration benchmark | @Hu2024-benchmark-clustering; @Dong2025-benchmark; @Yan2026-benchmark-alignment |
+| registration challenge | @weitz2024-acrobat |
+
+: {.striped tbl-colwidths="[33,66]"}
+
+:::
+
+- **Beyond this book**: Other analyses & concepts
+
+::: {.tbl}
+
+| | |
+|-|-|
+| `r Biocpkg("infercnv")` | n/a |
+| `r Githubpkg("icbi-lab/infercnvpy")` | n/a |
+| CNV benchmarks | @Jensen2025-cnv; @Schmid2025-benchmark-cnv |
+| `r Biocpkg("monocle")` | @Trapnell2014-monocle; @Qiu2017-monocle2 |
+| `r Biocpkg("slingshot")` | @Street2018-slingshot |
+| `r Githubpkg("hongleir/SpaceFlow")` | @Ren2022-SpaceFlow |
+| `r Githubpkg("BiomedicalMachineLearning/stlearn")` | @Pham2023-stLearn |
+| `r Githubpkg("yzf072/spaTrack")` | @Shen2025-spaTrack |
+| trajectory benchmarks | @Cannoodt2016-review-ti; @Saelens2019-benchmark-ti |
+| `scGPT` | @Cui2024-scGPT |
+| `scFoundation` | @Hao2024-scFoundation |
+| `Geneformer` | @Theodoris2023-Geneformer |
+| Prov-GigaPath | @xu2024gigapath |
+| FM review | @Szalata2024; @AhlmannEltze2026 |
+| annotation benchmark | @Kedzierska2025 |
+| perturbation prediction benchmark | @AhlmannEltze2025 |
+| spatial multi-omics review | @Vandereyken2023-review-multi; @Liu2024-review-multi; @Isik2026-review-multi |
+| `r Biocpkg("MOFA2")` | @Velten2022-MEFISTO |
+| `r BiocStyle::Biocpkg("MultiAssayExperiment")` | n/a |
+| `r Githubpkg("qukunlab/SpatialGlue")` | @Long2024-SpatialGlue |
+| [scvi-tool](https://scvi-tools.org/)'s *MultiVI* | @Ashuach2023-MultiVI |
 
 : {.striped tbl-colwidths="[33,66]"}
 
