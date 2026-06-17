@@ -106,6 +106,14 @@ relevance is reduced in imaging-based platforms that rely on targeted probe
 hybridization, as detection depends primarily on short hybridization regions 
 rather than full-length transcript integrity [@Ke2013; @Chen2015-MERFISH].
 
+Particularly for image-based ST, **histological QC** is often 
+more reliable still, using both H&E staining (assessment of cellular detail, 
+tissue architecture, and overall histological integrity) and DAPI staining 
+(nuclear quality assessment). Beyond this, these staining serve several 
+practical purposes such as confirming FFPE block orientation, region of interest 
+(ROI) selection, and identifying problematic areas such as necrosis, hemorrhage, 
+or artifact-rich zones (see above) that could compromise molecular profiling.
+
 #### Capture chemistry: poly-dT vs. probe-based
 
 The degree of RNA fragmentation in FFPE makes traditional poly-dT capture 
@@ -208,7 +216,7 @@ spatial heterogeneity across a specimen; however, the size of FOVs and total
 imaging area is either fixed or limited for current commercial platforms.
 
 - Computational models can be used to simulate **in silico tissue (IST)**,
-i.e., "virual" tissue structures that can help guide experimental design 
+i.e., "virtual" tissue structures that can help guide experimental design 
 *in silico* (that is, before an actual measurement is performed).
 
 ### Tissue microarrays (TMAs)
@@ -223,6 +231,11 @@ to increase sample size while reducing intra-slide technical variability.
 
 - Then again, the primary risk of TMAs is **sampling bias**, where a small core 
 (which stems from a manual punch) may not fully capture tissue heterogeneity.
+
+- Predetermined core diameter and spacing **measurements** often pose 
+another challenge: TMAs need to fit the capture area of the instrument used 
+for downstream molecular profiling; and, sufficiently many FOVs need to be 
+available to cover all cores (without exceeding time of cycling limitations).
 
 - It is common practice to include **control tissue** (such as a well-known 
 reference, or cell line pellets) to support QC of staining or hybridization 

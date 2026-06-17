@@ -381,14 +381,20 @@ Alternatively, we can use other R/Python frameworks to integrate imaging-based S
 
 ::: {.callout-tip icon="false" title="Further reading"}
 
-- This [single-cell best practices](https://www.sc-best-practices.org/spatial/imputation.html) 
-chapter provides a Python-focused complement, demonstrating how scRNA-seq can be 
-used to impute unmeasured genes in FISH-based ST data using Tangram [@Biancalani2021-Tangram].
-
 - This [OSCA](https://bioconductor.org/books/release/OSCA.multisample/)
-book part on multi-sample single-cell analyses covers a variety 
-of batch effect correction methods and quantitative diagnostics.
+book part on multi-sample single-cell analyses covers batch effect 
+correction methods and quantitative diagnostics (see also @sec-beyond).
+
+- This [single-cell best practices](https://www.sc-best-practices.org/spatial/imputation.html) 
+chapter provides a Python-focused complement, demonstrating how scRNA-seq 
+can be used to impute unmeasured genes in FISH-based ST data using 
+`r BiocStyle::Githubpkg("broadinstitute/Tangram")` [@Biancalani2021-Tangram].
  
+- @Li2022-benchmark compare methods for transcript location prediction and gene expression
+imputation in spatial omics, including `r BiocStyle::Githubpkg("rajewsky-lab/novosparc")`, 
+`r BiocStyle::Githubpkg("zcang/SpaOTsc")`, and `r BiocStyle::CRANpkg("rliger")`,
+using 32 simulated and 45 paired single-cell and spatial omics datasets.
+
 :::
 
 ### References {.unnumbered}

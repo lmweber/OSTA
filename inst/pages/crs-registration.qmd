@@ -6,7 +6,7 @@
 
 ### Introduction
 
-Spatial registation is defined as the task of mapping features or spatial locations of observations from a *query* to a *reference* assay [@Friston1995-registration; @Lewis2021-spatial-omics; @Nitzan2019-novoSpaRc]. 
+Spatial registration is defined as the task of mapping features or spatial locations of observations from a *query* to a *reference* assay [@Friston1995-registration; @Lewis2021-spatial-omics; @Nitzan2019-novoSpaRc]. 
 Here, the reference is a spatially-resolved dataset whereas the query could be an assay with or without spatial resolution. 
 
 In this chapter, we demonstrate methods that are available in R/Bioconductor for aligning (or registering) spatially-resolved datasets, where the utility and function of the alignment method is defined by the modality of the query dataset. 
@@ -192,7 +192,7 @@ p + geom_point(
 
 ::: {.callout-note collapse="true" title="Other methods"}
 
-A number of R/Python frameworks can be used to automatically or manually align microscopy images associated with spatial omic datasets. The Python modules could be used through R packages such as `r BiocStyle::Biocpkg("reticulate")` and `r BiocStyle::Biocpkg("basilisk")`.
+A number of R/Python frameworks can be used to automatically or manually align microscopy images associated with spatial omics datasets. The Python modules could be used through R packages such as `r BiocStyle::Biocpkg("reticulate")` and `r BiocStyle::Biocpkg("basilisk")`.
 
 - `r BiocStyle::Githubpkg("BIMSBbioinfo/VoltRon")` [@Manukyan2023-VoltRon] is an R package that allows alignment between multiple spatially aware datasets of distinct modalities. A Shiny application is provided to enable both automated and manual alignment across adjacent/same tissue sections where users can interactively manipulate microscopy images and choose landmarks points for co-registration.
 
@@ -245,14 +245,26 @@ Below we give a list of Python frameworks that reconstruct the spatial locations
 single-cell profiles. Some of these methods could be used through R using packages such as 
 `r BiocStyle::Biocpkg("reticulate")` and `r BiocStyle::Biocpkg("basilisk")`.
 
-- `r BiocStyle::Githubpkg("QihuangZhang/CeLEry")` [@Zhang2023-CeLEry] incorporates a supervised deep neural network model to learn the relationship between spot/cell profiles of spatial omics data and associated localization information, and then uses this model to predict the localization of single cell profiles by using the scRNAseq data as input.
+- `r BiocStyle::Githubpkg("QihuangZhang/CeLEry")` [@Zhang2023-CeLEry] incorporates a supervised deep neural network model to learn the relationship between spot/cell profiles of spatial omics data and associated localization information, and then uses this model to predict the localization of single cell profiles by using the scRNA-seq data as input.
 
 - `r BiocStyle::Githubpkg("rajewsky-lab/novosparc")` [@Nitzan2019-novoSpaRc] utilizes optimal transport (OT) to find a probabilistic embedding between expression space and physical space of single cells that minimizes the discrepancy between the pairwise graph-based distances in both of these spaces.
 
-- `r BiocStyle::Githubpkg("zcang/SpaOTsc")` [@Cang2020-SpaOTsc] also reconstructs the spatial localization of single-cell profiles by solving an OT problem. Three distance matrices are calculated which are associated with the dissimilarities between spot/cell profiles within and across two datasets, where one is a scRNAseq and the other is a spatial omics dataset. The solution to the unbalanced and structured OT problems returns an OT plan for mapping single-cell profiles to spatial locations.
+- `r BiocStyle::Githubpkg("zcang/SpaOTsc")` [@Cang2020-SpaOTsc] also reconstructs the spatial localization of single-cell profiles by solving an OT problem. Three distance matrices are calculated which are associated with the dissimilarities between spot/cell profiles within and across two datasets, where one is a scRNA-seq and the other is a spatial omics dataset. The solution to the unbalanced and structured OT problems returns an OT plan for mapping single-cell profiles to spatial locations.
 
 
 ## Appendix
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- @weitz2024-acrobat report results of the **ACROBAT 2022 Challenge** on improving accuracy and robustness of alignment/registration across 4,212 histopathology whole-slide images (WSIs), and review various image registration methods using feature detection algorithms, particularly deep learning-based architectures.
+
+- Several benchmarks compare spatial alignment methods across a large selection of technologies [e.g., @Hu2024-benchmark-clustering; @Dong2025-benchmark]. Most recently, @Yan2026-benchmark-alignment compared 11 methods across 240 tissue sections from 14 technologies.
+
+- 10x Genomics' [Xenium explorer tutorial](https://www.10xgenomics.com/support/software/xenium-explorer/latest/tutorials/xe-image-alignment)
+and Bruker's [CosMx analysis scratch space](https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/index.html#category=alignment)
+provide instructions how to perform spatial alignment for these data.
+
+:::
 
 ### References {.unnumbered}
 
