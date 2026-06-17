@@ -141,14 +141,19 @@ demonstrating applicability to different platforms (Xenium, CosMx, etc.).
 Foundation models (FMs) represent a modern paradigm where massive deep learning
 architectures (e.g., transformers) are pre-trained on millions of single-cell 
 profiles, biological images, etc., to learn generalizable representations. 
-
-Examples mentioned in previous chapters include
-Prov-GigaPath [@xu2024gigapath] (histopathology; @sec-ind-image-analysis);
-Geneformer [@Theodoris2023-Geneformer], scGPT [@Cui2024-scGPT], and 
-scFoundation [@Hao2024-scFoundation] (omics; @sec-ind-clustering)).
-These models are primarily implemented in Python, although R/Bioconductor 
+All of these models are developed and implemented in Python, although R
 infrastructure to interface with pre-trained models are underway, i.e.,
 making use of model weights and embeddings for downstream analysis.
+
+Examples (mostly )mentioned across different chapters include 
+Prov-GigaPath [@xu2024gigapath] (histopathology; @sec-ind-image-analysis); 
+Geneformer [@Theodoris2023-Geneformer], scGPT [@Cui2024-scGPT], scFoundation 
+[@Hao2024-scFoundation], and Novae [@Blampey2025-Novae] (omics; @sec-ind-clustering). 
+Not an FM but worth mentioning: `r BiocStyle::Githubpkg("OmicsML/CellPLM")` 
+[@Wen2023-CellPLM] is a pre-trained "cell language model" with cells = tokens 
+and tissues = sentences (an idea inspired by large language models); the model 
+supports several downstream tasks such as denoising and annotation of scRNA-seq 
+data, imputation of ST data, and perturbation prediction.
 
 Another popular task not mentioned in previous chapter is the prediction 
 of molecular changes upon perturbation (e.g., disease, treatment response); 
