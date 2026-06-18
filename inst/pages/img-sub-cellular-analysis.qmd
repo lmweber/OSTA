@@ -114,6 +114,32 @@ Depending on availability of cell type data, additional questions can be asked. 
 
 A majority of the molecule-resolved SRT data are 2D projections of 3D structures, such as cells, organelles, or even processes like RNA transport. A few imaging-based SRT technologies are capable of measuring tissue depth as z-axis, generating 3D coordinates with a sparse z-axis. However, working with 2D *vs* 3D data is not so different, since spatial relations are often captured as neighborhoods defined by Euclidean or other distance measures between locations, irrespective of coordinate dimension. Therefore, many tools are able to use n-dimension coordinates for measuring spatial relationships. For example, ClusterMap can use 3D coordinates by using `z_radius` for z-axis data, if its available, whereas for 2D coordinates it sets `z_radius = 0` [@He2021-ClusterMap].
 
+## Appendix
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- @Cassella2022-subcell-analysis provide a comprehensive review of the 
+biological significance and computational challenges of **sub-cellular 
+transcriptomics analysis**.
+
+- @Mah2024-Bento introduce **Bento**, a toolkit that provides a 
+unified framework for quantifying, predicting, and segmenting sub-cellular 
+RNA localization patterns.
+
+- @He2021-ClusterMap present **ClusterMap**, a segmentation-free method 
+for identifying sub-cellular structures and cell bodies directly from 
+molecule-resolved data.
+
+- @Walter2023-FISHFactor describe **FISHFactor**, which uses spatial 
+Poisson point processes to model transcript locations and identify 
+spatially-aware sub-cellular patterns.
+
+- @Kumar2024-Instant and @Bierman2024-SPRAWL provide statistical 
+frameworks for testing **gene-specific localization** and 
+**gene-pair co-localization** within cells.
+
+:::
+
 ## References {.unnumbered}
 
 {{< include _stop.qmd >}}
