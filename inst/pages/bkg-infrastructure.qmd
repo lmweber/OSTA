@@ -162,7 +162,7 @@ serving as the backbone for many Python-based omics analysis tools.
 - Several hackathons between R/Bioconductor and Python/scverse community
 members have been designated to advancing computational infrastructure around
 spatial omics; these developments were summarized in collaborative preprints 
-[@Marconato2024-hackathon, @Manukyan2026-hackathon, @Crowell2026-hackathon].
+[@Marconato2024-hackathon; @Manukyan2026-hackathon; @Crowell2026-hackathon].
 
 :::
 
