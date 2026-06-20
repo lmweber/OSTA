@@ -367,11 +367,11 @@ pancreatic islets are more affected than those further away.
 is an R toolkit for functional data analysis (FDA) of replicated single-cell
 spatial data, and associates spatial relationships to patient outcomes.
 
-- [CRAWDAD](https://github.com/jefworks-lab/crawdad)[@Peixoto2025-CRAWDAD]
+- [CRAWDAD](https://github.com/jefworks-lab/crawdad) [@Peixoto2025-CRAWDAD]
 is an R package for multi-scale characterization of spatial relationships
 between cell subpopulations, including comparison across multiple samples.
 
-- `r BiocStyle::Biocpkg("smoppix")`[@Hawinkel2026-smoppix] 
+- `r BiocStyle::Biocpkg("smoppix")` [@Hawinkel2026-smoppix] 
 is an R/Bioconductor package that provides univariate and bivariate tests 
 for spatial patterns (e.g., gradients and vicinity to cell centroid/edge),
 including support for nested design and automatic parameter calibration.
