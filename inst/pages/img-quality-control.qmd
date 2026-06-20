@@ -19,7 +19,7 @@ more intricate quality control metrics using the `SpaceTroper` package.
 :::
 
 Throughout this chapter, we will switch between both Xenium (`xen` object) 
-and CosMx (`cos` objext) datasets to showcase quality control (QC) metrics 
+and CosMx (`cos` object) datasets to showcase quality control (QC) metrics 
 that are standard for scRNA-seq data (using `r BiocStyle::Biocpkg("scuttle")`), 
 and ones that are more specific to some imaging-based ST data types
 (using `r BiocStyle::Biocpkg("SpaceTrooper")` [@Banzi2025-SpaceTrooper]).
@@ -75,7 +75,9 @@ To not confuse RNA target counts with counts stemming from either negative
 probes and system controls, the latter are moved into `altExp`s by default.
 We also add additional `colData` and `metadata` slots that are expected by 
 `r BiocStyle::Biocpkg("ggspavis")` (for visualization) and 
-`r BiocStyle::Biocpkg("SpaceTrooper")` (for analysis). In particular, `r BiocStyle::Biocpkg("SpaceTrooper")`'s `updateCosmxSPE` function takes care of standardizing the object's `colData` for use with `r BiocStyle::Biocpkg("SpaceTrooper")`'s functions.
+`r BiocStyle::Biocpkg("SpaceTrooper")` (for analysis). In particular, 
+`SpaceTrooper`'s `updateCosmxSPE` function takes care of standardizing
+the object's `colData` for use with `SpaceTrooper`'s functions.
 
 ::: {.aside}
 See @sec-img-introduction for details on the three main types 
@@ -587,6 +589,28 @@ xen$ex <- cos$ex <- NULL # drop for saving
 
 ## Appendix
 
+::: {.callout-tip icon="false" title="Further reading"}
+
+- Built around the `SpatialData` framework [@Marconato2025-SpatialData],
+`r BiocStyle::Githubpkg("LazDaria/SegTraQ")` is a Python-based toolkit
+for **assessing quality** of cell segmentation and transcript assignment.
+
+- @Ishaque2026 provide a perspective on **segmentation challenges**
+and how they impact downstream analysis, and discuss potential
+future directions for benchmarking segmentation algorithms
+(see also @sec-img-segmentation).
+
+- Bruker's [CosMx Analysis Scratch Space](
+https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/about.html) 
+provides an exploratory (open-source) **resource for CosMx** data analysis, which
+includes an FOV-level QC approach that relies on comparing proximal 
+FOVs in order to identify outliers in terms of RNA detection
+(see [here](https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/posts/fov-qc));
+and, a theoretical piece on *background* signal -- i.e., non-RNA target binding events
+(see [here](https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/posts/background)).
+
+:::
+
 ### Save data
 
 ```{r save-data}
@@ -594,17 +618,6 @@ xen$ex <- cos$ex <- NULL # drop for saving
 # for consecutive chapters
 saveRDS(xen[, !ex], "img-spe_qc.rds")
 ```
-
-### Resources
-
-Bruker's [CosMx Analysis Scratch Space](
-https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/about.html) 
-provides an exploratory (open-source) resource for CosMx data analysis, which
-includes an FOV-level QC approach that relies on comparing proximal 
-FOVs in order to identify outliers in terms of RNA detection
-(see [here](https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/posts/fov-qc));
-and, a theoretical piece on *background* signal -- i.e., non-RNA target binding events
-(see [here](https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/posts/background)).
 
 ### References {.unnumbered}
 

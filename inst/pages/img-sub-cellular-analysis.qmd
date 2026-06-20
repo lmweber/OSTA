@@ -22,13 +22,13 @@ Many molecule-resolved SRT technologies, such as MERFISH, SeqFISH, Stereo-seq, e
 
 ### Bento
 
-[Bento](https://github.com/YeoLab/bento-tools) [@Mah2024-Bento] is a Python-based toolkit for sub-cellular analysis of molecule-resolved SRT data that takes transcript locations and boundaries (cell, nucleus, region of interest) as input and stores them in AnnData format for downstream analyses. Bento includes 3 main approaches for processing molecule-resolved data:
+`r BiocStyle::Githubpkg("YeoLab/bento-tools")` [@Mah2024-Bento] is a Python-based toolkit for sub-cellular analysis of molecule-resolved SRT data that takes transcript locations and boundaries (cell, nucleus, region of interest) as input and stores them in AnnData format for downstream analyses. `Bento` includes 3 main approaches for processing molecule-resolved data:
 
-1.  It generates spatial summary statistics for each gene-cell pair and feeds these into **RNAforest** model to predict transcript localisation pattern (cytoplasmic, nuclear, nuclear edge, cell edge, or none) in each cell.
+1. It generates spatial summary statistics for each gene-cell pair and feeds these into **RNAforest** model to predict transcript localisation pattern (cytoplasmic, nuclear, nuclear edge, cell edge, or none) in each cell.
 
-2.  It identifies transcript compartment (nucleus or cytoplasm) from nucleus and cell boundaries, generating a cell x gene x compartment tensor. **RNAcoloc** approach is then applied to use the tensor for assessing co-localisation of gene pairs in each compartment.
+2. It identifies transcript compartment (nucleus or cytoplasm) from nucleus and cell boundaries, generating a cell x gene x compartment tensor. **RNAcoloc** approach is then applied to use the tensor for assessing co-localisation of gene pairs in each compartment.
 
-3.  It generates **RNAflux** embeddings of local neighborhoods in each cell, which are used for unsupervised segmentation of sub-cellular domains.
+3. It generates **RNAflux** embeddings of local neighborhoods in each cell, which are used for unsupervised segmentation of sub-cellular domains.
 
 ```{r fig-bento, echo = FALSE, out.width = "60%", fig.cap= "Bento approaches for sub-cellular analysis include: A, RNAforest; B, RNAcoloc; C, RNAflux."}
 knitr::include_graphics("../images/img-sub-cellular_Bento.png")
@@ -38,17 +38,17 @@ These approaches supplement other downstream analyses, such as differential expr
 
 ### SpatialFeatures
 
-`r BiocStyle::Githubpkg("SydneyBioX/SpatialFeatures")` is a R package that uses MoleculeExperiment to store transcript location and boundaries (cells, nuclei, and/or regions of interest), and perform sub-cellular and extra-cellular analyses. SpatialFeatures run involves 3 main steps:
+`r BiocStyle::Githubpkg("SydneyBioX/SpatialFeatures")` is a R package that uses `MoleculeExperiment` to store transcript location and boundaries (cells, nuclei, and/or regions of interest), and perform sub-cellular and extra-cellular analyses. A `SpatialFeatures` run involves 3 main steps:
 
-1.  Generate new sub-cellular (sub-concentric, sub-sector) and extra-cellular (super-concentric, super-sector) boundaries (`loadBoundaries()`).
+1. Generate new sub-cellular (sub-concentric, sub-sector) and extra-cellular (super-concentric, super-sector) boundaries (`loadBoundaries()`).
 
 ```{r fig-spFeatures, echo = FALSE, out.width = "60%", fig.cap= "The boundary feature types in SpatialFeature can be sub-cellular (A, sub-concentric; B, sub-sector) or extra-cellular (C, super-concentric; D, super-sector)"}
 knitr::include_graphics("../images/img-sub-cellular_SpatialFeatures.png")
 ```
 
-2.  Calculate entropy-based metrics (`EntropyMatrix()`) for each cell across the boundary feature type.
+2. Calculate entropy-based metrics (`EntropyMatrix()`) for each cell across the boundary feature type.
 
-3.  Combine these information into a SingleCellExperiment object (`EntropySingleCellExperiment()`) containing a cell x feature matrix assay for each boundary feature type (sub-concentric, sub-sector, super-concentric, super-sector).
+3. Combine these information into a `SingleCellExperiment` object (`EntropySingleCellExperiment()`) containing a cell x feature matrix assay for each boundary feature type (sub-concentric, sub-sector, super-concentric, super-sector).
 
 These features can be used to cluster and identify cells with similar sub-cellular and/or extra-cellular expression patterns.
 
@@ -84,27 +84,27 @@ knitr::include_graphics("../images/img-sub-cellular_ClusterMap.png")
 knitr::include_graphics("../images/img-sub-cellular_CellSP.png")
 ```
 
-CellSP uses AnnData format for single cell and spatial transcriptomics analysis. Internally, CellSP uses other tools, such as `r BiocStyle::Githubpkg("KrishnaswamyLab/MAGIC")` [@vanDijk2018-MAGIC] for denoising, `r BiocStyle::Githubpkg("broadinstitute/Tangram")` [@Biancalani2021-Tangram] for imputation, `r BiocStyle::Githubpkg("bhavaygg/InSTAnT")` [@Kumar2024-Instant] for identifying gene-pair sub-cellular co-localisation patterns, and `r BiocStyle::Githubpkg("salzman-lab/SPRAWL")` [@Bierman2024-SPRAWL] for identifying gene sub-cellular localisation patterns.
+`CellSP` uses AnnData format for single cell and spatial transcriptomics analysis. Internally, `CellSP` uses other tools, such as `r BiocStyle::Githubpkg("KrishnaswamyLab/MAGIC")` [@vanDijk2018-MAGIC] for denoising, `r BiocStyle::Githubpkg("broadinstitute/Tangram")` [@Biancalani2021-Tangram] for imputation, `r BiocStyle::Githubpkg("bhavaygg/InSTAnT")` [@Kumar2024-InSTAnT] for identifying gene-pair sub-cellular co-localisation patterns, and `r BiocStyle::Githubpkg("salzman-lab/SPRAWL")` [@Bierman2024-SPRAWL] for identifying gene sub-cellular localisation patterns.
 
-CellSP outputs a set of gene-cell modules for each sub-cellular pattern type (peripheral, radial, punctate, central, co-localisation). A gene-cell module represents a set of genes or gene pairs that have the same sub-cellular pattern across the same set of cells. The statistical significance of grouping is estimated using a Bonferroni-based score. In each module, genes and cells are characterized using gene ontology (GO) enrichment tests and cell type composition (if available), respectively.
+`CellSP` outputs a set of gene-cell modules for each sub-cellular pattern type (peripheral, radial, punctate, central, co-localisation). A gene-cell module represents a set of genes or gene pairs that have the same sub-cellular pattern across the same set of cells. The statistical significance of grouping is estimated using a Bonferroni-based score. In each module, genes and cells are characterized using gene ontology (GO) enrichment tests and cell type composition (if available), respectively.
 
-Some statistical tests for gene(s) localisation/co-localisation that can be performed using CellSP include:
+Some statistical tests for gene(s) localisation/co-localisation that can be performed using `CellSP` include:
 
--   Testing per cell - does a cell have significant sub-cellular localisation of a set of genes or gene-pairs?
+- Testing per cell -- does a cell have significant sub-cellular localisation of a set of genes or gene-pairs?
 
--   Testing across multiple cells - do cells belonging to a cell type/cluster have significant sub-cellular localisation of a gene or gene pair?
+- Testing across multiple cells -- do cells belonging to a cell type/cluster have significant sub-cellular localisation of a gene or gene pair?
 
--   Testing across multiple groups/samples - are specific genes differentially localized/co-localized in two cell types/clusters from one sample or a cell type/cluster from two different conditions?
+- Testing across multiple groups/samples -- are specific genes differentially localized/co-localized in two cell types/clusters from one sample or a cell type/cluster from two different conditions?
 
 ### SpaGNN
 
-[SpaGNN](https://github.com/coskunlab/spaGNN) [@Fang2023-SpaGNN] is another Python-based pipeline for sub-cellular analyses, including: 
+`r BiocStyle::Githubpkg("coskunlab/spaGNN")` [@Fang2023-SpaGNN] is another Python-based pipeline for sub-cellular analyses, including: 
 
--   **Sub-cellular clustering** of transcript locations into sub-cellular patches with high transcript density using Leiden graph clustering. 
+- **Sub-cellular clustering** of transcript locations into sub-cellular patches with high transcript density using Leiden graph clustering. 
 
--   **Sub-cellular patch analysis**, where transcripts of each gene in each patch are summed to generate a patch x gene counts data. This is used to calculate Pearson's correlation between genes across all patches, to identify gene pairs that often co-localize. The statistical significance of these correlation values can be assessed using a t-test. 
+- **Sub-cellular patch analysis**, where transcripts of each gene in each patch are summed to generate a patch x gene counts data. This is used to calculate Pearson's correlation between genes across all patches, to identify gene pairs that often co-localize. The statistical significance of these correlation values can be assessed using a t-test. 
 
--   **Sub-cellular local neighborhoods** are detected within a patch by identifying 9 nearest neighbors of each transcript in the patch. Further analysis involves summing transcript counts in the local neighborhoods and calculating Pearson's correlation between genes. Through permutation analysis, a proximity score is calculated for each gene pair in the patch.
+- **Sub-cellular local neighborhoods** are detected within a patch by identifying 9 nearest neighbors of each transcript in the patch. Further analysis involves summing transcript counts in the local neighborhoods and calculating Pearson's correlation between genes. Through permutation analysis, a proximity score is calculated for each gene pair in the patch.
 
 Depending on availability of cell type data, additional questions can be asked. For example, how similar are the patch correlations between same/different cell types, or how consistent is the sub-cellular co-localisation of a gene pair in same/different cell types?
 
@@ -112,7 +112,33 @@ Depending on availability of cell type data, additional questions can be asked. 
 
 ### 2D *versus* 3D
 
-A majority of the molecule-resolved SRT data are 2D projections of 3D structures, such as cells, organelles, or even processes like RNA transport. A few imaging-based SRT technologies are capable of measuring tissue depth as z-axis, generating 3D coordinates with a sparse z-axis. However, working with 2D *vs* 3D data is not so different, since spatial relations are often captured as neighborhoods defined by Euclidean or other distance measures between locations, irrespective of coordinate dimension. Therefore, many tools are able to use n-dimension coordinates for measuring spatial relationships. For example, ClusterMap can use 3D coordinates by using `z_radius` for z-axis data, if its available, whereas for 2D coordinates it sets `z_radius = 0` [@He2021-ClusterMap].
+A majority of the molecule-resolved SRT data are 2D projections of 3D structures, such as cells, organelles, or even processes like RNA transport. A few imaging-based SRT technologies are capable of measuring tissue depth as z-axis, generating 3D coordinates with a sparse z-axis. However, working with 2D *versus* 3D data is not so different, since spatial relations are often captured as neighborhoods defined by Euclidean or other distance measures between locations, irrespective of coordinate dimension. Therefore, many tools are able to use n-dimension coordinates for measuring spatial relationships. For example, `ClusterMap` can use 3D coordinates by using `z_radius` for z-axis data, if its available, whereas for 2D coordinates it sets `z_radius = 0` [@He2021-ClusterMap].
+
+## Appendix
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- `r BiocStyle::Githubpkg("wanglab-broad/ClusterMap")` [@He2021-ClusterMap] 
+is a segmentation-free method for identifying cell bodies and
+sub-cellular structures directly from molecule-resolved data.
+
+- `r BiocStyle::Githubpkg("bioFAM/FISHFactor")` [@Walter2023-FISHFactor]
+uses point processes to model transcript locations 
+and identify spatially-aware sub-cellular patterns.
+
+- `r BiocStyle::Githubpkg("YeoLab/bento-tools")` [@Mah2024-Bento] 
+provides a unified framework for quantifying, predicting, 
+and segmenting sub-cellular RNA localization patterns.
+
+- `r BiocStyle::Githubpkg("bhavaygg/InSTAnT")` [@Kumar2024-InSTAnT] and
+`r BiocStyle::Githubpkg("salzman-lab/SPRAWL")` [@Bierman2024-SPRAWL] 
+provide statistical frameworks for testing gene-specific 
+localization and gene pair co-localization within cells.
+
+- @Cassella2022-subcell-analysis study RNA localization patterns and 
+mechanisms within the columnar follicular epithelium of *Drosophila*.
+
+:::
 
 ## References {.unnumbered}
 

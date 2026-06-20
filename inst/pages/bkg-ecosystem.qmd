@@ -260,6 +260,22 @@ ggplot(gg, aes(n, j)) +
 
 ## Appendix
 
+::: {.callout-tip icon="false" title="Further reading"}
+
+- The **Bioconductor project** has been described approximately once per decade,
+summarizing the project's current status, challenges, and future perspectives
+[@Gentleman2004-Bioconductor; @Huber2015-Bioconductor; @Carey2025-Bioconductor].
+
+- Many additional e-books, resources, and publications capture additional 
+aspects of the project, such as educational efforts [@Drnevich2025-bioc-edu];
+see [here](https://www.bioconductor.org/help/publications/) for a full list.
+
+- The **scverse project** was first describes in 2023 and, arguably inspired
+by R/Bioconductor, set out to build a unified computational ecosystem for 
+single-cell and spatial omics data analysis in Python [@Virshup2023-scverse].
+
+:::
+
 ### References {.unnumbered}
 
 {{< include _stop.qmd >}}

@@ -229,8 +229,8 @@ a primary vehicle for scaling spatial studies to large-scale cohorts
 usually 0.6 mm to 3 mm in diameter, on a single slide. They offer a means 
 to increase sample size while reducing intra-slide technical variability.
 
-- Then again, the primary risk of TMAs is **sampling bias**, where a small core 
-(which stems from a manual punch) may not fully capture tissue heterogeneity.
+- Then again, the primary risk of TMAs is **sampling bias**, where a small 
+core (from a manual punch) may not fully capture tissue heterogeneity.
 
 - Predetermined core diameter and spacing **measurements** often pose 
 another challenge: TMAs need to fit the capture area of the instrument used 

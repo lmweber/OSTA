@@ -140,6 +140,32 @@ knitr::include_graphics("../images/SpatialData.png")
 
 ## Appendix
 
+::: {.callout-tip icon="false" title="Further reading"}
+
+- R/Bioconductor's [`OSCA`](https://bioconductor.org/books/release/OSCA/)
+[@Amezquita2020-OSCA] e-book is designated to *Orchestrating Single-Cell Analysis 
+with Bioconductor*, and remains a seminal resource of omics analysis in general;
+the ["Single-Cell Best Practices"](https://www.sc-best-practices.org/) 
+[@Heumos2023-best-prac] e-book provides the Python/scverse complement.
+
+- [`SpatialData`](https://spatialdata.scverse.org/) [@Marconato2025-SpatialData] 
+provides a framework within the [scverse](http://scverse.org) ecosystem 
+for unified storage and manipulation of multi-modal spatial omics data;
+and, [`Squidpy`](https://squidpy.readthedocs.io/) [@Palla2022-Squidpy] 
+provides diverse tooling for spatial omics data analysis in Python/scverse.
+
+- Python/scverse's [`AnnData`](https://anndata.readthedocs.io/) [@Virshup2024-anndata],
+and the R-native `r BiocStyle::Biocpkg("anndataR")` [@Deconinck2026-anndataR] 
+complement, are a foundational data structure for annotated matrices,
+serving as the backbone for many Python-based omics analysis tools.
+
+- Several hackathons between R/Bioconductor and Python/scverse community
+members have been designated to advancing computational infrastructure around
+spatial omics; these developments were summarized in collaborative preprints 
+[@Marconato2024-hackathon; @Manukyan2026-hackathon; @Crowell2026-hackathon].
+
+:::
+
 ### References {.unnumbered}
 
 {{< include _stop.qmd >}}

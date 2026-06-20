@@ -6,8 +6,9 @@
 
 ### Introduction
 
-Neighborhood analysis aims to investigate the composition of and interaction between cells and cell types within small regions of tissue, which are referred to as neighborhoods or niches.
-
+Neighborhood analysis aims to investigate the composition of and 
+interaction between cells and cell types within small regions of tissue, 
+which are referred to as neighborhoods or niches.
 
 ### Dependencies
 
@@ -21,13 +22,13 @@ library(BiocParallel)
 library(SpatialExperiment)
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r data, message=FALSE, warning=FALSE}
 # load data from previous section
 spe <- readRDS("img-spe_cl.rds")
 spe$k <- colLabels(spe)
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r util, message=FALSE, warning=FALSE}
 # basic theme for spatial plots
 theme_xy <- list(
     coord_equal(expand=FALSE), 
@@ -36,7 +37,6 @@ theme_xy <- list(
         legend.key=element_blank(),
         panel.background=element_rect(fill="black")))
 ```
-
 
 ## Nearest neighbors
 
@@ -70,7 +70,9 @@ is_r <- ns_r$nn.idx
 range(rowSums(is_r > 0))
 ```
 
-The neighbors obtained via fixed-radius search (right) are less scattered than those obtained for unlimited distances (left); the former are arguably more meaningful in a biological context:
+The neighbors obtained via fixed-radius search (right) are less scattered 
+than those obtained for unlimited distances (left); the former are arguably 
+more meaningful in a biological context:
 
 ```{r nns-plot, fig.width=8, fig.height=3, fig.cap="Results of kNN searches. Left: basic kNN search, highlighting source (pink) and target cells (gold). Right: kNN search with same k, but thresholding on neighbor distances."}
 #| code-fold: true
@@ -107,7 +109,8 @@ ns <- nn2(
 ```
 
 For our actual search, we then set `k` to be twice our estimate.
-As a final spot-check, we make sure that all cells have fewer than `k` NNs, since we might otherwise be missing some.
+As a final spot-check, we make sure that all cells have fewer 
+than `k` NNs, since we might otherwise be missing some.
 
 ```{r nns-note-real}
 # real search
@@ -172,8 +175,10 @@ plot_layout(nrow=1) &
 
 ## Co-localization
 
-`r BiocStyle::Biocpkg("hoodscanR")` [@Liu2025-hoodscanR] also relies on a (Euclidean) $k$NN graph to estimate the probability of each cell associating with its NNs.
-The resulting probability matrix (rows=cells, columns=NNs) can, in turn, be used to assess co-occurrence of subpopulations. 
+`r BiocStyle::Biocpkg("hoodscanR")` [@Liu2025-hoodscanR] also relies on a 
+(Euclidean) $k$NN graph to estimate the probability of each cell associating 
+with its NNs. The resulting probability matrix (rows=cells, columns=NNs) can, 
+in turn, be used to assess co-occurrence of subpopulations. 
 
 ```{r hoodscanR-calc, message=FALSE}
 library(hoodscanR)
@@ -184,7 +189,8 @@ grp <- mergeByGroup(mtx, nbs$cells)
 sqe <- mergeHoodSpe(sqe, grp)       
 ```
 
-To perform neighborhood co-localization analysis, `plotColocal()` computes the Pearson correlation of probability distribution between cells.
+To perform neighborhood co-localization analysis, `plotColocal()` 
+computes the Pearson correlation of probability distribution between cells.
 Here, **high/low values indicate attraction/repulsion** between clusters:
 
 ```{r hoodscanR-plot-corr, message=FALSE, fig.width=3.5, fig.height=3}
@@ -199,9 +205,11 @@ pheatmap(cor,
 
 ::: {.callout-note title="measuring local mixing" collapse="true"}
 
-Downstream, `calcMetrics()` can be used to calculate cell-level [entropy](https://en.wikipedia.org/wiki/entropy_(information_theory)) and [perplexity](https://en.wikipedia.org/wiki/perplexity),
-which both measure the mixing of cellular neighborhoods.
-Here, **low/high values indicate heterogeneity/homogeneity** of a cell's local neighborhood:
+Downstream, `calcMetrics()` can be used to calculate cell-level
+[entropy](https://en.wikipedia.org/wiki/entropy_(information_theory)) and
+[perplexity](https://en.wikipedia.org/wiki/perplexity),
+which both measure the mixing of cellular neighborhoods. Here,
+**low/high values indicate heterogeneity/homogeneity** of a cell's local neighborhood:
 
 ```{r hoodscanR-calc-mets}
 sqe <- calcMetrics(sqe, pm_cols=colnames(grp))
@@ -222,7 +230,9 @@ ggplot(fd, aes(x_centroid, y_centroid, col=value)) +
     scale_color_gradient2("z-scaled\nvalue", low="cyan", mid="navy", high="magenta") 
 ```
 
-Stratifying these values by subpopulation, we can observe that clusters forming distinct aggregates in space are lowest in entropy/perplexity (i.e., the most homogeneous locally):
+Stratifying these values by subpopulation, we can observe that clusters 
+forming distinct aggregates in space are lowest in entropy/perplexity 
+(i.e., the most homogeneous locally):
 
 ```{r hoodscanR-plot-mets-k, fig.width=7, fig.height=2.5, fig.cap="Boxplot of entropy and perplexity, stratified by cluster assignment and z-scaled across cells (capped at 2 SDs)."}
 #| code-fold: true
@@ -246,11 +256,10 @@ ggplot(fd, aes(k, value, fill=k)) +
 Kernel density estimation (KDE) is used to describe the spatial distributions of cells, and ROIs are identified based on the spatial density of some cell types of interest (COIs).
 One can also calculate the spatial density of transcript expression of a gene or a gene set, so that gene (set)-specific ROIs can be identified. 
 ROIs can then be used for downstream analysis such as cell type co-localization, cell type composition and differential expression (DE) analysis. 
-All functions operate on `SpatialExperiment` objects, allowing seemless integration. 
+All functions operate on `SpatialExperiment` objects, allowing seamless integration. 
 Using the Xenium breast carcinoma dataset, we demonstrate a standard `r BiocStyle::Biocpkg("scider")` workflow. 
 
 ```{r scider-load-package-and-data, message=FALSE}
-#| message: false
 # dependencies
 library(scider)
 library(OSTA.data)
@@ -264,8 +273,10 @@ unzip(pa, exdir=td)
 spe <- readXeniumSXE(td, addTx=FALSE)
 ```
 
-In this example, we define ROIs based on the celluar density of tumor cells, that is, DCIS_1, DCIS_2 and invasive tumor cells are considered as the COI. 
-Firstly, we need to add cell type annotations to `colData`, where cell type annotations were obtained from the original publication [@Janesick2023-high-res]. 
+In this example, we define ROIs based on the cellular density of tumor cells, 
+that is, DCIS_1, DCIS_2 and invasive tumor cells are considered as the COI. 
+Firstly, we need to add cell type annotations to `colData`, where cell type
+annotations were obtained from the original publication [@Janesick2023-high-res]. 
 
 ```{r scider-cell-type-annotation}
 #| fig-width: 5
@@ -285,7 +296,8 @@ spe <- gridDensity(spe, grid.length.x=50, bandwidth=25)
 metadata(spe)$grid_density[1:4, 1:8]
 ```
 
-The density value represents the expected number of COI cells on each grid, and can be visualized by the `plotDensity()` function. 
+The density value represents the expected number of COI cells on 
+each grid, and can be visualized by the `plotDensity()` function. 
 For example, here we visualize the density of COI cells:
 
 ```{r scider-plot-coi-density}
@@ -312,12 +324,14 @@ scider::plotROI(spe, roi=coi) +
   ggtitle("Tumour cell-based ROIs")
 ```
 
-These ROIs can then be used for downstream analysis, such as cell type colocalization, spatial domain clustering, and differential expression (DE). 
+These ROIs can then be used for downstream analysis, such as cell type 
+colocalization, spatial domain clustering, and differential expression (DE). 
 Here as an example, we demonstrate an ROI-level cell type co-localization analysis. 
 
 ### Cell type co-localization on the ROI level
 
-`r BiocStyle::Biocpkg("scider")` performs cell type co-localization analysis by calculating the correlation between the spatial densities of every two cell types. 
+`r BiocStyle::Biocpkg("scider")` performs cell type co-localization analysis by 
+calculating the correlation between the spatial densities of every two cell types. 
 
 ```{r scider-cell-type-colocalization}
 #| fig-width: 3.5
@@ -329,11 +343,14 @@ spe_cor <- corDensity(spe)
 scider::plotCorHeatmap(spe_cor)
 ```
 
-We see that immune and stromal cells are positively colocalized within their respective groups, whereas myoepithelial, DCIS, and invasive tumor populations form distinct, negatively correlated clusters.
+We see that immune and stromal cells are positively colocalized 
+within their respective groups, whereas myoepithelial, DCIS, and 
+invasive tumor populations form distinct, negatively correlated clusters.
 
 ### Cell type composition analysis based on density contours
 
-Additionally, contour levels can be calculated from the estimated COI density, which is useful for cell type composition analysis. 
+Additionally, contour levels can be calculated from the estimated 
+COI density, which is useful for cell type composition analysis. 
 
 ```{r scider-cal-and-plot-contours}
 #| fig-width: 5
@@ -345,7 +362,9 @@ spe <- getContour(spe, coi=coi, bins=10)
 scider::plotContour(spe, coi=coi, line.width=0.5)
 ```
 
-We can then assign each cell to its corresponding contour level according to their spatial coordinates, and visualize the cell type composition at each COI contour level using the `plotCellCompo()` function. 
+We can then assign each cell to its corresponding contour level 
+according to their spatial coordinates, and visualize the cell type 
+composition at each COI contour level using the `plotCellCompo()` function. 
 
 ```{r scider-cell-type-composition-all-rois}
 #| fig-width: 4
@@ -357,9 +376,10 @@ spe <- allocateCells(spe, contour=coi, to.roi=TRUE)
 scider::plotCellCompo(spe, contour=coi, self.included=FALSE)
 ```
 
-For example, we see a decreasing proportion of stromal cells, and an increasing proportion of unlabeled cells as tumor cell density increases. 
-Normally, we would have filtered out unlabeled cells in preprocessing. 
-It is also useful to investigate how cell type composition changes to COI densities within each ROI:
+For example, we see a decreasing proportion of stromal cells, and an increasing 
+proportion of unlabeled cells as tumor cell density increases. Normally, we 
+would have filtered out unlabeled cells in preprocessing. It is also useful 
+to investigate how cell type composition changes to COI densities within each ROI:
 
 ```{r scider-cell-type-composition-each-roi}
 #| fig-width: 10
@@ -370,11 +390,19 @@ It is also useful to investigate how cell type composition changes to COI densit
 scider::plotCellCompo(spe, contour=coi, self.included=FALSE, roi=coi)
 ```
 
-ROIs can also be used to perform other types of downstream analysis, such as gene expression clustering, DE analysis and pathway analysis by pseudo-bulking cells located within each ROI, using the `spe2PB()` function. 
-Given the pseudo-bulk samples, `r BiocStyle::Biocpkg("scider")` is fully compatible with all `r BiocStyle::Biocpkg("limma")` and `r BiocStyle::Biocpkg("edgeR")` functionalities, allowing arbitrarily complex experimental design to answer various biological questions.
-We recommend to perform such DE analyses using the `voomLmFit()` pipeline [@Baldoni2025-diffSplice] or the quasi-likelihood pipeline in `r BiocStyle::Biocpkg("edgeR")` [@Chen2025-edgeR-v4].
-Examples of DE and pathway analyses can be found in @Li2025-scider. 
-More case studies will also be available at https://github.com/ChenLaboratory/scider. 
+ROIs can also be used to perform other types of downstream analysis, 
+such as gene expression clustering, DE analysis and pathway analysis by 
+pseudo-bulking cells located within each ROI, using the `spe2PB()` function. 
+Given the pseudo-bulk samples, `r BiocStyle::Biocpkg("scider")` 
+is fully compatible with all `r BiocStyle::Biocpkg("limma")` and 
+`r BiocStyle::Biocpkg("edgeR")` functionalities, allowing arbitrarily 
+complex experimental design to answer various biological questions.
+We recommend to perform such DE analyses using the `voomLmFit()` pipeline 
+[@Baldoni2025-diffSplice] or the quasi-likelihood pipeline in 
+`r BiocStyle::Biocpkg("edgeR")` [@Chen2025-edgeR-v4].
+Examples of DE and pathway analyses can be found in @Li2025-scider; 
+more case studies are also available in the corresponding
+[code repository](https://github.com/ChenLaboratory/scider). 
 
 ## Other methods
 

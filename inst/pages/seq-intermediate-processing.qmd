@@ -245,6 +245,18 @@ wrap_plots(ps, nrow = 2) &
 
 ## Appendix
 
+::: {.callout-tip icon="false" title="Further reading"}
+
+For further methodological details, literature, and resources 
+on the analyses performed in this chapter, we refer readers to:
+
+- @sec-ind-normalization on normalization, 
+- @sec-ind-dimensionality-reduction on dimension reduction,
+- @sec-ind-clustering on clustering & annotation, and
+- @sec-ind-feature-selection-testing on feature selection & testing.
+
+:::
+
 ### Save data {.unnumbered}
 
 Save data object for re-use within later chapters.
