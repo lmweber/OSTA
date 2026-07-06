@@ -143,7 +143,7 @@ table(spe$Leiden)
 
 ## Deconvolution
 
-In a complementary approach, we deconvolute spot measurements using (annotated) reference single-cell data provided by the authors. Let's first retrieve these data, alongside corresponding cell metadata, which includes low- (`Level1`) and high-resolution (`Level2`) annotations into 10 and 32 subpopulations, respectively.
+In a complementary approach, we deconvolve spot measurements using (annotated) reference single-cell data provided by the authors. Let's first retrieve these data, alongside corresponding cell metadata, which includes low- (`Level1`) and high-resolution (`Level2`) annotations into 10 and 32 subpopulations, respectively.
 
 ```{r load-sce, message=FALSE, results="hide"}
 # retrieve dataset from OSF repo
@@ -206,7 +206,7 @@ table(spe$RCTD <- factor(ids), spe$Leiden)
 
 We can also compartmentalize the tissue into broad biological compartments; here, by grouping `RCTD`-based subpopulation assignments into four classes:
 
-```{r}
+```{r group-rctd-compartments}
 lab <- list(
     tum="Tumor",
     epi="Intestinal.Epithelial",

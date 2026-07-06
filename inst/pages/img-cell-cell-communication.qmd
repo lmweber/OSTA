@@ -32,7 +32,7 @@ Consequently, they tend to be more interpretable, easier and faster to run.
 <!--
 Cell-cell communication analyses aim to investigate how cells interact within tissues through signaling pathways and communication networks.
 
-Several methods have been developed for these types of analyses. In general, these methods require annotated cell types, spatial coordinates, and curated lists of ligand-receptor (L-R) pairs (and optionaly pathway or target gene sets) as inputs. Ligand-receptor pairs can be accessed from databases including `OmniPath`, `CellChatDB`, `CellPhoneDB`, and others.
+Several methods have been developed for these types of analyses. In general, these methods require annotated cell types, spatial coordinates, and curated lists of ligand-receptor (L-R) pairs (and optionally pathway or target gene sets) as inputs. Ligand-receptor pairs can be accessed from databases including `OmniPath`, `CellChatDB`, `CellPhoneDB`, and others.
 -->
 
 ### Dependencies

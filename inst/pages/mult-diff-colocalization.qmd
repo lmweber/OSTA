@@ -6,12 +6,13 @@
 
 ### Introduction
 
-In this section, we will explore tools to assess differential colocalization between conditions with the two packages `r BiocStyle::Biocpkg("spicyR")` [@Canete2022-spicyR] and `r BiocStyle::Biocpkg("spatialFDA")` [@Emons2026-spatialFDA]. Both packages are based the comparison of known spatial statistics functions implemented in the package `r BiocStyle::CRANpkg("spatstat")`.
+In this chapter, we explore tools to assess differential colocalization between conditions with the two packages `r BiocStyle::Biocpkg("spicyR")` [@Canete2022-spicyR] and `r BiocStyle::Biocpkg("spatialFDA")` [@Emons2026-spatialFDA]. Both packages compare known spatial statistics functions implemented in the package `r BiocStyle::CRANpkg("spatstat")`.
 
+This chapter extends the single-sample neighborhood and spatial statistics ideas introduced in @sec-img-neighborhood-analysis and @sec-ind-spatial-statistics to a multiple-sample setting.
 
 ### Dependencies
 
-```{r, setup, warning=FALSE, message=FALSE}
+```{r setup, warning=FALSE, message=FALSE}
 library(osfr)
 library(dplyr)
 library(tidyr)
@@ -29,7 +30,7 @@ library(SpatialExperiment)
 
 For this example, we use a dataset on type I diabetes (T1D) [@Damond2019-IMC-diabetes]. This dataset contains three conditions (non-diabetic, onset, and long-duration diabetes), several patients per condition, and several fields-of-view per patient. This hierarchical setup requires the modeler to account for correlation between fields-of-view, for example if they stem from the same patient. Such a setup can be modeled with mixed models (see below).
 
-```{r, load-data-hide, warning=FALSE, eval=FALSE, echo=FALSE}
+```{r load-data-hide, warning=FALSE, eval=FALSE, echo=FALSE}
 # load data from full dataset (not run due to computational limitations)
 spe <- .loadExample(full = TRUE)
 # subset data to smaller example
@@ -41,7 +42,7 @@ assays(spe) <- list()
 An assay-free version of the dataset is available through our OSF repository
 (used here to reduce runtime as the following analyses do not require assay data):
 
-```{r, load-data, message=FALSE}
+```{r load-data, message=FALSE}
 # load data from OSF repository (for smaller download)
 osf_repo <- osf_retrieve_node("https://osf.io/5n4q3/")
 osf_files <- osf_ls_files(osf_repo, 
@@ -77,7 +78,7 @@ spe$cell_type <- factor(spe$cell_type)
 To save on runtime, we here skip over some larger `cell_type`s.
 By default, `from/to=NULL` will test all pairwise combinations.
 
-```{r, spicyR, message=FALSE, warning=FALSE}
+```{r spicyR, message=FALSE, warning=FALSE}
 # filter out some larger 'cell_type's
 # (for runtime reasons in this demo)
 ids <- setdiff(
@@ -100,7 +101,7 @@ head(topPairs(spicyTestPair))
 
 The results can be represented as a bubble plot using the `signifPlot` function.
 
-```{r, spicyR-heatmap, fig.width=8, fig.height=6}
+```{r spicyR-heatmap, fig.width=8, fig.height=6}
 signifPlot(spicyTestPair)
 ```
 
@@ -111,7 +112,7 @@ compared to non-diabetic patients, indicated by the positive coefficient.
 
 We can use `spicyBoxPlot` to examine a cell type-cell type relationship closely.
 
-```{r, spicyR-boxplot, warning=FALSE, fig.width=5, fig.asp=1}
+```{r spicyR-boxplot, warning=FALSE, fig.width=5, fig.asp=1}
 spicyBoxPlot(spicyTestPair, from="Tc", to="beta") + ylim(c(-50, 50))
 ```
 
@@ -187,12 +188,12 @@ border of a FOV become too extreme.
 The histogram of all bounding-circle radii across all images and $1/2$ 
 of the smallest bin of this histogram as a heuristic are shown below. 
 
-```{r, rMaxHeuristic, results="hide", message = FALSE, warning = FALSE, fig.width=8, fig.height=4}
+```{r rMaxHeuristic, results="hide", message=FALSE, warning=FALSE, fig.width=8, fig.height=4}
 rMaxHeuristic(spe, subsetby="image_number", marks="cell_type")
 ```
 
 We will consider a radius of $50 \mu m$ to 
-a) be below the heurstic of $91 \mu m$ defined above, and 
+a) be below the heuristic of $91 \mu m$ defined above, and
 b) consider shorter range interactions in our data. 
 With a cell diameter of $\sim 10 \mu m$, the `rMax` of 
 $50 \mu m$ results in interactions across 5 cell pairs. 
@@ -209,7 +210,7 @@ Important are:
 The parameters `sample_id, image_id, condition` are important for the statistical inference. 
 All other parameters can be specified to achieve better results but there are defaults specified as well. 
 
-```{r, spatialFDA-calc, warning=FALSE}
+```{r spatialFDA-calc, warning=FALSE}
 # relevel to have non-diabetic as the reference category
 spe$patient_stage <- relevel(factor(spe$patient_stage), "Non-diabetic")
 
@@ -259,7 +260,7 @@ We can plot the overall picture of the interactions by performing an $F$-test
 on all functional models and plotting both the $p$-value of the tests as well 
 as the mean coefficient over the domain $r$.
 
-```{r, spatialFDA-bubbleplot, results="hide", fig.width=8, fig.height=4}
+```{r spatialFDA-bubbleplot, results="hide", fig.width=8, fig.height=4}
 coefs <- c(
     "Onset"="conditionOnset(x)", 
     "Long-Duration"="conditionLong_duration(x)")
@@ -278,7 +279,7 @@ transformed spatial statistics functions [@Sun2011-boxplots].
 Here, the black line indicates the median curve, the purple region 
 is the 50% central region, and the red lines indicate outliers.
 
-```{r, spatialFDA-plot, warning=FALSE, fig.width=4, fig.height=4}
+```{r spatialFDA-plot, warning=FALSE, fig.width=4, fig.height=4}
 #| layout-ncol: 3
 # extract the metric dataframe
 res <- resLs$alpha_Tc
@@ -303,7 +304,7 @@ Here, we decompose the functional data into eigenfunctions
 and can plot the first two principal components as a biplot 
 [@Goldsmith2024-refund-package].
 
-```{r, spatialFDA-fPCA, fig.width=8, fig.height=3}
+```{r spatialFDA-fPCA, fig.width=8, fig.height=3}
 # prepare 'data.frame' from 'calcMetricRes' 
 # to be in the correct format for FDA
 dat <- prepData(metricRes, "r", "rs")
@@ -332,7 +333,7 @@ summaries. We use a generalized additive mixed model with a functional response
 [@Scheipl2015-additive; @Scheipl2016-generalized; @Goldsmith2024-refund-package]. 
 In such models, some parameters are functional and some are constants (see below).
 
-```{r, spatialFDA-fGAM, results="hide", fig.width=6, fig.height=5}
+```{r spatialFDA-fGAM, results="hide", fig.width=6, fig.height=5}
 summary(mdl <- res$mdl)
 mm <- res$designmat
 lapply(colnames(mm), \(x) {
@@ -347,7 +348,7 @@ to 'Non-diabetic' patients) but also the strength of the effect at each scale.
 
 The Q-Q plot indicates a reasonable model fit, although not perfect.
 
-```{r, spatialFDA-qq, fig.width=5}
+```{r spatialFDA-qq, fig.width=5}
 res <- mdl$residuals
 qqnorm(res, pch=16)
 qqline(res, col="red")

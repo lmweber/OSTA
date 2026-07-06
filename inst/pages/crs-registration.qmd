@@ -226,7 +226,7 @@ between serial sections by solving a fused Gromov–Wasserstein optimal transpor
 The solution finds a mapping between each pair of adjacent slices by minimizing a transport 
 cost that depends on both gene expression profiles and distance between spots of each slice.
 
-![](../images/crs-registration-PASTE.png){width="75%" fig-align="center" alt="The Shiny application interface for alignmening spatial datasets stored in `VoltRon` objects."}
+![](../images/crs-registration-PASTE.png){width="75%" fig-align="center" alt="The Shiny application interface for aligning spatial datasets stored in `VoltRon` objects."}
 
 - **SLAT** is another alternative provided as a Python module 
 [scSLAT](https://github.com/gao-lab/SLAT) [@Xia2023-SLAT] that jointly models 

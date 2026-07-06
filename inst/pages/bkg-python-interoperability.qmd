@@ -240,7 +240,7 @@ plt.gca().set_aspect("equal")
 plt.title("ERBB2")
 ```
 
-```{r, include=FALSE}
+```{r cleanup-h5ad, include=FALSE}
 # clean up by removing the `spe.h5ad` file
 file.remove("spe.h5ad")
 ```

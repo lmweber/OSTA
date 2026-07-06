@@ -40,7 +40,7 @@ library(SpatialFeatureExperiment)
 set.seed(777)
 ```
 
-```{r}
+```{r crop-helper}
 # utility for cropping by bounding box
 .crop <- \(spe, box) {
     box <- as.list(box)
@@ -92,7 +92,7 @@ head(spe$map[[1]])
 Quick inspection shows us the number of 2um bins that were segmented, 
 either as part of nuclei or whole cells:
 
-```{r}
+```{r check-bin-cell-mapping}
 # number of segmented 2um bins
 summary(sapply(spe$map, nrow))
 # fraction of 2um bins assigned to nucleus
@@ -130,7 +130,7 @@ plotCoords(
 
 This retains about `r round(100*ncol(sub)/ncol(spe), 2)`\% of cells, and `r ncol(sub)` in total.
 
-```{r}
+```{r subset-cells}
 round(100*ncol(sub)/ncol(spe), 2)
 ncol(spe <- sub)
 ```
@@ -297,9 +297,9 @@ We will use these to map likely cell identities onto our Visium HD cells.
 
 ::: {.callout-note collapse="true" title="using deconvolution instead"}
 
-We here use a single-cell label transfer approach to annotade cells. However, **although each observation is intended to represent a single cell, there are still cases where this is not the case** (e.g., as a result of partial volume effects at boundaries, segmentation errors, tightly packed regions, or local diffusion of transcripts.
+Here, we use a single-cell label transfer approach to annotate cells. However, **although each observation is intended to represent a single cell, there are still cases where this is not the case** (e.g., as a result of partial volume effects at boundaries, segmentation errors, tightly packed regions, or local diffusion of transcripts).
 
-Once could hence deconvolute cells instead (see @sec-seq-deconvolution), for example, using `r BiocStyle::Biocpkg("spacexr")`'s `RCTD` [@Cable2022-RCTD] **in doublet mode** to flag these cases and provide a principled estimate of the most likely composition. In practice, we expect most units to be classified as singlets, with a minority of doublets that warrant closer inspection or additional filtering.
+One could instead deconvolve cells (see @sec-seq-deconvolution), for example, using `r BiocStyle::Biocpkg("spacexr")`'s `RCTD` [@Cable2022-RCTD] **in doublet mode** to flag these cases and provide a principled estimate of the most likely composition. In practice, we expect most units to be classified as singlets, with a minority of doublets that warrant closer inspection or additional filtering.
 
 :::
 
@@ -403,10 +403,10 @@ plot_layout() &
 
 ## Downstream
 
-Having annoted our cells, we can proceed with various downstream analyses.
+Having annotated our cells, we can proceed with various downstream analyses.
 Compared to analysis at the bin-level, cell-level Visium HD data is similar
 to data from imaging-based platforms, but with full-transcriptome coverage.
-In princple, most analyses are thus transferable. 
+In principle, most analyses are thus transferable.
 
 We refer readers to the chapters designed to specific analysis tasks, e.g.,
 @sec-ind-feature-selection-testing on feature selection and testing, 

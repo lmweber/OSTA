@@ -128,7 +128,7 @@ Future updates to the package (currently under development) will also provide di
 
 After installing the package from Bioconductor, you can run the Shiny application by executing the following command in R:
 
-```{r, eval=FALSE}
+```{r imagetcga-run-app, eval=FALSE}
 imageTCGA::imageTCGA()
 ```
 
@@ -173,7 +173,7 @@ The TCIA API requires an access token to access the data. The
 API. By default, it is configured to obtain a public token. Note that
 the token expires after a certain period of time and must be refreshed.
 
-```{r, eval=FALSE}
+```{r tcia-query-cohort, eval=FALSE}
 tcia_access_token() |> httr2::obfuscate()
 ```
 
@@ -186,7 +186,7 @@ file. The json file can be obtained by navigating to the [TCIA website](https://
 Histopathology Portal' and clicking on the 'TCIA Histopathology Custom
 Dataset Builder' link.
 
-```{r, eval=FALSE}
+```{r tcia-download-images, eval=FALSE}
 svsinfo <- tcia_svs_info("311781") 
 svsinfo |> head(3L)
 ```
@@ -195,7 +195,7 @@ The `tcia_svs_info` function returns a list containing the metadata of
 the SVS including the download URL. The download URL can be used to
 download the SVS images.
 
-```{r, eval=FALSE}
+```{r tcia-download-pathology, eval=FALSE}
 svsinfo[["field_wsiimage"]][[1L]][["url"]]
 ```
 
@@ -206,7 +206,7 @@ The `tcia_svs_download` function downloads SVS images from the TCIA API.
 Like `tcia_svs_info`, the function requires a `camic_id`, which can be
 obtained from the 'TCIA Histopathology Custom Dataset Builder.json' file.
 
-```{r, eval=FALSE}
+```{r tcia-extract-features, eval=FALSE}
 tcia_svs_download("311781")
 ```
 

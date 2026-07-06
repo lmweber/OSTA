@@ -58,6 +58,10 @@ Newer technologies try to move beyond this, either through truly volumetric
 measurements, or by computationally reconstructing them from serial sections 
 (2.5D); prospectively, time will remain the last dimension to unlock (4D).
 
+For a cancer-focused review of 3D spatial multi-omics atlas construction,
+including serial-section reconstruction, volumetric imaging, computational
+analysis, and clinical translation, see @Liu2026-3D-tumour-atlases.
+
 ### Reconstruction from serial sections
 
 A common strategy to capture 3D tissue architecture involves performing spatial 
@@ -125,6 +129,10 @@ They systematically catalog ST approaches across key methodological dimensions
 compare platforms in terms of experimental design and analytical trade-offs, 
 contextualizing methodological diversity by highlighting how approaches relate, 
 complement different experimental questions, and shape biological interpretation.
+
+- The [**Analysis workflow for IMC data**](https://bodenmillergroup.github.io/IMCDataAnalysis/) online book provides a workflow highlighting the use of R/Bioconductor packages to analyze single-cell data obtained from segmented imaging mass cytometry (IMC) measurements. While examples focus on IMC data, they can also be applied to images generated using other highly-multiplexed imaging technologies such as CODEX, MIBI, and mIF.
+
+- `r BiocStyle::Biocpkg("VectraPolarisData")` is a Bioconductor data package providing multiplex single-cell imaging datasets collected on Akoya's Vectra Polaris and Vectra 3 instruments.
 
 :::
 

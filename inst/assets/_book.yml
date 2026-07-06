@@ -100,10 +100,9 @@ book:
     - pages/_beyond.qmd
   appendices:
     - pages/apx-contributing.qmd
-    - pages/apx-acknowledgments.qmd
-    - pages/apx-related-resources.qmd
-    - pages/apx-session-info.qmd
     - pages/apx-citation.qmd
+    - pages/apx-acknowledgments.qmd
+    - pages/apx-session-info.qmd
   favicon: assets/favicon.png
   sidebar: 
     title: "OSTA"

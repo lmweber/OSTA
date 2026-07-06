@@ -15,7 +15,7 @@ These datasets can be accessed through Bioconductor's `ExperimentHub` packages:
 ::: {.aside}
 The CosMx dataset includes additional information, such as fluorescent stains, 
 cell boundaries, field of view placement, etc. that allow us to demonstrate 
-more intricate quality control metrics using the `SpaceTroper` package.
+more intricate quality control metrics using the `SpaceTrooper` package.
 :::
 
 Throughout this chapter, we will switch between both Xenium (`xen` object) 

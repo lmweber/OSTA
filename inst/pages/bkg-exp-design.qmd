@@ -264,7 +264,7 @@ type markers as well as under-characterized targets to test biological hypothese
 
 ::: {.column-margin}
 In addition to higher cost, higher plexity can decrease spot-calling accuracy (due 
-to molecular crowing) and increase spatial bleeding (see also @sec-img-segmentation).
+to molecular crowding) and increase spatial bleeding (see also @sec-img-segmentation).
 :::
 
 ### Selection microdissection sites

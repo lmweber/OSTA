@@ -7,8 +7,8 @@
 ### Introduction
 
 In this demo, we will continue processing the Xenium dataset from a human breast cancer biopsy section collected by @Janesick2023-high-res, which has already undergone quality control and minimal filtering; see @sec-img-quality-control.
-The processing steps carried out here -- namely, normalization, dimension reduction, and clustering -- lay the foundating for a variety of downstream analysis tasks that will be covered in the next chapters.
-Here, we will run standard non-spatial and spatially-aware approaches; for a more comprehensive overview of methodology and tools, see @sec-ind-dimensionality-reduction on dimension reduction and @sec-ind-clustering on clustering. 
+The processing steps carried out here -- namely, normalization, dimensionality reduction, and clustering -- lay the foundation for a variety of downstream analysis tasks that will be covered in the next chapters.
+Here, we run standard non-spatial and spatially-aware approaches as a compact imaging-based processing demo. For a more comprehensive overview of methodology and tools, see @sec-ind-normalization on normalization, @sec-ind-dimensionality-reduction on dimensionality reduction, @sec-ind-clustering on clustering, and @sec-ind-feature-selection-testing on feature selection and testing.
 
 ### Dependencies
 
@@ -70,7 +70,7 @@ is *targeted* and relatively low-plex, so that 'interesting' features have
 already been selected by design (e.g., different targets will be included 
 in immuno-oncology as opposed to neuroscience panels).
 
-## Dimension Reduction
+## Dimensionality reduction
 
 As a baseline, we will perform principal component analysis (PCA), which 
 underlies many standard scRNA-seq analysis pipelines, such as (spatially 

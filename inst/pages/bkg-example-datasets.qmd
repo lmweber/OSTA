@@ -17,7 +17,7 @@ These datasets have been deposited in an Open Storage Framework (OSF) repository
 
 ::: {.column-margin}
 :::: {.callout-note collapse="false" title="cache invalidation"}
-It can happen that we change, add, or remove data from the OSF repositorying underlying `OSTA.data`. Should you ever run into any issues that might be related to this, we suggest removing affected cache resource(s) as follows, and retrieving these data anew.
+It can happen that we change, add, or remove data from the OSF repository underlying `OSTA.data`. Should you ever run into any issues that might be related to this, we suggest removing affected cache resource(s) as follows, and retrieving these data anew.
 
 ```{r bfc, eval=FALSE}
 library(BiocFileCache)

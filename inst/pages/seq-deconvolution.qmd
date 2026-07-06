@@ -2,11 +2,13 @@
 
 {{< include _start.qmd >}}
 
-## Introduction
+## Preamble
+
+### Introduction
 
 Sequencing-based ST data can contain zero to multiple cells per spot, which might be fully or only partially covered by cells, depending on the spatial resolution of the platform and the tissue cell density (see also @sec-seq-introduction and the schematic Figure below). This aspect of the data implies that there may be a mixture of cell types in a spot and thus a mixture of transcriptional programs.
 
-```{r, echo = FALSE, out.width = "33%", fig.cap = "Schematic illustrating multiple cells in a 10x Genomics Visium spot (diameter of 55µm; purple line) overlaying the hematoxylin and eosin (H&E) stained image. The center-to-center distance between spots is 100µm (yellow line), and a typical immune cell's diameter is around 10µm (cyan line)."}
+```{r fig-deconvolution-spot, echo=FALSE, out.width="33%", fig.cap="Schematic illustrating multiple cells in a 10x Genomics Visium spot (diameter of 55µm; purple line) overlaying the hematoxylin and eosin (H&E) stained image. The center-to-center distance between spots is 100µm (yellow line), and a typical immune cell's diameter is around 10µm (cyan line)."}
 knitr::include_graphics("../images/seq-deconvolution.png")
 ```
 
@@ -33,11 +35,11 @@ To help understand these mixtures, at least 20 deconvolution techniques have bee
 
 Among these, `std-poisson`, `STdeconvolve`, and `SpiceMix` are reference-free methods. Methods that incorporate spatial location information are `CARD`, `DSTG`, `SD2`, `Tangram`, `cell2location`, `DestVI`, `std-poisson`, and `SpiceMix`.
 
-In this section, we will demonstrate deconvolution of cell types per spot, using `RCTD` on Visium and Visium HD datasets.
+In this chapter, we demonstrate deconvolution of cell types per spot, using `RCTD` on Visium and Visium HD datasets. For related examples where deconvolution is one step within a broader workflow, see @sec-seq-workflow-visium-crc and @sec-seq-workflow-visium-hd-bin.
 
-## Dependencies {#sec-seq-deconvolution-load-data}
+### Dependencies {#sec-seq-deconvolution-load-data}
 
-```{r deps, message = FALSE, warning = FALSE}
+```{r deps, message=FALSE, warning=FALSE}
 library(BiocParallel)
 library(CARDspa)
 library(DropletUtils)
@@ -52,7 +54,7 @@ library(SpatialExperiment)
 library(VisiumIO)
 ```
 
-In this example of Visium breast cancer data [@Janesick2023-high-res], we perform cell type deconvolution without a single-cell (Chromium) reference and compare the concordance with the provided Visium annotation provided by 10x Genomics.
+In this example of Visium breast cancer data [@Janesick2023-high-res], we perform cell type deconvolution without a single-cell (Chromium) reference and compare the concordance with the Visium annotation provided by 10x Genomics.
 
 ```{r load-vis, message = FALSE}
 # retrieve dataset from OSF repository
@@ -214,7 +216,7 @@ Another method that can be used is `CARD`. First, we rename the columns of spati
 
 <!-- First, we realized delayed count matrices and rename spatial coordinate columns to make the input data compatible with CARD [Note: RCTD handles the conversion internally with spacexr::check_counts()]{.aside} -->
 
-```{r}
+```{r card-realize-counts}
 # realize delayed matrices, as CARD does 
 # not yet support delayed matrix handling
 counts(sce) <- as(counts(sce), "sparseMatrix")

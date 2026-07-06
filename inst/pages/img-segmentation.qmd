@@ -6,6 +6,8 @@
 
 Standard imaging-based ST data analysis pipelines rely on microscopy stains to estimate boundaries (e.g., nucleus or cellular membrane), and assign molecular readouts to their cell of origin. Such readouts can be discrete points (e.g., molecule locations) or continuous distributions (e.g., fluorescent intensities); for the latter, a decision with regard to summarization needs to be made (e.g., mean or median). The resulting measurement matrix of features (e.g., genes or proteins) $\times$ observations (e.g., cells or spots) forms the basis for numerous analysis tasks.
 
+Segmentation therefore connects several parts of the imaging-based workflow: the resulting boundaries and molecule-to-cell assignments are part of the imported data structures described in @sec-bkg-importing-data, segmentation quality is assessed in @sec-img-quality-control, and cell boundaries are required for many sub-cellular analyses in @sec-img-sub-cellular. For broader image-derived features, see @sec-ind-image-analysis.
+
 ## Common algorithms
 
 **Image-based.** `r BiocStyle::Githubpkg("MouseLand/cellpose")` [@Stringer2021-Cellpose] is a deep learning-based method that utilizes a flow-based representation of cell morphology to identify and delineate cells across diverse microscopy images.
@@ -18,7 +20,7 @@ A variety of information -- e.g., fluorescent stains (e.g., nuclei staining via 
 Yet, Baysor can perform segmentation using transcript information (i.e., location and identity) alone; auxiliary data has been shown to improve performance, but is optional.
 
 **Transcript-based.** `r BiocStyle::Githubpkg("dcjones/proseg")` [@Jones2025-Proseg] is available as a CLI and Julia package. 
-It presents fully unsupervised probabilistic approach, based on a cellular Potts model (CPM) simulation framework, where cell morphologies are initialized using a nuclear stain, then expanded and altered at random until they best explain the observed spatial distribution of transcripts.
+It presents a fully unsupervised probabilistic approach, based on a cellular Potts model (CPM) simulation framework, where cell morphologies are initialized using a nuclear stain, then expanded and altered at random until they best explain the observed spatial distribution of transcripts.
 
 ## Commercial solutions
 
@@ -29,7 +31,7 @@ For each cell, segmentation results are then obtained in one of three ways (in o
 (ii) nuclear expansion to the interior's edge stain (18S rRNA); and, 
 (iii) nuclear expansion by a fixed distance (5um since v2.0, previously 15um), or until another boundary is encountered.
 
-```{r fig-10xsegmentation, echo = FALSE, out.width = "100%", fig.cap = "Schematic of the stains and multi-model segmentation on the 10x Genomics Xenium platform. Source: 10x Genomics [Nucleus and Cell Segmentation Algorithms](https://www.10xgenomics.com/support/software/xenium-onboard-analysis/latest/algorithms-overview/segmentation)"}
+```{r fig-10xsegmentation, echo=FALSE, out.width="100%", fig.cap="Schematic of the stains and multi-model segmentation on the 10x Genomics Xenium platform. Source: 10x Genomics [Nucleus and Cell Segmentation Algorithms](https://www.10xgenomics.com/support/software/xenium-onboard-analysis/latest/algorithms-overview/segmentation)"}
 knitr::include_graphics("../images/img-seg_Xenium.jpeg")
 ```
 
@@ -59,7 +61,7 @@ These are resolved to pixels, and stacked to create a gene expression vector fie
 [In other words, RNA target locations across the tissue are converted into a multi-channel image where each channel corresponds to one feature.]{.aside} 
 The resulting representation may be used to cluster and annotate pixels, identify tissue domains (i.e., regions of homogeneous 'cell' type composition).
 
-```{r fig-SSAM, echo = FALSE, out.width = "80%", fig.cap = "Schematic of the SSAM framework. Source: [Figure 1 of Park et al. 2021](https://www.nature.com/articles/s41467-021-23807-4#Fig1)"}
+```{r fig-SSAM, echo=FALSE, out.width="80%", fig.cap="Schematic of the SSAM framework. Source: [Figure 1 of Park et al. 2021](https://www.nature.com/articles/s41467-021-23807-4#Fig1)"}
 knitr::include_graphics("../images/img-seg_SSAM.jpeg")
 ```
 

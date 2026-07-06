@@ -62,7 +62,7 @@ After these steps, further QC and processing is performed at the count matrix le
 3. Feature Selection
 
 ::: {.callout-note}
-See the chapters on Quality Control (#seq-quality-control), and Processing (#seq-processing).
+See @sec-seq-quality-control for spot-level quality control and @sec-seq-intermediate-processing for normalization, feature selection, dimensionality reduction, and related count-matrix processing steps.
 :::
 
 ### Barcode Deconvolution
@@ -81,7 +81,7 @@ Alignment is performed by a software aligner such as `STAR` [@Dobin2013-STAR], o
 
 At the read level, filtering and QC is performed based on information from all of the previous preprocessing steps: reads with low Quality Scores are filtered out, reads with barcodes that didn't map to known CIDs or MID/UMIs are filtered out, and finally reads that didn't align to the reference genome, aligned to multiple regions ambiguously, or aligned to intronic regions are all likely to be filtered out depending slightly on the tool/pipeline and parameters thereof.
 
-Once filtering has been performed, Quality Control metrics can be used to fine-tune additional filtering performed on the data either at the read level, or later at the spot level. Some commonly used metrics and plots are as follow: 
+Once filtering has been performed, Quality Control metrics can be used to fine-tune additional filtering performed on the data either at the read level, or later at the spot level. Some commonly used metrics and plots are as follows:
 
 * Quality Score distribution/density plots: Can help identify any clear patterning in Q-scores that might indicate contaminants or rna degradation.
 * Read mapping statistics: Useful to check that the aligner is configured correctly as well as the quality of the mapping
@@ -157,6 +157,14 @@ A vignette demonstrating the workflow of stPipe for some example Visium data is 
 
 
 ## Appendix
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+Data preprocessing procedures:
+
+- [**Visium data preprocessing**](https://lmweber.org/Visium-data-preprocessing/): Online book containing details on data preprocessing procedures for spatial transcriptomics data from the 10x Genomics Visium platform (using tools outside R and Bioconductor).
+
+:::
 
 ### References {.unnumbered}
 

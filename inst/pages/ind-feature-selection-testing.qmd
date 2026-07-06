@@ -30,7 +30,7 @@ library(SpatialExperiment)
 library(tidyr)
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r load-libs, message=FALSE, warning=FALSE}
 # set seed for random number generation
 # in order to make results reproducible
 set.seed(123)

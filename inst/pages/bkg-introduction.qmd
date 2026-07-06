@@ -2,12 +2,13 @@
 
 {{< include _start.qmd >}}
 
-## Introduction
+## Contents and structure
 
-This book provides reproducible examples and discussion on computational analysis workflows for spatial omics data using [Bioconductor](https://bioconductor.org/) in R. The book contains chapters describing individual analysis steps as well as extended workflows, each with examples including R code and datasets. In some examples, R code is also integrated with Python tools.
+This book provides reproducible examples and discussion on computational analysis workflows for spatial omics data using [Bioconductor](https://bioconductor.org/) in R.
 
+The book contains **📖 discussion chapters, ⚙️ analysis chapters, and 🧩 workflow chapters**. The analysis and workflow chapters describe individual analysis steps as well as extended workflows, each with examples including R code and datasets. In some examples, R code is also integrated with Python tools.
 
-## Contents
+Chapters are generally structured according to their purpose. Background chapters introduce concepts, data formats, and infrastructure. Method-focused chapters usually begin with a short preamble, followed by dependencies, data setup, analysis sections, and an **appendix with further reading and references**. Workflow chapters use a similar structure, but emphasize a complete analysis path for one dataset. When a platform-specific chapter gives a compact demonstration of a general method, we link to the corresponding platform-independent chapter for broader context and alternatives.
 
 Book chapters are organized into several parts:
 
@@ -23,25 +24,25 @@ Book chapters are organized into several parts:
 
 - **Cross-platform analyses:** downstream analyses and workflows to integrate or combine information across platforms
 
-- **Appendices:** acknowledgments, related resources, and session information
+- **Appendices:** contributing, citation, acknowledgments, and session information
 
 
 ## Scope and who this book is for
 
-The aim of this book is to demonstrate key principles of computational analysis workflows for spatial omics data through examples and discussion, including reproducible R code and a variety of datasets. We assume some familiarity with R programming and an understanding of the types of biological questions that single-cell and spatial omics can be used to answer. Previous experience with Bioconductor is not required.
+The aim of this book is to demonstrate **key principles of computational analysis workflows for spatial omics data** through examples and discussion, including reproducible R code and a variety of datasets. We assume some familiarity with R programming and an understanding of the types of biological questions that single-cell and spatial omics can be used to answer. Previous experience with Bioconductor is not required.
 
-The book covers both preprocessing and downstream analyses, so the starting point can be either raw spatial omics data, or processed spot/cell-level expression matrices and sets of spatial coordinates as the main inputs. Since preprocessing procedures vary from platform to platform, we cover some key examples only.
+The book covers **both preprocessing and downstream analyses**, so the starting point can be either raw spatial omics data, or processed spot/cell-level expression matrices and sets of spatial coordinates as the main inputs. Since preprocessing procedures vary from platform to platform, we cover some key examples only.
 
-For most analysis steps, multiple methods are available to choose from. In general, we showcase methods that we have found to work well and are computationally scalable, with a preference for methods available through Bioconductor. The book is not intended to provide a comprehensive listing of all available methods.
+For most analysis steps, multiple methods are available to choose from. In general, we showcase methods that we have found to work well and are computationally scalable, with a **preference for methods available through Bioconductor in R**. The book is not intended to provide a comprehensive listing of all available methods.
 
-The code examples will only include methods available as software packages from either Bioconductor or CRAN (in R) or PyPI (in Python). This restriction helps ensure long-term stability and maintainability, enables regular testing via the Bioconductor build system, and makes it easier for readers to adapt the examples to integrate new methods or build extended Bioconductor-based workflows. Methods available from GitHub are also discussed in the text, but are not included in the code examples.
+The code examples will only include methods available as software packages from either Bioconductor or CRAN (in R) or PyPI (in Python). This restriction helps ensure long-term stability and maintainability, enables **regular testing via the Bioconductor build system**, and makes it easier for readers to adapt the examples to integrate new methods or build extended Bioconductor-based workflows. Methods available from GitHub are also discussed in the text, but are not included in the code examples.
 
 
 ## Bioconductor
 
-[Bioconductor](https://bioconductor.org/) is an "open source and open development" project providing a cohesive and flexible framework for rigorous and reproducible analyses of high-throughput genomic data in R [@Carey2025-Bioconductor; @Huber2015-Bioconductor; @Gentleman2004-Bioconductor]. Bioconductor provides access to more than 2,000 contributed R packages, as well as infrastructure maintained by the Bioconductor Core Team, providing a rich analysis environment for users.
+[Bioconductor](https://bioconductor.org/) is an "open source and open development" project providing a cohesive and flexible framework for rigorous and reproducible analyses of high-throughput genomic data in R [@Carey2025-Bioconductor; @Huber2015-Bioconductor; @Gentleman2004-Bioconductor]. Bioconductor provides access to **more than 2,000 contributed R packages**, as well as infrastructure maintained by the Bioconductor Core Team, providing a rich analysis environment for users.
 
-A key strength of the Bioconductor framework is the modularity and open development philosophy. Packages are contributed by numerous research groups, with the Bioconductor Core Team coordinating the overall project and maintaining infrastructure, build testing, and development guidelines. Contributed packages use consistent data structures, enabling users to connect packages developed by different research groups to build analysis workflows that include the latest state-of-the-art methods. Bioconductor packages also include comprehensive documentation, including extended tutorials and package vignettes.
+A key strength of the Bioconductor framework is the **modularity and open development philosophy**. Packages are contributed by numerous research groups, with the Bioconductor Core Team coordinating the overall project and maintaining infrastructure, build testing, and development guidelines. Contributed packages use consistent data structures, enabling users to connect packages developed by different research groups to build analysis workflows that include the latest state-of-the-art methods. Bioconductor packages also include comprehensive documentation, including extended tutorials and package vignettes.
 
 
 ## Additional introductory resources
@@ -60,6 +61,13 @@ For readers who are new to R and/or Bioconductor, additional useful resources in
 ## Feedback and suggestions
 
 We welcome feedback, suggestions, and contributions from readers in the research community. These may be provided as [GitHub issues](https://github.com/lmweber/OSTA) for further discussion with the developers. Note that all methods used within code examples must be available as packages from either Bioconductor or CRAN (in R) or PyPI (in Python), as discussed above.
+
+For more details on how to provide feedback and contributions, see @sec-apx-contributing.
+
+
+## Source code
+
+The source code of the book is available from [GitHub](https://github.com/lmweber/OSTA) and the [Bioconductor Git repository](https://code.bioconductor.org/). The repository may also be useful as a starting point for teaching materials, workshops, or adapting workflows for other data analysis projects. The modular structure of the code is intended to facilitate reuse and extension in applied spatial omics projects.
 
 
 ## Appendix

@@ -1,65 +1,21 @@
 # Contributing
 
-OSTA is an open, community-driven resource that is designed to evolve alongside new methods, technologies, and best practices. Contributions are welcome from readers, users, and method developers, including feedback on clarity, suggestions for improvements, and extensions to existing content or workflows.
+OSTA is an open, community-driven resource that is designed to evolve alongside
+new methods, technologies, and best practices. Contributions are welcome from
+readers, users, and method developers.
 
-### 🌟 Why to contribute {-}
+Contribution guidelines and instructions are provided in the OSTA book appendix:
 
-There are several motivations for contributing:
-    
-- Being publicly acknowledged within a trusted scientific ecosystem
-- Helping shape best practices in spatial (transcript)omics data analysis
-- Increasing the visibility and impact of your work through a widely used resource
-- Improving clarity and usability of a widely used educational resource
-- Ensuring new methods and technologies are represented in community standards
-- Supporting reproducible and transparent computational research practices
+- [Appendix: Contributing](../inst/pages/apx-contributing.qmd)
 
-### 📌 Ways to contribute {-}
+For contributions consisting of substantial new sections or chapters, please also use the chapter template `.qmd` file:
 
-You can contribute in many ways:
+- [Chapter template](../inst/template.qmd)
 
-- Reporting typographical errors, issues,N or unclear sections
-- Improving explanations of methods or workflows
-- Adding new example analyses or methodological extensions
-- Extending platform or technology coverage
-- Improving reproducibility, performance, or overall clarity
-- Adding relevant literature, benchmarks, or external resources  
-(e.g., in "Further reading" or within chapter content)
+In brief, please open a GitHub issue describing the proposed contribution before
+starting a substantial change. Pull requests should be submitted to the
+`sandbox` branch so that GitHub Actions can build and check the book without
+deploying a new public version.
 
-### ⚙️ How to contribute {-}
-
-All contributions follow a GitHub-based workflow:
-
-1. Open an issue describing the problem or proposal
-2. Fork the repository and create a feature branch
-3. Implement changes in a reproducible manner
-4. Ensure the book renders successfully using Quarto
-5. Submit a pull request to the `sandbox` branch
-  
-### 🔍 Review process {-}
-
-Contributions are evaluated for:
-
-- Scientific correctness and long-term maintainability
-- Consistency with OSTA structure and clarity of exposition
-- Computational reproducibility and successful build/check status
-
-### 🔬 Reproducibility standards {-}
-
-All contributions must:
-
-- Run end-to-end without warnings or errors
-- Use Bioconductor-compatible dependencies  
-(e.g., no `Remotes:` field in the DESCRIPTION)
-- Include session information (see existing chapters for formatting)
-- Be compatible with the target Bioconductor version, depending on the branch
-- Follow Bioconductor standards for package development (see [guidelines](https://contributions.bioconductor.org/bioconductor-package-submissions.html)) 
-
-### ⚖️ Community expectations {-}
-
-Contributors are expected to:
-
-- Be respectful in all interactions
-- Keep issues focused and actionable
-- Follow the [Bioconductor Code of Conduct](https://www.bioconductor.org/about/code-of-conduct)  
-
-🙏 Accepted contributions will be recognized in the book’s Acknowledgments section.
+Contributors are expected to follow the
+[Bioconductor Code of Conduct](https://www.bioconductor.org/about/code-of-conduct).

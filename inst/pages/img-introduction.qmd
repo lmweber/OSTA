@@ -34,6 +34,8 @@ Modeled after synthetic sequences from the External RNA Controls Consortium (ERC
 Depending on the barcoding scheme (number of bits, Hamming weight/distance), a number of barcodes will be left unoccupied; these **system controls** (also referred to as blank or false codes) serve to quantify misidentification of reporter readout.
 :::
 
+The following chapters build on this platform overview. @sec-bkg-importing-data describes common output files and Bioconductor import options, @sec-img-segmentation discusses how molecule locations are assigned to cells, @sec-img-quality-control covers cell-level and platform-specific quality control, and @sec-img-workflow-xenium and @sec-img-workflow-cosmx provide complete example workflows. For image-derived features beyond transcript-based analysis, see @sec-ind-image-analysis.
+
 ## Platforms
 
 
@@ -46,19 +48,19 @@ The [10x Genomics Xenium](https://www.10xgenomics.com/platforms/xenium) platform
 Xenium gives an imageable area of 12mm x 24 mm, although slightly less to avoid fiducial markers. Several pre-designed panels are available, including a "Pan Tissue and Pathways" for both mouse and human, which both include over 5000 genes and there is a possibility to custom design an additional 100 genes. More focused panels are available for human brain, lung, colon and breast tissue as well as cancer immunological subpopulations; for mouse, focused brain and multi-tissue panels are available.
 
 
-### CosMx (NanoString)
+### CosMx (Bruker)
 
 Unlike Xenium, [CosMx](https://nanostring.com/products/cosmx-spatial-molecular-imager/single-cell-imaging-overview/) [@He2022-CosMx] does not rely on RCA. As a result, CosMx tends to be less sensitive than Xenium (albeit higher-plex at present). Furthermore, segmentation is performed separately for each FOV (without stitching). This results in a variety of technical artefacts, such as fractured and possibly duplicated cells near FOV borders.
 
 <!-- The platform currently supports universal 1,000- and 6,000-plex [panels](https://nanostring.com/products/cosmx-spatial-molecular-imager/cosmx-rna-assays), as well as 1,000-plex panels tailored to human immuno-oncology and mouse neuronal tissue; a whole-transcriptome (~18,000-plex) panel is underway. -->
 
-The NanoString CosMx platform gives an imageable area of 15x20 mm and allows up to 6000 RNAs (and now up to 68 proteins) to be assayed in a spatial context. Their human "discovery" 6000 gene panel is currently being expanded to full-transcriptome (>18,000 targets), which should become available in 2025. Other more targeted panels are available, including a 1000-gene "Universal Cell Characterization", a focused 100-gene immuno-oncology panel or a 1000-gene mouse neuroscience panel. In addition, custom panels are available in either an add-on (up to 50 genes) or standalone (up to 300 genes) format. (Antibody-based) Protein panels are currently available for human immuno-oncology and mouse neuroscience contexts.
+The CosMx platform gives an imageable area of 15x20 mm and allows thousands of RNAs and dozens of proteins to be assayed in a spatial context. Available panels include broad discovery panels as well as targeted panels for applications such as cell characterization, immuno-oncology, and neuroscience. In addition, custom panels are available in add-on or standalone formats, and antibody-based protein panels are available for selected biological contexts.
 
 ### MERSCOPE (Vizgen)
 
 The [Vizgen MERSCOPE](https://vizgen.com/products/) platform, among the fluorescence-based targeted spatial transcriptomics platforms, allows the highest resolution (≤20 nm), while also providing a high capacity for multiplexing, with (customizable) panels containing up to 1000 genes, and an imageable area of 1 cm^2^. MERSCOPE was recently shown to be amongst the most sensitive in a recent head-to-head comparison [@Hartman2024-comparative] using mouse brain tissue.
 
-<!--Davide:
+<!--
 ## Pre-processing / understanding the input data structure
 
 - Briefly explain the logic behind sequential FISH
@@ -88,7 +90,7 @@ error-robust barcoded FISH, field of views (FOVs), etc.
 (e.g., gene panels, example datasets, software guides) 
 are available through the corresponding vendor sites, including 
 [CosMx (Bruker)](https://brukerspatialbiology.com/products/cosmx-spatial-molecular-imager),
-[MESCOPE (Vizgen)](https://vizgen.com/products/spatial-transcriptomics), and
+[MERSCOPE (Vizgen)](https://vizgen.com/products/spatial-transcriptomics), and
 [Xenium (10x Genomics)](https://www.10xgenomics.com/platforms/xenium).
 
 :::

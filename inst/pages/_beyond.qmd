@@ -17,6 +17,24 @@ analytical tasks, **we welcome contributions to expand these sections** into
 full chapters, whether to provide deeper theory or to include code examples.
 Please refer to our [contribution guidelines](@sec-apx-contributing).
 
+## Methodological foundations
+
+OSTA is primarily intended as a practical guide to spatial omics analysis workflows using existing, maintained software tools. While we introduce key mathematical and statistical concepts needed to understand analysis choices, e.g. relating to spatial resolution, data representation, quality control, normalization, clustering, spatial statistics, and cross-platform integration, we do not attempt to provide detailed formal mathematical or statistical treatment of each method.
+
+For readers interested in further details on mathematical and statistical foundations, e.g., for the purpose of new method development, we recommend consulting additional resources including primary method papers and more specialized resources on statistical modeling, spatial statistics, machine learning, and image analysis.
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- [An Introduction to Statistical Learning](https://www.statlearning.com/) by G. James, D. Witten, T. Hastie, and R. Tibshirani (Springer (2013), ISBN: 978-0-387-84858-7) provides an introduction to statistical learning methods, including linear regression, classification, resampling methods, and unsupervised learning. It is freely available online with practical applications in R and, more recently, Python. For specialized resources relating to spatial statistics, see @sec-ind-spatial-statistics.
+
+- [Modern Statistics for Modern Biology](https://www.huber.embl.de/msmb/) by S. Holmes and W. Huber (Cambridge University Press (2019), ISBN: 9781108705295) provides a practical introduction to the statistical thinking and computational methods needed to analyze modern biological data. Rather than developing theory from first principles, it equips readers with the concepts and tools they need to understand, perform, and interpret contemporary data analyses.
+
+- [Deep Learning with Python](https://deeplearningwithpython.io/) by F. Chollet (Manning Publications (2021), ISBN: 9781617296864) provides a practical introduction to deep learning and generative AI, from core neural network concepts to modern architectures such as transformers and diffusion models. Through hands-on projects and code examples, it develops the intuition and skills needed to build and understand state-of-the-art AI systems.
+
+- [Introduction to Data Science](https://rafalab.dfci.harvard.edu/dsbook-part-2/) by R. Irizarry (Chapman & Hall/CRC (2024), ISBN: 9781032116556) consists of six parts: Summary Statistics, Probability, Statistical Inference, Linear Models, High-Dimensional Data, and Machine Learning. Foundational concepts are introduced through examples, followed by applied case studies that integrate these ideas. Chapters are designed for single-lecture delivery and include practical exercises in R; all data and the book’s source code are available online.
+
+:::
+
 ## Integration
 
 Reconciling molecular measurements across multiple tissue sections or diverse 

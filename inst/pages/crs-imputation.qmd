@@ -37,7 +37,7 @@ Expression Flex applied to FFPE tissues (scFFPE-Seq) assay with around
 ### Xenium
 
 ```{r load-spe, message=FALSE, warning=FALSE}
-# rertrieve spatial data
+# retrieve spatial data
 id <- "Xenium_HumanBreast1_Janesick"
 pa <- OSTA.data_load(id, mol=FALSE)
 dir.create(td <- tempfile())
@@ -84,8 +84,8 @@ Considering an omics assay as a matrix of measurement values where rows/columns 
 Specifically, methods applicable to each type of integration strategy depend on the choice of *anchors* used or, otherwise put, the dimension along which to integrate.
 
 Firstly, experiments may involve multiple (biological or technical) replicates, requiring **horizontal** integration across cells that share a common feature space. 
-Secondly, multi-modal assays can simultaneously extract di↵erent types of features from a given cell. 
-Integration must then be **vertical**, i.e., across features measured from the same cells. Thirdly, technological limitations may require measuring different modalities from separate groups of cells, in which case **diagonal** integration across both di↵erent cells and features is necessary 
+Secondly, multi-modal assays can simultaneously extract different types of features from a given cell.
+Integration must then be **vertical**, i.e., across features measured from the same cells. Thirdly, technological limitations may require measuring different modalities from separate groups of cells, in which case **diagonal** integration across both different cells and features is necessary
 
 Single-cell transcriptomics data analyses are most commonly faced with horizontal integration. 
 Methods for this task have been benchmarked extensively [@Tran2020; @ChazarraGil2021; @Luecken2022].
@@ -171,12 +171,12 @@ plot_layout(nrow=1, guides="collect") &
 
 ::: {.callout-note collapse="true" title="quantifying batch effects and their removal"}
 
-UMAPs like above are perhaps pretty, but not quantiative. We strongly encourage
-more quantitative metrics to quantify batch effects prior and post correction,
+UMAPs like the one above are perhaps pretty, but not quantitative. We strongly encourage
+more quantitative metrics to quantify batch effects before and after correction,
 e.g., entropy, principal component regression, local inverse simpson index,
-silhouette width (problematic according to @Rautenstrauch2025), or similat.
+silhouette width (problematic according to @Rautenstrauch2025), or similar.
 A number of such metrics have been proposed in benchmarks (see previous box),
-and many are implemeted in `r BiocStyle::Biocpkg("CellMixS")` [@Lutge2021-CellMixS].
+and many are implemented in `r BiocStyle::Biocpkg("CellMixS")` [@Lutge2021-CellMixS].
 
 Here, we will perform principal component regression (PCR) to quantify 
 the variance explained by cluster/batch (before and after correction); 

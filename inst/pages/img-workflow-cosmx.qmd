@@ -64,7 +64,7 @@ Unlike, Xenium and MERSCOPE, CosMx does not stitch fields of view (FOVs) in a si
 plotCellsFovs(cos)
 ```
 
- @sec-img-quality-control gives a thorough overview of quality control steps for imaging-based spatial transcriptomics data, including CosMX-specific metrics. Here, we will simply compute `r BiocStyle::Biocpkg("SpaceTrooper")`'s aggregated QC score and keep the cells that pass the threshold.
+@sec-img-quality-control gives a thorough overview of quality control steps for imaging-based spatial transcriptomics data, including CosMx-specific metrics. Here, we will simply compute `r BiocStyle::Biocpkg("SpaceTrooper")`'s aggregated QC score and keep the cells that pass the threshold.
 
 ```{r qc-cosmx, message=FALSE}
 lys <- c("NegPrb", "Negative", "SystemControl")

@@ -1,8 +1,8 @@
-# Contributing
+# Contributing {#sec-apx-contributing}
 
 OSTA is an open, community-driven resource that is designed to evolve alongside new methods, technologies, and best practices. Contributions are welcome from readers, users, and method developers, including feedback on clarity, suggestions for improvements, and extensions to existing content or workflows.
 
-### 🌟 Why to contribute {-}
+### 🌟 Why contribute? {-}
 
 There are several motivations for contributing:
     
@@ -17,7 +17,7 @@ There are several motivations for contributing:
 
 You can contribute in many ways:
 
-- Reporting typographical errors, issues,N or unclear sections
+- Reporting typographical errors, issues, or unclear sections
 - Improving explanations of methods or workflows
 - Adding new example analyses or methodological extensions
 - Extending platform or technology coverage
@@ -35,6 +35,30 @@ All contributions follow a GitHub-based workflow:
 4. Ensure the book renders successfully using Quarto
 5. Submit a pull request to the `sandbox` branch
   
+### 📋 Suggested structure for contributions {-}
+
+When proposing a new section, workflow, or substantial revision, please open a
+GitHub issue with the following information:
+
+- Contribution type: clarification, correction, update, new method, new workflow,
+dataset update, or related resource
+- Proposed location in OSTA: existing chapter/section or
+new chapter
+- Motivation and audience: what reader need or analysis gap this addresses
+- Scope: brief outline of the intended text, code, figures, and expected length
+- Software and data: packages, versions or repositories, datasets, and whether
+dependencies are available from Bioconductor, CRAN, or PyPI
+- Reproducibility plan: expected runtime, required seeds, cached objects,
+session information, and whether the full chapter builds
+- Maintenance considerations: likely stability of dependencies, data
+availability, and whether the example can be tested regularly
+- Related literature: key references to add to the bibliography
+
+For substantial new sections or chapters, please use `inst/template.qmd` as a
+starting point. This template file provides the expected Quarto chapter structure,
+including suggested sections for the preamble, dependencies, reproducible code,
+saved objects, benchmarks, and references.
+
 ### 🔍 Review process {-}
 
 Contributions are evaluated for:

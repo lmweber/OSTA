@@ -10,6 +10,8 @@ This chapter demonstrates methods for several intermediate processing steps -- n
 
 We use methods from the `r BiocStyle::Biocpkg("scrapper")` Bioconductor package, which were originally developed for scRNA-seq data, with the (simplified) assumption that these methods can be applied to spot-based ST data by treating spots as equivalent to cells. In addition, we discuss alternative spatially-aware methods, and provide links to later parts of the book where these methods are described in more detail.
 
+This chapter is intended as a compact sequencing-based processing demo. For more comprehensive and platform-independent discussion, see @sec-ind-normalization, @sec-ind-feature-selection-testing, @sec-ind-dimensionality-reduction, and @sec-ind-clustering.
+
 Following the processing steps, this chapter also includes short demonstrations for subsequent steps, including clustering and identification of marker genes. For more details on these steps, see the later analysis chapters or workflow chapters.
 
 
@@ -24,7 +26,7 @@ library(BayesSpace)
 library(SpatialExperiment)
 ```
 
-```{r}
+```{r set-seed}
 # set seed for reproducibility
 set.seed(100)
 ```
@@ -141,9 +143,7 @@ spe <- runUmap.se(spe, reddim.type = "PCA")
 
 ## Clustering {#sec-seq-intermediate-processing-clustering}
 
-<!-- To do: consider moving sections from here onwards into later chapters (either workflows or downstream steps) - or new workflow chapter (before DLPFC) -->
-
-After completing the intermediate processing steps above, we next demonstrate some short examples of downstream analysis steps.
+After completing the intermediate processing steps above, we next demonstrate some short examples of downstream analysis steps. These examples are included to show how processed objects feed into later analyses; the more detailed method discussion is deferred to the platform-independent chapters linked below.
 
 Here, we run a spatially-aware clustering algorithm, `r BiocStyle::Biocpkg("BayesSpace")` [@Zhao2021-BayesSpace], to identify spatial domains. BayesSpace was developed for sequencing-based ST data, and takes the spatial coordinates of the measurements into account.
 

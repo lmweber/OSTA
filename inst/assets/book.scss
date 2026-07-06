@@ -144,6 +144,11 @@ div.sidebar-item-container .active, div.sidebar-item-container .show>.nav-link, 
   font-weight: 800;
 }
 
+#quarto-sidebar a.sidebar-link[href$="index.html"],
+#quarto-sidebar a.sidebar-link[href$="_beyond.html"] {
+  font-weight: 800;
+}
+
 .sidebar-title {
   font-weight: 800;
   background: #0087af;

@@ -20,7 +20,7 @@ Running [Space Ranger](https://www.10xgenomics.com/support/software/space-ranger
 
 The resulting outputs are described by 10x Genomics [here](https://www.10xgenomics.com/support/software/space-ranger/latest/analysis/outputs/output-overview); briefly:
 
-```{r, eval=FALSE}
+```{r visium-files, eval=FALSE}
 Visium
   └── outs
     ├── spatial
@@ -39,7 +39,7 @@ Visium
 
 Running [Space Ranger](https://www.10xgenomics.com/support/software/space-ranger/latest) on Visium HD data generates outputs similar to the above, but by default includes outputs binned at a resolution of 2, 8, and 16 µm. Thus, outputs have a hierarchical structure where each `binned_outputs/` subdirectory contains files analogous to the `outs/` directory for Visium; e.g.:
 
-```{r, eval=FALSE}
+```{r visium-hd-files, eval=FALSE}
 VisiumHD
   └── binned_outputs
     └─── square_002um
@@ -73,7 +73,7 @@ Running [Xenium Ranger](https://www.10xgenomics.com/support/software/xenium-rang
 
 All outputs are described by 10x Genomics in detail [here](https://www.10xgenomics.com/support/software/xenium-onboard-analysis/latest/analysis/xoa-output-understanding-outputs); briefly:
 
-```{r, eval=FALSE}
+```{r xenium-files, eval=FALSE}
 Xenium
   └── outs 
     ├── cells.parquet          # cell metadata (e.g., area)
@@ -95,7 +95,7 @@ Through [custom module scripts](https://github.com/Nanostring-Biostats/CosMxDACu
 
 A detailed description of these files is given [here](https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/posts/flat-file-exports/flat-files-compare.html); briefly:
 
-```{r, eval=FALSE}
+```{r cosmx-files, eval=FALSE}
 CosMx
   ├── exprMat_file.csv       # (gene x cell) counts
   ├── fov_positions_file.csv # FOV corner positions

@@ -83,12 +83,16 @@ SPE has been extended through `r BiocStyle::Biocpkg("SpatialFeatureExperiment")`
 
 There are several other frameworks outside Bioconductor that support spatially-aware analysis for both sequencing- and imaging-based platforms.
 
-In particular, [Seurat](https://satijalab.org/seurat/) [@Hao2023-Seurat] and [Scanpy](https://scanpy.readthedocs.io/) [@Wolf2018-Scanpy] provide comprehensive single-cell analysis pipelines in R and Python, respectively, and incorporate features to visualize and analyze spatial omics datasets. Packages including [Giotto](https://giottosuite.com/) [@Chen2025-Giotto-Suite; @Dries2021-Giotto] and `r BiocStyle::Githubpkg("BIMSBbioinfo/VoltRon")` [@Manukyan2023-VoltRon] (R), as well as [Squidpy](http://squidpy.readthedocs.io/) [@Palla2022-Squidpy] (Python) support all-in-one frameworks for analyzing spatial omics data and contain extensive sets of spatially-aware algorithms.
+In particular, [Seurat](https://satijalab.org/seurat/) [@Hao2023-Seurat] and [Scanpy](https://scanpy.readthedocs.io/) [@Wolf2018-Scanpy] provide comprehensive single-cell analysis pipelines in R and Python, respectively, and incorporate features to visualize and analyze spatial omics datasets. Scanpy and other Python/scverse tools use [AnnData](https://anndata.readthedocs.io/en/latest/) as a core class for storing annotated single-cell and spatial data. Packages including [Giotto](https://giottosuite.com/) [@Chen2025-Giotto-Suite; @Dries2021-Giotto] and `r BiocStyle::Githubpkg("BIMSBbioinfo/VoltRon")` [@Manukyan2023-VoltRon] (R), as well as [Squidpy](http://squidpy.readthedocs.io/) [@Palla2022-Squidpy] (Python) support all-in-one frameworks for analyzing spatial omics data and contain extensive sets of spatially-aware algorithms.
 
 
 #### Giotto
 
 [Giotto](https://giottosuite.com/) (or Giotto Suite) [@Chen2025-Giotto-Suite; @Dries2021-Giotto] provides tools to process, analyze and visualize spatial multi-omics data at multiple scales and resolutions. The package supports the analysis of an extensive set of sequencing- and imaging-based platforms with either transcriptomics and proteomics modalities such as Xenium, Visium HD, and CODEX (Akoya). `Giotto` provides utilities to manipulate spatial objects and images, detect spatial patterns and spatially-aware clusters, and support database-based backend data using `r BiocStyle::Githubpkg("drieslab/dbverse")` for scalability.
+
+The [Giotto classes](https://drieslab.github.io/Giotto_website/articles/structure.html)
+documentation describes the R classes used to store spatial omics data within
+the Giotto framework.
 
 
 #### VoltRon
@@ -158,6 +162,8 @@ provides diverse tooling for spatial omics data analysis in Python/scverse.
 and the R-native `r BiocStyle::Biocpkg("anndataR")` [@Deconinck2026-anndataR] 
 complement, are a foundational data structure for annotated matrices,
 serving as the backbone for many Python-based omics analysis tools.
+See @sec-bkg-python-interoperability for more details on conversion between
+Python and R/Bioconductor data structures.
 
 - Several hackathons between R/Bioconductor and Python/scverse community
 members have been designated to advancing computational infrastructure around

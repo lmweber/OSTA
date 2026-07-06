@@ -2,11 +2,13 @@
 
 {{< include _start.qmd >}}
 
-## Introduction
+## Preamble
 
-Visium HD is a next-generation spatial transcriptomics technology developed by 10x Genomics, designed to provide single-cell resolution spatial gene expression data across entire tissue sections. Commercially available since 2024, Visium HD advanced the platform's resolution from 55 µm spots to bins of subcellular resolution (2 µm). In this workflow, we will demonstrate common analysis steps with a Visium HD dataset on colorectal cancer [@deOliveira2025-high-def].
+### Introduction
 
-## Dependencies
+Visium HD is a next-generation spatial transcriptomics technology developed by 10x Genomics, designed to provide single-cell resolution spatial gene expression data across entire tissue sections. Visium HD advanced the platform's resolution from 55 µm spots to bins of subcellular resolution (2 µm). In this workflow, we demonstrate common analysis steps with a Visium HD dataset on colorectal cancer [@deOliveira2025-high-def].
+
+### Dependencies
 
 ```{r deps, message=FALSE, warning=FALSE}
 library(Banksy)
@@ -27,7 +29,7 @@ library(tidyr)
 library(VisiumIO)
 ```
 
-In this demo, we perform deconvolution on 16 µm bins and compare the concordance with results on 8 µm bins, provided by 10x Genomics. [Here, we only demonstrate the analysis for patient 2 (P2). Other patients, such as P1 and P5, also have public Chromium, Visium HD, and Xenium data available for the CRC group (see @sec-bkg-example-datasets). It would be interesting to investigate the differences in malignant cells/bins (e.g., DEGs, pathways) between patients across different platforms.]{.aside}
+In this demo, we perform deconvolution on 16 µm bins and compare the concordance with results on 8 µm bins, provided by 10x Genomics. See @sec-seq-deconvolution for a more focused discussion of deconvolution methods. [Here, we only demonstrate the analysis for patient 2 (P2). Other patients, such as P1 and P5, also have public Chromium, Visium HD, and Xenium data available for the CRC group (see @sec-bkg-example-datasets). It would be interesting to investigate the differences in malignant cells/bins (e.g., DEGs, pathways) between patients across different platforms.]{.aside}
 
 ```{r load-vhd8, message=FALSE, warning=FALSE}
 # retrieve dataset from OSF repo
@@ -74,7 +76,7 @@ lapply(lab, \(.) {
   theme(legend.key.size=unit(0, "lines"))
 ```
 
-Another resolution of Visium HD with 16 µm bin can be read in as follow:
+Another resolution of Visium HD with 16 µm bins can be read in as follows:
 
 ```{r load-vhd16, message=FALSE}
 # read 16um bins into 'SpatialExperiment'

@@ -4,6 +4,14 @@
 
 ## Preamble
 
+### Introduction
+
+In this demo, we will rely on data from @Janesick2023-high-res, which includes
+same-section Visium and Xenium measurements on human breast cancer tissue.
+
+![H&E staining](../images/xenvis-visium.png){height=300px}
+![Xenium IF](../images/xenvis-xenium.png){height=300px}
+
 ### Dependencies
 
 ```{r dep, message=FALSE, warning=FALSE}
@@ -22,14 +30,6 @@ library(VisiumIO)
 # in order to make results reproducible
 set.seed(194849)
 ```
-
-### Introduction
-
-In this demo, we will rely on data from @Janesick2023-high-res, which includes
-same-section Visium and Xenium measurements on human breast cancer tissue.
-
-![H&E staining](../images/xenvis-visium.png){height=300px}
-![Xenium IF](../images/xenvis-xenium.png){height=300px}
 
 ## Setup {#sec-crs-workflow-xenvis-load-data}
 
