@@ -316,9 +316,7 @@ qqline(resid(mod))
 
 - The packages `r BiocStyle::CRANpkg("vegan")` and `r BiocStyle::Biocpkg("poem")` are useful when calculating diversity metrics within structures and/or border regions. To identify border regions and how to overlap anatomical regions with sample coordinates, please have a look at the `r BiocStyle::Biocpkg("sosta")` vignette.
 
-- The Python package [GRIDGENE](https://demirandalab-gridgen.readthedocs.io/en/latest/) [@Sequeira2025-GRIDGENE] offers methods for performing structure-based analysis based on transcript density. 
-
-- The Python package [CellCharter](https://cellcharter.readthedocs.io/en/latest/) [@Varrone2024-CellCharter] allows for spatial clustering and offers approaches for the reconstruction of spatial structures as well as calculation of some geometric metrics.
+- The Python packages [GRIDGENE](https://demirandalab-gridgen.readthedocs.io) [@Sequeira2025-GRIDGENE] and [CellCharter](https://cellcharter.readthedocs.io) [@Varrone2024-CellCharter] provide complementary approaches for structure-based spatial omics analysis. `GRIDGENE` focuses on analyses based on transcript density, whereas `CellCharter` offers methods for spatial clustering, reconstruction of spatial structures, and quantification of their geometric properties.
 
 :::
 

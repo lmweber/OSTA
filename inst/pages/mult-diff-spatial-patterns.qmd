@@ -142,8 +142,17 @@ ggplot(dat, aes(factor(day), log_cpm)) +
     theme(legend.position="right")
 ```
 
-
 ## Appendix
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- The methodology underlying `r BiocStyle::Biocpkg("DESpace")` is detailed in @Cai2025-DESpace2, which provides a more comprehensive description of the statistical framework and additional examples of DSP analyses.
+
+- The R package [STcompare](https://jef.works/STcompare/) [@Clifton2025-STcompare] R package provides a statistical framework for comparative ST analysis by identifying genes with differential spatial expression patterns between conditions.
+
+- The Python package `r BiocStyle::Githubpkg("xiaojierzi/CODA")` [@Tan2026-CODA] Python package provides methods for cross-sample alignment of ST data and identification of spatially informative genes across tissues and conditions.
+
+:::
 
 ### References {.unnumbered}
 
