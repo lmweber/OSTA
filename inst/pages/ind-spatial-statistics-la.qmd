@@ -102,7 +102,7 @@ plotLocalResult(sfe,
 
 #### Multivariate measures – Lee's L
 
-Lee's $L$ combines the Pearson correlation coefficient and Moran's $I$ [@Lee2001-bivariate]. This unified metric allows to evaluate how two continuous variables are related while accounting for their spatial dependencies. We will calculate the global metric on the 20 most highly (non-spatial) variable features.
+Lee's $L$ combines the Pearson correlation coefficient and Moran's $I$ [@Lee2001-bivariate]. This unified metric allows us to evaluate how two continuous variables are related while accounting for their spatial dependencies. We will calculate the global metric on the 20 most highly (non-spatial) variable features.
 
 ```{r lees_l, warning=FALSE}
 res <- calculateBivariate(sfe, type="lee", feature1=geneProbes, colGraphName="knn6")
@@ -139,7 +139,7 @@ plotLocalResult(
 
 ### Join count statistics
 
-Join count statistics can be used to quantify the arrangement of categorical marks on lattices. The join count statistic calculates how often a categorical mark appears next to itself or to another category within the pre-defined neighborhood. This values can then be compared against a theoretical or a permutation-based value test of the null hypothesis of random spatial allocation of the marks [@Getis2009-spatial-weights].
+Join count statistics can be used to quantify the arrangement of categorical marks on lattices. The join count statistic calculates how often a categorical mark appears next to itself or to another category within the pre-defined neighborhood. These values can then be compared against a theoretical or a permutation-based value test of the null hypothesis of random spatial allocation of the marks [@Getis2009-spatial-weights].
 
 Here, we will use the this to quantify the tendency of clusters (non-spatial) to co-localize in their relative neighborhood. Note that the output contains z-scores and no p-values such that a user-defined threshold can be applied.
 

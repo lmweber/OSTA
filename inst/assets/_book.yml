@@ -1,67 +1,117 @@
 book:
   title: "Orchestrating Spatial Transcriptomics Analysis with Bioconductor"
+  # repo-url: https://github.com/lmweber/OSTA
+  # repo-actions: [source, issue] # source repo, new issue
+  # repo-link-target: _blank      # open in a new tab
+  # repo-subdir: "inst/pages"     # .qmd location
+  # repo-branch: devel
   chapters:
     - index.qmd
     - part: "Background"
       chapters:
-        - pages/bkg-introduction.qmd
-        - pages/bkg-spatial-omics.qmd
-        - pages/bkg-infrastructure.qmd
-        - pages/bkg-ecosystem.qmd
-        - pages/bkg-importing-data.qmd
-        - pages/bkg-example-datasets.qmd
-        - pages/bkg-python-interoperability.qmd
+        - text: "📖 Introduction"
+          file: pages/bkg-introduction.qmd
+        - text: "📖 Spatial omics"
+          file: pages/bkg-spatial-omics.qmd
+        - text: "📖 Experimental design"
+          file: pages/bkg-exp-design.qmd
+        - text: "📖 Infrastructure"
+          file: pages/bkg-infrastructure.qmd
+        - text: "📖 Ecosystem"
+          file: pages/bkg-ecosystem.qmd
+        - text: "📖 Importing data"
+          file: pages/bkg-importing-data.qmd
+        - text: "📖 Example datasets"
+          file: pages/bkg-example-datasets.qmd
+        - text: "⚙️ Python interoperability"
+          file: pages/bkg-python-interoperability.qmd
     - part: "Sequencing-based platforms"
       chapters:
-        - pages/seq-introduction.qmd
-        - pages/seq-reads-to-counts.qmd
-        - pages/seq-quality-control.qmd
-        - pages/seq-intermediate-processing.qmd
-        - pages/seq-deconvolution.qmd
-        - pages/seq-workflow-dlpfc.qmd
-        - pages/seq-workflow-visium-crc.qmd
-        - pages/seq-workflow-visium-hd-bin.qmd
-        - pages/seq-workflow-visium-hd-seg.qmd
+        - text: "📖 Introduction"
+          file: pages/seq-introduction.qmd
+        - text: "📖 Reads to counts"
+          file: pages/seq-reads-to-counts.qmd
+        - text: "⚙️ Quality control"
+          file: pages/seq-quality-control.qmd
+        - text: "⚙️ Intermediate processing"
+          file: pages/seq-intermediate-processing.qmd
+        - text: "⚙️ Deconvolution"
+          file: pages/seq-deconvolution.qmd
+        - text: "🧩 Workflow: Visium DLPFC"
+          file: pages/seq-workflow-dlpfc.qmd
+        - text: "🧩 Workflow: Visium CRC"
+          file: pages/seq-workflow-visium-crc.qmd
+        - text: "🧩 Workflow: Visium HD (bin)"
+          file: pages/seq-workflow-visium-hd-bin.qmd
+        - text: "🧩 Workflow: Visium HD (seg)"
+          file: pages/seq-workflow-visium-hd-seg.qmd
     - part: "Imaging-based platforms"
       chapters:
-        - pages/img-introduction.qmd
-        - pages/img-segmentation.qmd
-        - pages/img-quality-control.qmd
-        - pages/img-intermediate-processing.qmd
-        - pages/img-neighborhood-analysis.qmd
-        - pages/img-cell-cell-communication.qmd
-        - pages/img-sub-cellular-analysis.qmd
-        - pages/img-workflow-xenium.qmd
-        - pages/img-workflow-cosmx.qmd
+        - text: "📖 Introduction"
+          file: pages/img-introduction.qmd
+        - text: "📖 Segmentation"
+          file: pages/img-segmentation.qmd
+        - text: "⚙️ Quality control"
+          file: pages/img-quality-control.qmd
+        - text: "⚙️ Intermediate processing"
+          file: pages/img-intermediate-processing.qmd
+        - text: "⚙️ Neighborhood analysis"
+          file: pages/img-neighborhood-analysis.qmd
+        - text: "⚙️ Cell–cell communication"
+          file: pages/img-cell-cell-communication.qmd
+        - text: "📖 Sub-cellular analysis"
+          file: pages/img-sub-cellular-analysis.qmd
+        - text: "🧩 Workflow: Xenium"
+          file: pages/img-workflow-xenium.qmd
+        - text: "🧩 Workflow: CosMx"
+          file: pages/img-workflow-cosmx.qmd
     - part: "Platform-independent analyses"
       chapters:
-        - pages/ind-normalization.qmd
-        - pages/ind-dimensionality-reduction.qmd
-        - pages/ind-clustering.qmd
-        - pages/ind-feature-selection-testing.qmd
-        - pages/ind-feature-set-signatures.qmd
-        - pages/ind-spatial-statistics.qmd
-        - pages/ind-image-analysis.qmd
-        - pages/ind-deep-learning.qmd
+        - text: "⚙️ Normalization"
+          file: pages/ind-normalization.qmd
+        - text: "⚙️ Dimensionality reduction"
+          file: pages/ind-dimensionality-reduction.qmd
+        - text: "⚙️ Clustering & annotation"
+          file: pages/ind-clustering.qmd
+        - text: "⚙️ Feature selection & testing"
+          file: pages/ind-feature-selection-testing.qmd
+        - text: "⚙️ Feature sets & signatures"
+          file: pages/ind-feature-set-signatures.qmd
+        - text: "⚙️ Spatial statistics"
+          file: pages/ind-spatial-statistics.qmd
+        - text: "📖 Image analysis"
+          file: pages/ind-image-analysis.qmd
+        - text: "📖 Deep learning"
+          file: pages/ind-deep-learning.qmd
     - part: "Multiple-sample analyses"
       chapters:
-        - pages/mult-diff-spatial-patterns.qmd
-        - pages/mult-diff-colocalization.qmd
-        - pages/mult-structure-based.qmd
+        - text: "⚙️ Differential spatial patterns"
+          file: pages/mult-diff-spatial-patterns.qmd
+        - text: "⚙️ Differential colocalization"
+          file: pages/mult-diff-colocalization.qmd
+        - text: "⚙️ Structure-based analysis"
+          file: pages/mult-structure-based.qmd
     - part: "Cross-platform analyses"
       chapters:
-        - pages/crs-spatial-registration.qmd
-        - pages/crs-imputation.qmd
-        - pages/crs-workflow-xenvis.qmd
+        - text: "⚙️ Registration"
+          file: pages/crs-registration.qmd
+        - text: "⚙️ Imputation"
+          file: pages/crs-imputation.qmd
+        - text: "🧩 Workflow: Xenium × Visium"
+          file: pages/crs-workflow-xenvis.qmd
+    - pages/_beyond.qmd
   appendices:
-    - pages/apx-acknowledgments.qmd
-    - pages/apx-related-resources.qmd
-    - pages/apx-session-info.qmd
+    - pages/apx-contributing.qmd
     - pages/apx-citation.qmd
-  #cover-image: assets/cover.png
+    - pages/apx-acknowledgments.qmd
+    - pages/apx-session-info.qmd
   favicon: assets/favicon.png
   sidebar:
     title: "OSTA"
     style: "docked"
     background: "light"
     collapse-level: 5
+    tools:
+      - icon: github
+        text: GitHub
+        href: https://github.com/lmweber/OSTA

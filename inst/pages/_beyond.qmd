@@ -1,0 +1,242 @@
+# Beyond this book {.unnumbered #sec-beyond}
+
+{{< include _start.qmd >}}
+
+The analytical landscape of spatial omics is vast and continuously developing. Here, 
+we outline additional analysis tasks and topics that have not been covered elsewhere. 
+
+Throughout this book, we have emphasized the reproducibility standards provided 
+by the R/Bioconductor ecosystem. However, certain tasks -- particularly those 
+involving machine and deep learning or intensive image analysis -- frequently 
+leverage the strengths of existing Python infrastructure. We consider these 
+ecosystems complementary, and hope to address omissions in the future.
+
+Finally, we view this e-book as a living resource and a community effort.
+If you are a keen developer or researcher with expertise in these (or other) 
+analytical tasks, **we welcome contributions to expand these sections** into 
+full chapters, whether to provide deeper theory or to include code examples.
+Please refer to the contribution guidelines in @sec-apx-contributing.
+
+## Methodological foundations
+
+OSTA is primarily intended as a practical guide to spatial omics analysis workflows using existing, maintained software tools. While we introduce key mathematical and statistical concepts needed to understand analysis choices, e.g. relating to spatial resolution, data representation, quality control, normalization, clustering, spatial statistics, and cross-platform integration, we do not attempt to provide detailed formal mathematical or statistical treatment of each method.
+
+For readers interested in further details on mathematical and statistical foundations, e.g., for the purpose of new method development, we recommend consulting additional resources including primary method papers and more specialized resources on statistical modeling, spatial statistics, machine learning, and image analysis.
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- [An Introduction to Statistical Learning](https://www.statlearning.com/) by G. James, D. Witten, T. Hastie, and R. Tibshirani (Springer (2013), ISBN: 978-0-387-84858-7) provides an introduction to statistical learning methods, including linear regression, classification, resampling methods, and unsupervised learning. It is freely available online with practical applications in R and, more recently, Python. For specialized resources relating to spatial statistics, see @sec-ind-spatial-statistics.
+
+- [Modern Statistics for Modern Biology](https://www.huber.embl.de/msmb/) by S. Holmes and W. Huber (Cambridge University Press (2019), ISBN: 9781108705295) provides a practical introduction to the statistical thinking and computational methods needed to analyze modern biological data. Rather than developing theory from first principles, it equips readers with the concepts and tools they need to understand, perform, and interpret contemporary data analyses.
+
+- [Deep Learning with Python](https://deeplearningwithpython.io/) by F. Chollet (Manning Publications (2021), ISBN: 9781617296864) provides a practical introduction to deep learning and generative AI, from core neural network concepts to modern architectures such as transformers and diffusion models. Through hands-on projects and code examples, it develops the intuition and skills needed to build and understand state-of-the-art AI systems.
+
+- [Introduction to Data Science](https://rafalab.dfci.harvard.edu/dsbook-part-2/) by R. Irizarry (Chapman & Hall/CRC (2024), ISBN: 9781032116556) consists of six parts: Summary Statistics, Probability, Statistical Inference, Linear Models, High-Dimensional Data, and Machine Learning. Foundational concepts are introduced through examples, followed by applied case studies that integrate these ideas. Chapters are designed for single-lecture delivery and include practical exercises in R; all data and the book’s source code are available online.
+
+:::
+
+## Integration
+
+Reconciling molecular measurements across multiple tissue sections or diverse 
+platforms is essential for atlas building and comparative studies. 
+In R/Bioconductor, linear methods like `r BiocStyle::Biocpkg("harmony")` 
+[@Korsunsky2019-Harmony] have been shown to perform well for scRNA-seq data 
+[@Luecken2022]. And, the `r BiocStyle::Biocpkg("CellMixS")` [@Lutge2021-CellMixS] 
+package implements several metrics to evaluate batch effects and correction.
+
+In R/CRAN, `r BiocStyle::Githubpkg("satijalab/seurat")` implements different 
+options, including canonical correlation analysis (CCA) and also `harmony`
+(parameter defaults have changed between major releases). The variational 
+autoencoder-based Python tool `r BiocStyle::Githubpkg("scverse/scvi-tools")` 
+is another popular choice. And, many methods can be adapted to multi-modal
+data, e.g., by combining low-dimensional embeddings across modalities.
+
+For ST data, `r BiocStyle::Biocpkg("BayesSpace")` [@Zhao2021-BayesSpace] 
+integrates sections through joint spatial clustering. More recently, implicitly 
+spatially aware integration frameworks such as `r BiocStyle::CRANpkg("PRECAST")` 
+[@Liu2023-PRECAST] have been developed to explicitly model spatial autocorrelation 
+across slices, trading off batch correction and preservation of tissue architecture.
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- @Hu2024-benchmark-clustering present a multi-task benchmark that 
+includes clustering, spatial alignment, and integration of ST data.
+
+- @Luecken2022 have systematically benchmark batch correction methods for 
+scRNA-seq data; notably, the evaluation metrics presented here are worth 
+considering also during day-to-day data analysis (not only benchmarking).
+
+- The [OSCA](https://bioconductor.org/books/release/OSCA.multisample/integrating-datasets.html)
+chapter on correcting batch effects provides motivations and demonstrates
+the use of linear regression and MNN for correction; consecutive chapters 
+cover diagnostics (removing technical vs. preserving biological variation) 
+and downstream analyses (differential expression and abundance analysis).
+
+- The [single-cell best practices](https://www.sc-best-practices.org/cellular_structure/integration.html)
+Python book chapter on data integration provides more extensive theoretical
+background, including a formal categorization of methodologies (graph-based, 
+deep learning, and more). The chapter also demonstrates popular Python tools,
+including `r BiocStyle::Githubpkg("scverse/scvi-tools")`'s `scANVI` [@Xu2021-scANVI].
+
+:::
+
+## Trajectory inference
+
+Trajectory inference (TI) aims to reconstruct dynamic biological processes 
+by ordering cells or spots along paths of minimal transcriptional change, 
+inferring a continuous progression known as **pseudotime**. 
+
+Foundational R/Bioconductor methods like `r BiocStyle::Biocpkg("monocle")` 
+[@Trapnell2014-monocle; @Qiu2017-monocle2] and `r BiocStyle::Biocpkg("slingshot")` 
+[@Street2018-slingshot] remain popular also for spatially resolved data. 
+Alternatively, spatially aware DR (see @sec-ind-dimensionality-reduction) 
+can be used to obtain smoothed embeddings for downstream TI.
+
+By contrast, ST data offer a means to reconstruct of **pseudo-space-time**, 
+which reconciles transcriptional similarity with physical proximity. 
+In Python spatially aware frameworks include 
+`r BiocStyle::Githubpkg("hongleir/SpaceFlow")` [@Ren2022-SpaceFlow] 
+that uses spatially regularized graph networks to learn 
+spatially-coherent expression patterns for TI from ST data;
+`r BiocStyle::Githubpkg("BiomedicalMachineLearning/stlearn")` [@Pham2023-stLearn],
+which penalizes transitions between physically distant points; 
+`r BiocStyle::Githubpkg("yzf072/spaTrack")` [@Shen2025-spaTrack], 
+an optimal transport-based approach to identify plausible paths. 
+
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- The [OSCA](https://bioconductor.org/books/release/OSCA.advanced/trajectory-analysis.html)
+book chapter on trajectory analysis demonstrates `r BiocStyle::Githubpkg("slingshot")`, 
+how to identify genes that exhibit dynamic trends, and how to estimate trajectory roots.
+
+- The [single-cell best practices](https://www.sc-best-practices.org/trajectories/pseudotemporal.html#)
+Python book chapter on pseudotemporal ordering of scRNA-seq data uses diffusion 
+maps for inference; subsequent chapters cover RNA velocity and lineage tracing.
+
+- @Cannoodt2016-review-ti review TI in its early days, yet nicely
+summarize key aspects of TI modeling, evaluation, and application. 
+
+- @Saelens2019-benchmark-ti provide the most comprehensive benchmark of 
+single-cell TI methods to date, including a wide variety of synthetic 
+and real datasets, trajectory topologies, and both R and Python tools.
+
+:::
+
+## CNV inference
+
+Copy number variations (CNV), or alterations (CNA), aims to infer computationally
+genomic segments that have been duplicated or deleted from transcriptomics data. 
+This strategy is particularly interesting in cancer, in order to identify
+malignant cells and, in spatially resolved data, map subclonal architecture.
+
+In Python, the Broad Institute's `r BiocStyle::Githubpkg("broadinstitute/inferCNV")`
+is perhaps the most widely known tool for this task; while discontinued, 
+`r BiocStyle::Githubpkg("icbi-lab/infercnvpy")` represents a replacement 
+with improved scalability and `scanpy` interoperability. In R/Bioconductor, 
+`r BiocStyle::Biocpkg("infercnv")` provides a `reticulate`-based interface.
+
+Briefly, `inferCNV`'s approach is to, for every cell, compute the average gene
+expression over moving chromosomal windows, and to compare these to a set of 
+'normal' reference cells. Results are typically captured as a heatmap where
+rows = cells and columns = genomic regions; the global loss/gain patterns 
+can be compared with known driver-mutations in the scientific literature.
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- @Erickson2022-cnv have adapted scRNA-seq CNV inference to 10x Genomics
+Visium data, reconstructing CNV-based clonal evolution in prostate cancer.
+
+- @Jensen2025-cnv have adapted the approach to imaging-based ST data,
+demonstrating applicability to different platforms (Xenium, CosMx, etc.).
+
+- @Schmid2025-benchmark-cnv benchmark CNV inference methods for scRNA-seq data.
+
+:::
+
+## Foundation models
+
+Foundation models (FMs) represent a modern paradigm where massive deep learning
+architectures (e.g., transformers) are pre-trained on millions of single-cell 
+profiles, biological images, etc., to learn generalizable representations. 
+All of these models are developed and implemented in Python, although R
+infrastructure to interface with pre-trained models are underway, i.e.,
+making use of model weights and embeddings for downstream analysis.
+
+Examples (mostly) mentioned across different chapters include 
+Prov-GigaPath [@xu2024gigapath] (histopathology; @sec-ind-image-analysis); 
+Geneformer [@Theodoris2023-Geneformer], scGPT [@Cui2024-scGPT], scFoundation 
+[@Hao2024-scFoundation], and Novae [@Blampey2025-Novae] (omics; @sec-ind-clustering). 
+For spatial omics, these models increasingly overlap with spatial domain and neighborhood analysis by providing embeddings that can be clustered, compared across samples, or used as input to downstream analyses; see @sec-ind-clustering and @sec-img-neighborhood-analysis for representative domain and niche workflows.
+Not an FM but worth mentioning: `r BiocStyle::Githubpkg("OmicsML/CellPLM")` 
+[@Wen2023-CellPLM] is a pre-trained "cell language model" with cells = tokens 
+and tissues = sentences (an idea inspired by large language models); the model 
+supports several downstream tasks such as denoising and annotation of scRNA-seq 
+data, imputation of ST data, and perturbation prediction.
+
+Another popular task not mentioned in previous chapter is the prediction 
+of molecular changes upon perturbation (e.g., disease, treatment response); 
+however, deep learning-based approaches for this task have been shown 
+to not (yet) outperform simple linear baselines [@AhlmannEltze2025].
+Out-performance by simpler methods has also been demonstrated 
+by @Kedzierska2025 in the context of cell type annotation.
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- @Szalata2024 describe, review, and discuss future directions of 
+transformers in single-cell omics: a popular architecture for FMs.
+
+- @AhlmannEltze2025 demonstrates that linear models yield better 
+performance than more sophisticated deep learning-based approaches.
+
+- @AhlmannEltze2026 review tasks and challenges around representation learning 
+of scRNA-seq data, including transformer-based FMs, autoencoders, and more.
+
+:::
+
+## Multi-modality
+
+Paralleling past technological developments around single-cell omics, spatial 
+multi-omics approaches are sprouting by now, including spatial co-profiling of 
+RNA with proteins (e.g., spatial-CITE-seq [@Liu2023-spatial-CITE-seq]) and with
+the epigenome (e.g., spatial-ATAC-RNA-seq [@Zhang2023-spatial-ATAC-RNA-seq]). 
+
+Simultaneous capture is by now also supported by commercial *in situ* platforms, 
+such as 10x Genomics' Xenium and Bruker's CosMx, which enable co-detection of 
+RNA and a curated set of protein targets. Microfluidic-based methods like 
+DBiT-seq [@Liu2020-DBiT-seq] and SPOTS [@Ben-Chetrit2023-SPOTS] have 
+further expanded these capabilities to high-throughput sequencing.
+
+Computationally, the challenge lies in the joint latent representation of 
+disparate data types. In R/Bioconductor, `r BiocStyle::Biocpkg("MOFA2")` 
+[@Velten2022-MEFISTO] provides a factor analysis framework for multi-modal 
+integration. The `r BiocStyle::Biocpkg("MultiAssayExperiment")` class offers 
+foundational infrastructure to manage synchronicity between linked data layers.
+In Python, tools such as `r BiocStyle::Githubpkg("scverse/scvi-tools")`'s `MultiVI`
+[@Ashuach2023-MultiVI] and `r BiocStyle::Githubpkg("JinmiaoChenLab/SpatialGlue")`
+[@Long2024-SpatialGlue] use deep learning (e.g., graph neural networks) 
+to reconcile these layers while preserving spatial context. 
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- @Vandereyken2023-review-multi review biotechnology for spatial multi-omics; 
+and, @Liu2024-review-multi review multi-modal data integration. More recently, 
+@Isik2026-review-multi review the computational landscape and challenges 
+around integrating multi-modal spatial omics and biological imaging data, 
+from statistical to deep learning-based approaches.
+
+- @Argelaguet2021 nicely summarize computational concepts of single-cell 
+data integration, distinguishing between horizontal (same features),
+vertical (same observations), and diagonal (both different) tasks.
+
+- The [single-cell best practices](https://www.sc-best-practices.org/multimodal_integration/paired_integration.html)
+Python book provides two chapters on multi-omics, including integration 
+of paired and unpaired datasets (same vs. different measurement entities).
+
+:::
+
+## Appendix
+
+### References {.unnumbered}
+
+{{< include _stop.qmd >}}

@@ -1,0 +1,89 @@
+# Contributing {#sec-apx-contributing}
+
+OSTA is an open, community-driven resource that is designed to evolve alongside new methods, technologies, and best practices. Contributions are welcome from readers, users, and method developers, including feedback on clarity, suggestions for improvements, and extensions to existing content or workflows.
+
+### 🌟 Why contribute? {-}
+
+There are several motivations for contributing:
+    
+- Being publicly acknowledged within a trusted scientific ecosystem
+- Helping shape best practices in spatial (transcript)omics data analysis
+- Increasing the visibility and impact of your work through a widely used resource
+- Improving clarity and usability of a widely used educational resource
+- Ensuring new methods and technologies are represented in community standards
+- Supporting reproducible and transparent computational research practices
+
+### 📌 Ways to contribute {-}
+
+You can contribute in many ways:
+
+- Reporting typographical errors, issues, or unclear sections
+- Improving explanations of methods or workflows
+- Adding new example analyses or methodological extensions
+- Extending platform or technology coverage
+- Improving reproducibility, performance, or overall clarity
+- Adding relevant literature, benchmarks, or external resources  
+(e.g., in "Further reading" or within chapter content)
+
+### ⚙️ How to contribute {-}
+
+All contributions follow a GitHub-based workflow:
+
+1. Open an issue describing the problem or proposal
+2. Fork the repository and create a feature branch
+3. Implement changes in a reproducible manner
+4. Ensure the book renders successfully using Quarto
+5. Submit a pull request to the `sandbox` branch
+  
+### 📋 Suggested structure for contributions {-}
+
+When proposing a new section, workflow, or substantial revision, please open a
+GitHub issue with the following information:
+
+- Contribution type: clarification, correction, update, new method, new workflow,
+dataset update, or related resource
+- Proposed location in OSTA: existing chapter/section or
+new chapter
+- Motivation and audience: what reader need or analysis gap this addresses
+- Scope: brief outline of the intended text, code, figures, and expected length
+- Software and data: packages, versions or repositories, datasets, and whether
+dependencies are available from Bioconductor, CRAN, or PyPI
+- Reproducibility plan: expected runtime, required seeds, cached objects,
+session information, and whether the full chapter builds
+- Maintenance considerations: likely stability of dependencies, data
+availability, and whether the example can be tested regularly
+- Related literature: key references to add to the bibliography
+
+For substantial new sections or chapters, please use `inst/template.qmd` as a
+starting point. This template file provides the expected Quarto chapter structure,
+including suggested sections for the preamble, dependencies, reproducible code,
+saved objects, benchmarks, and references.
+
+### 🔍 Review process {-}
+
+Contributions are evaluated for:
+
+- Scientific correctness and long-term maintainability
+- Consistency with OSTA structure and clarity of exposition
+- Computational reproducibility and successful build/check status
+
+### 🔬 Reproducibility standards {-}
+
+All contributions must:
+
+- Run end-to-end without warnings or errors
+- Use Bioconductor-compatible dependencies  
+(e.g., no `Remotes:` field in the DESCRIPTION)
+- Include session information (see existing chapters for formatting)
+- Be compatible with the target Bioconductor version, depending on the branch
+- Follow Bioconductor standards for package development (see [guidelines](https://contributions.bioconductor.org/bioconductor-package-submissions.html)) 
+
+### ⚖️ Community expectations {-}
+
+Contributors are expected to:
+
+- Be respectful in all interactions
+- Keep issues focused and actionable
+- Follow the [Bioconductor Code of Conduct](https://www.bioconductor.org/about/code-of-conduct)  
+
+🙏 Accepted contributions will be recognized in the book’s Acknowledgments section.

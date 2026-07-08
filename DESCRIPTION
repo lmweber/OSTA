@@ -23,7 +23,7 @@ Authors@R:
              comment = c(ORCID = "0000-0002-7858-0231")), 
       person("Lukas M.", "Weber", 
              role = c("aut", "cre"), 
-             email = "lmweb012@gmail.com", 
+             email = "weberlm3@gmail.com", 
              comment = c(ORCID = "0000-0002-3282-1730")))
 URL: https://github.com/lmweber/OSTA
 BugReports: https://github.com/lmweber/OSTA/issues

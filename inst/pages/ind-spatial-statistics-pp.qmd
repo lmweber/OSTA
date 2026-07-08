@@ -97,7 +97,7 @@ resCross <- calcCrossMetricPerFov(
 
 We can plot Ripley's $K$ function not corrected for inhomogeneities of the chosen marks. Here, the diagonal is Ripley's $K$ function among the three cell types themselves and the off diagonal plots show the cross type combinations.
 
-```{r fig.width=12, fig.height=8}
+```{r pp-plot-ripley-cross, fig.width=12, fig.height=8}
 plotCrossMetricPerFov(
     metricDf=resCross, 
     theo=TRUE,

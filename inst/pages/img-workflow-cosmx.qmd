@@ -64,7 +64,7 @@ Unlike, Xenium and MERSCOPE, CosMx does not stitch fields of view (FOVs) in a si
 plotCellsFovs(cos)
 ```
 
- @sec-img-quality-control gives a thorough overview of quality control steps for imaging-based spatial transcriptomics data, including CosMX-specific metrics. Here, we will simply compute `r BiocStyle::Biocpkg("SpaceTrooper")`'s aggregated QC score and keep the cells that pass the threshold.
+@sec-img-quality-control gives a thorough overview of quality control steps for imaging-based spatial transcriptomics data, including CosMx-specific metrics. Here, we will simply compute `r BiocStyle::Biocpkg("SpaceTrooper")`'s aggregated QC score and keep the cells that pass the threshold.
 
 ```{r qc-cosmx, message=FALSE}
 lys <- c("NegPrb", "Negative", "SystemControl")
@@ -259,7 +259,7 @@ We can then classify cells based on the significance of their local Moran's I va
 res <- localResults(sfe)[["localmoran"]][[1]]
 res$locClust <- with(res, ifelse(
     `-log10p_adj` > -log10(0.05), 
-    as.character(mean), "non-siginificant"))
+    as.character(mean), "non-significant"))
 localResults(sfe)[["localmoran"]][[1]] <- res
 
 plotLocalResult(sfe,
@@ -344,6 +344,20 @@ In this case, we can see that pyramidal CA1 neurons and oligodendrocytes tend to
 We only briefly discussed cell-cell interactions and spatial exploratory analyses here: we refer interested readers to the comprehensive documentation and tutorials available at the [pasta](https://robinsonlabuzh.github.io/pasta/00-home.html) and [Voyager](https://pachterlab.github.io/voyager/) websites.
 
 ## Appendix
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- Bruker's [CosMx Analysis Scratch Space](https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/about.html) 
+provides a large variety of (mostly R-based) tutorial-style notebooks --
+specifically for CosMx data from AtoMx exports -- that include file handling, 
+image exploration, quality control, and a variety of downstream analysis tasks.
+
+- @He2022-CosMx (1K-plex) and @Khafizov2024-CosMx (whole-transcriptome) 
+describe the biotechnology underlying CosMx. While these studies were 
+authored by industry-affiliated researchers, they remain informative 
+references for understanding the platform (and potential data issues).
+
+:::
 
 ### References {.unnumbered}
 

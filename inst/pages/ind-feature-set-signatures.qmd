@@ -149,14 +149,30 @@ mu <- sweep(assay(pb, "sums"), 2, pb$counts, `/`)
 pheatmap(mu, scale="row", col=pals::coolwarm())
 ```
 
-In a multi-sample setting - say, where sections across different stages of
-development, treatments, or health and disease - signatures may be compared 
+In a multi-sample setting -- say, where sections across different stages of
+development, treatments, or health and disease -- signatures may be compared 
 between experimental conditions. Ideally, this'd be done at the subpopulation
 level, since compositional differences are deemed to drive differences (e.g.,
 sections richer in CD8+ T cells are, by chance, more likely to score higher
 for cytotoxicity than sections where CD8+ T cells are absent, or similar).
 
 ## Appendix
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- @Subramanian2005-MSigDB describe gene set enrichment analysis (GSEA) for the 
+first time, including basic methodology and the original MSigDB 1.0 collection.
+
+- This [OSCA](https://bioconductor.org/books/3.15/OSCA.basic/cell-type-annotation.html)
+chapter includes parts on assigning cell labels from signatures and computing 
+gene set activities in scRNA-seq data (using the R/Bioconductor packages
+`r BiocStyle::Biocpkg("AUCell")` and `r BiocStyle::Biocpkg("GSEA")`).
+
+- This [single-cell best practices](https://www.sc-best-practices.org/conditions/gsea_pathway.html)
+Python book chapter provides more conceptual background on GSEA and 
+a case study (using `r BiocStyle::Githubpkg("saezlab/decoupleR")`).
+
+:::
 
 ### References {.unnumbered}
 

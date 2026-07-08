@@ -30,7 +30,7 @@ library(SpatialExperiment)
 library(tidyr)
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r load-libs, message=FALSE, warning=FALSE}
 # set seed for random number generation
 # in order to make results reproducible
 set.seed(123)
@@ -150,7 +150,7 @@ Methods that belong to this category include `r BiocStyle::Biocpkg("DESpace")` [
 
 **Cell type-specific** SVG methods leverage external cell type annotations to identify SVGs within cell types. 
 They analyze interaction effects between cell types and spatial coordinates [@Yan2024-categorization-SVGs].
-Examplary methods in R include `r BiocStyle::Biocpkg("CTSV")` [@Yu2022-CTSV], *C-SIDE* (implemented in `r BiocStyle::Biocpkg("spacexr")`; [@Cable2022-C-SIDE]), and `r BiocStyle::Githubpkg("shanyu-stat/spVC")` [@Yu2024-spVC].
+Exemplary methods in R include `r BiocStyle::Biocpkg("CTSV")` [@Yu2022-CTSV], *C-SIDE* (implemented in `r BiocStyle::Biocpkg("spacexr")`; [@Cable2022-C-SIDE]), and `r BiocStyle::Githubpkg("shanyu-stat/spVC")` [@Yu2024-spVC].
 
 ### nnSVG
 
@@ -338,17 +338,27 @@ wrap_plots(plots, ncol=3)
 
 ## Appendix
  
-### Reviews {.unnumbered}
+::: {.callout-tip icon="false" title="Further reading"}
 
-- @Adhikari2024-advances-SVGs
-- @Yan2024-categorization-SVGs
+- @Adhikari2024-advances-SVGs and @Yan2024-categorization-SVGs review SVG 
+detection methods for ST data; the latter, in particular, provides 
+extensive methodological detail on each of the 33 methods covered.
 
+- @Soneson2018 systematically evaluate 36 approaches for DE analysis of scRNA-seq data, 
+including everything from standard statistics (e.g., Wilcoxon, $t$-test) to `Seurat`.
 
-### Benchmarks {.unnumbered}
+- This [single-cell best practices](https://www.sc-best-practices.org/spatial/spatially_variable_genes.html)
+Python book chapter showcases the use of `r BiocStyle::Githubpkg("teichlab/spatialde")` 
+for SVG detection and computing Moran's $I$ with `r BiocStyle::Githubpkg("scverse/squidpy")` 
+(see also @sec-ind-spatial-statistics).
 
-- @Li2023-benchmarking-SVGs compares 14 methods using 60 simulated datasets, generated using four different strategies, 12 experimental ST datasets, and 3 spatial ATAC-seq datasets.
-- @Chen2024-evaluating-SVGs compares 8 methods based on 22 experimental datasets (8 technologies, 6 tissue types) and 9 datasets simulated using `r BiocStyle::Biocpkg("scDesign3")` [@Song2024-scDesign3].
+- @Li2023-benchmarking-SVGs compares 14 methods using 60 simulated datasets, 
+generated using four different strategies, 12 experimental ST datasets, and 
+3 spatial ATAC-seq datasets; @Chen2024-evaluating-SVGs compares 8 methods 
+based on 22 experimental datasets (8 technologies, 6 tissue types) and 9 
+datasets simulated with `r BiocStyle::Biocpkg("scDesign3")` [@Song2024-scDesign3].
 
+:::
 
 ### References {.unnumbered}
 

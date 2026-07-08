@@ -4,6 +4,14 @@
 
 ## Preamble
 
+### Introduction
+
+In this demo, we will rely on data from @Janesick2023-high-res, which includes
+same-section Visium and Xenium measurements on human breast cancer tissue.
+
+![H&E staining](../images/xenvis-visium.png){height=300px}
+![Xenium IF](../images/xenvis-xenium.png){height=300px}
+
 ### Dependencies
 
 ```{r dep, message=FALSE, warning=FALSE}
@@ -22,14 +30,6 @@ library(VisiumIO)
 # in order to make results reproducible
 set.seed(194849)
 ```
-
-### Introduction
-
-In this demo, we will rely on data from @Janesick2023-high-res, which includes
-same-section Visium and Xenium measurements on human breast cancer tissue.
-
-![H&E staining](../images/xenvis-visium.png){height=300px}
-![Xenium IF](../images/xenvis-xenium.png){height=300px}
 
 ## Setup {#sec-crs-workflow-xenvis-load-data}
 
@@ -76,7 +76,7 @@ rownames(xen) <- make.unique(rowData(xen)$Symbol)
 To align Xenium and Visium sections, we use the affine transformation matrix 
 provided by 10x Genomics, which was obtained by registration of Xenium onto 
 Visium in Python with the [Fiji Java plug-in](https://www.10xgenomics.com/resources/analysis-guides/he-to-xenium-dapi-image-registration-with-fiji); see
-@sec-crs-spatial-registration for details.
+@sec-crs-registration for details.
 
 ```{r mtx}
 # affine matrix for aligning Xenium onto Visium
@@ -290,6 +290,17 @@ From here on out, both datasets could be analyzed together and/or independently,
 e.g., in order to identify cluster markers, annotate cell subpopulations etc.
 
 ## Appendix
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+For further literature and resources on 
+cross-modal analyses, we refer readers to:
+
+- @sec-crs-registration on registration,
+- @sec-crs-imputation on imputation, and
+- [Beyond this book](#sec-beyond) on integration and multi-modality.
+
+:::
 
 ### References {.unnumbered}
 

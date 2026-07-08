@@ -2,11 +2,13 @@
 
 {{< include _start.qmd >}}
 
-## Introduction
+## Preamble
+
+### Introduction
 
 Sequencing-based ST data can contain zero to multiple cells per spot, which might be fully or only partially covered by cells, depending on the spatial resolution of the platform and the tissue cell density (see also @sec-seq-introduction and the schematic Figure below). This aspect of the data implies that there may be a mixture of cell types in a spot and thus a mixture of transcriptional programs.
 
-```{r, echo = FALSE, out.width = "33%", fig.cap = "Schematic illustrating multiple cells in a 10x Genomics Visium spot (diameter of 55µm; purple line) overlaying the hematoxylin and eosin (H&E) stained image. The center-to-center distance between spots is 100µm (yellow line), and a typical immune cell's diameter is around 10µm (cyan line)."}
+```{r fig-deconvolution-spot, echo=FALSE, out.width="33%", fig.cap="Schematic illustrating multiple cells in a 10x Genomics Visium spot (diameter of 55µm; purple line) overlaying the hematoxylin and eosin (H&E) stained image. The center-to-center distance between spots is 100µm (yellow line), and a typical immune cell's diameter is around 10µm (cyan line)."}
 knitr::include_graphics("../images/seq-deconvolution.png")
 ```
 
@@ -22,18 +24,22 @@ To help understand these mixtures, at least 20 deconvolution techniques have bee
   - `r BiocStyle::Githubpkg("SpatialTranscriptomicsResearch/std-poisson")` [@Berglund2018-std-poisson]
   - `r BiocStyle::Githubpkg("almaan/stereoscope")` [@Andersson2020-stereoscope]
   - `r BiocStyle::Githubpkg("DongqingSun96/STRIDE")` [@Sun2022-STRIDE]  in Python.
+  
 - **non-negative matrix factorization (NMF)-based**: decompose gene expression data into latent components representing different cell types. Available tools include `r BiocStyle::Githubpkg("drieslab/Giotto")`'s `SpatialDWLS` [@Chen2025-Giotto-Suite] and `r BiocStyle::Biocpkg("SPOTlight")` [@ElosuaBayes2021-SPOTlight] in R, and `r BiocStyle::Githubpkg("tudaga/NMFreg_tutorial")` in Python.
+
 - **graph-based**: use graph neural networks or graph-based optimization to model spatial relationships. Available tools include `r BiocStyle::Githubpkg("leihouyeung/SD2")` [@Li2022-SD2] in R, and `r BiocStyle::Githubpkg("Su-informatics-lab/DSTG")` [@Song2021-DSTG] and `r BiocStyle::Githubpkg("ma-compbio/SpiceMIx")` [@Chidester2023-SpiceMix] in Python.
+
 - **optimal transport (OT)-based**: infer spatial gene expression distributions by mapping scRNA-seq and ST data. Available tools include `r BiocStyle::Githubpkg("zcang/SpaOTsc")` [@Cang2020-SpaOTsc] and `r BiocStyle::Githubpkg("rajewsky-lab/novosparc")` [@Nitzan2019-novoSpaRc] in Python.
+
 - **deep learning-based**: align and integrate single-cell and spatial transcriptomics data with neural networks. For example, `r BiocStyle::Githubpkg("broadinstitute/Tangram")` [@Biancalani2021-Tangram] in Python.
 
 Among these, `std-poisson`, `STdeconvolve`, and `SpiceMix` are reference-free methods. Methods that incorporate spatial location information are `CARD`, `DSTG`, `SD2`, `Tangram`, `cell2location`, `DestVI`, `std-poisson`, and `SpiceMix`.
 
-In this section, we will demonstrate deconvolution of cell types per spot, using `RCTD` on Visium and Visium HD datasets.
+In this chapter, we demonstrate deconvolution of cell types per spot, using `RCTD` on Visium and Visium HD datasets. For related examples where deconvolution is one step within a broader workflow, see @sec-seq-workflow-visium-crc and @sec-seq-workflow-visium-hd-bin.
 
-## Dependencies {#sec-seq-deconvolution-load-data}
+### Dependencies {#sec-seq-deconvolution-load-data}
 
-```{r deps, message = FALSE, warning = FALSE}
+```{r deps, message=FALSE, warning=FALSE}
 library(BiocParallel)
 library(CARDspa)
 library(DropletUtils)
@@ -48,7 +54,7 @@ library(SpatialExperiment)
 library(VisiumIO)
 ```
 
-In this example of Visium breast cancer data [@Janesick2023-high-res], we perform cell type deconvolution without a single-cell (Chromium) reference and compare the concordance with the provided Visium annotation provided by 10x Genomics.
+In this example of Visium breast cancer data [@Janesick2023-high-res], we perform cell type deconvolution without a single-cell (Chromium) reference and compare the concordance with the Visium annotation provided by 10x Genomics.
 
 ```{r load-vis, message = FALSE}
 # retrieve dataset from OSF repository
@@ -180,7 +186,7 @@ dim(sce)
 
 ## RCTD
 
-Next, we perform deconvolution with `r BiocStyle::Biocpkg("spacexr")` (also known as RCTD)[@Cable2022-RCTD].
+Next, we perform deconvolution with `r BiocStyle::Biocpkg("spacexr")` (also known as RCTD) [@Cable2022-RCTD].
 [Note that RCTD can also be adapted to Visium HD data with `rctd_mode = "doublet"`, as demonstrated by [@deOliveira2025-high-def] and @sec-seq-workflow-visium-hd-seg.]{.aside}
 By default, `runRctd()`'s `rctd_mode = "doublet"` specifies at most two subpopulations coexist in a data unit (i.e. within a spot); here, we set `rctd_mode = "full"` in order to allow for an arbitrary number of subpopulations to be fit instead.
 
@@ -210,7 +216,7 @@ Another method that can be used is `CARD`. First, we rename the columns of spati
 
 <!-- First, we realized delayed count matrices and rename spatial coordinate columns to make the input data compatible with CARD [Note: RCTD handles the conversion internally with spacexr::check_counts()]{.aside} -->
 
-```{r}
+```{r card-realize-counts}
 # realize delayed matrices, as CARD does 
 # not yet support delayed matrix handling
 counts(sce) <- as(counts(sce), "sparseMatrix")
@@ -370,7 +376,7 @@ hm(prop.table(table(vis$anno, vis$RCTD_no_stroma), 2), string="RCTD_no_stroma")
 
 Overall, we observe agreement between the provided spot labels and the `RCTD` deconvolution derived annotations.
 Before cleaning up stromal, some immune cell types, such as dendritic and mast, never had a chance to have the highest cell type proportion. 
-On the left panel, among among all the spots annotated by `RCTD` as T cells, nearly all of them are from the "immune" type in the provided annotation. Strong agreements are also observed for spots with cell type of "DCIS1", "DCIS2", and "Invasive tumor".
+On the left panel, among all the spots annotated by `RCTD` as T cells, nearly all of them are from the "immune" type in the provided annotation. Strong agreements are also observed for spots with cell type of "DCIS1", "DCIS2", and "Invasive tumor".
 
 ::: {.callout-note title="PC regression" collapse="true"}
 Next, we prepare the principal components (PCs) needed to perform PC regression:
@@ -463,15 +469,17 @@ score would be returned to indicate doublets with two predicted cell types.]{.as
 
 ## Appendix
 
-### Benchmarks {.unnumbered}
+::: {.callout-tip icon="false" title="Further reading"}
 
-Benchmarking studies of deconvolution methods often require generating synthetic spots to establish a ground truth for cell type proportions. This process involves either simulating artificial tissue patterns or aggregating counts from scRNA-seq or imaging-based spatial transcriptomics data into spots. However, it is equally important to evaluate how these methods perform in tissues with highly spatially-heterogeneous cell type compositions, such as real cancer samples. Below are three comprehensive benchmarking studies, two of which that incorporate both artificial and real datasets.
+Benchmarking studies of deconvolution methods often require generating synthetic spots to establish a ground truth for cell type proportions. This process involves either simulating artificial tissue patterns or aggregating counts from scRNA-seq or imaging-based spatial transcriptomics data into spots. However, it is equally important to evaluate how these methods perform in tissues with highly spatially-heterogeneous cell type compositions, such as real cancer samples. Below are three comprehensive benchmarking studies, two of which incorporate both artificial and real datasets.
 
 - @Sang-aram2023-Spotless developed a pipeline to benchmark 11 deconvolution methods, including `RCTD`, across 63 synthetic, 3 binned, and 2 real datasets. `RCTD` and `cell2location` were the most recommended methods. Figure 2 gives an overview of the benchmarking results.
 
 - @Li2023-benchmark-deconvolution benchmarked 18 deconvolution methods, including `RCTD`, across 50 simulated and real datasets. Among these methods, `CARD`, `cell2location`, and `Tangram` are highly recommended. Figure 1 summarizes the method performance, and Figure 4 gives a flowchart of how to decide on which method to use.
 
 - @Gaspard-Boulinc2025-deconvolution review and compare available cell-type deconvolution methods, and provide a continuously updated web-based summary table.
+
+:::
 
 
 ### References {.unnumbered}

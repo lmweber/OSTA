@@ -201,7 +201,7 @@ role of "tokens" and "sentences":
   a reduced gene set.
 
 Not an FM in the strict sense, but conceptually related and worth mentioning:
-`r BiocStyle::Githubpkg("OmicsML/CellPLM")` [@wen2023cellplm] is a pre-trained
+`r BiocStyle::Githubpkg("OmicsML/CellPLM")` [@Wen2023-CellPLM] is a pre-trained
 "cell language model" with cells as tokens and tissues as sentences-an idea
 directly inspired by large language models. It supports several downstream
 tasks including denoising and annotation of scRNA-seq data, imputation of ST

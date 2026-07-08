@@ -1,4 +1,4 @@
-# Clustering {#sec-ind-clustering}
+# Clustering & annotation {#sec-ind-clustering}
 
 {{< include _start.qmd >}}
 
@@ -20,6 +20,10 @@ It is also important to keep in mind that when we use clustering to define cell 
 The optimal number of clusters depends on the biological context -- in particular, there is no "true" number of clusters, since this depends on the biological context (e.g. if we are comparing major cell populations vs. comparing rare subtypes), so the choice of the optimal number of clusters or resolutions requires some judgment and biological interpretation.
 
 Once we have identified spatial domains, these can then be further investigated in additional downstream analyses.
+
+Spatial domain identification is one component of a broader analysis workflow.
+Other related tasks include classifying cellular neighborhoods or niches based on local cell-type composition (see @sec-img-neighborhood-analysis), identifying spatially variable genes (see @sec-ind-feature-selection-testing-svgs), estimating cell-type mixtures in spots (see @sec-seq-deconvolution), and modeling spatially constrained cell-cell communication (see @sec-img-cell-cell-communication).
+In this chapter, we focus on clustering cells or spots into spatial domains, while pointing readers to complementary chapters for other related analyses.
 
 ### Dependencies
 
@@ -47,7 +51,7 @@ spe <- readRDS("img-spe_cl.rds")
 
 As a baseline, we will perform a standard graph-based clustering approach developed for scRNA-seq data, using molecular features (gene expression) only.
 Specifically, we construct a shared nearest neighbor (SNN) graph based on non-spatial PCs (`reducedDim` slot `"PCA_tx"`), and use the Leiden algorithm for community detection [@Traag2019-Louvain-to-Leiden].
-[The `resolution` parameter used here was selected in order to obtain a similar number of clusters annotated by the authors.]
+[The `resolution` parameter used here was selected in order to obtain a similar number of clusters annotated by the authors.]{.aside}
 
 ```{r clu-Leiden}
 # build cellular shared nearest-neighbor (SNN) graph;
@@ -110,12 +114,18 @@ table(spe$Banksy)
 #### Encoder-based
 
 Another category of spatially-aware clustering method uses encoder architectures to generate a latent embedding incorporating both spatial and transcriptomics information, which is then clustered using standard algorithms. 
-One typical example is `r BiocStyle::Githubpkg("CSOgroup/cellcharter")` [@Varrone2024-CellCharter], which uses a variational auto-encoder to generate a latental feature space and aggregate the features of each spot across its neighbors to preserve their spatial context. 
+One typical example is `r BiocStyle::Githubpkg("CSOgroup/cellcharter")` [@Varrone2024-CellCharter], which uses a variational auto-encoder to generate a latent feature space and aggregate the features of each spot across its neighbors to preserve their spatial context. 
+
+Recent machine-learning approaches for spatial domain identification often construct a graph whose nodes represent spots or cells and whose edges encode spatial proximity, transcriptional similarity, histological similarity, or combinations thereof.
+Graph neural networks, graph attention autoencoders, variational autoencoders, contrastive learning, and foundation model embeddings can then be used to learn spatially informed representations before clustering.
+These methods can be powerful when tissue structure depends jointly on expression, local neighborhood composition, and histology, but they also introduce additional dependencies, hyperparameters, hardware requirements, and reproducibility considerations.
 
 ::: {.callout-note title="Other methods" collapse="true"}
 Several other published methods have also adopted encoder architectures in different ways to perform spatially-aware clustering. 
 `r BiocStyle::Githubpkg("zhanglabtools/STAGATE")` [@Dong2022-STAGATE] uses a graph attention autoencoder to integrate spatial and transcriptional data by modeling spatial neighborhoods as graphs, whereas `r BiocStyle::Githubpkg("Tang-Lab-super/PROST")` [@Liang2024-PROST] employs a self-attention transformer-based encoder to learn spatial patterns by jointly modeling gene expression and spatial coordinates. 
 Graph-based encoder methods, such as `STAGATE`, may be particularly well-suited for imaging-based ST data, as their ability to model spatial neighborhoods as graphs aligns naturally with the continuous and fine-grained spatial organization of tissues captured through imaging.
+Other examples include `r BiocStyle::Githubpkg("jianhuupenn/SpaGCN")` [@Hu2021-SpaGCN], `r BiocStyle::Githubpkg("JiangBioLab/DeepST")` [@Xu2022-DeepST], `r BiocStyle::Githubpkg("JinmiaoChenLab/GraphST")` [@Long2023-GraphST], `r BiocStyle::Githubpkg("hongleir/SpaceFlow")` [@Ren2022-SpaceFlow], `r BiocStyle::Githubpkg("Lotfollahi-lab/nichecompass")` [@Birk2025-NicheCompass], and `r BiocStyle::Githubpkg("MICS-Lab/novae")` [@Blampey2025-Novae].
+We demonstrate `CellCharter` here as one representative encoder-based workflow, and recommend benchmark and review papers below for method selection.
 :::
 
 ```{r env, warning=FALSE, eval=FALSE}
@@ -183,27 +193,15 @@ label_df[["label"]].value_counts()
 spe$CellCharter <- unlist(py$label_df)
 ```
 
-<!--
-#### Other methods: Probability statistics-based methods 
-
-* BASS
-* DR.SC
--->
-
 ## Downstream
 
 ### Visualization
-
-<!--Jieran:
-* Visualization (Align the cluster labels before running it)
-* Smoothness entropy checking
--->
 
 Let's visualize the assignment obtains from non-spatial and spatially-aware clustering:
 
 ```{r plot-xy-k-joint, message=FALSE, fig.width=11, fig.height=6}
 #| code-fold: true
-ks <- c("Label", "Leiden", "Banksy")#, "CellCharter")
+ks <- c("Label", "Leiden", "Banksy")
 lapply(ks, \(.) {
     plt <- plotCoords(spe, annotate=.)
     plt$layers[[1]]$aes_params$stroke <- 0
@@ -301,16 +299,134 @@ mtx <- sweep(assay(pbs, "sums"), 2, pbs$counts, `/`)
 pheatmap(mat=t(mtx), scale="column", breaks=seq(-2, 2, length=101))
 ```
 
+## Annotation
+
+Following clustering and marker gene identification, the next step is the 
+biological interpretation of identified subpopulations, typically by 
+assigning them cell type or -- in spatial context -- tissue domain labels. 
+Depending on data characteristics (e.g., spatial resolution, molecular coverage), 
+and the availability of a suitable single-cell reference dataset, annotation 
+can be performed using a range of approaches, ranging from manual to automated 
+marker-based annotation, reference mapping, deep learning, or foundation models. 
+Several common annotation strategies are outlined below.
+
+- **Deconvolution**: 
+For spot-based ST (e.g., Visium) where spots contain multiple cells, it is
+typically required to estimate the proportions of different cell types within 
+each spot through reference-based deconvolution (see @sec-seq-deconvolution).
+
+- **Manual**: 
+Clusters can be labeled based on the expression of canonical marker genes and 
+results from DE analysis (as shown above). While highly accurate when performed 
+by experts, this process is labor-intensive and arguably subjective.
+
+- **Marker-based**: 
+To reduce manual effort and improve reproducibility, clusters can be scored 
+against predefined marker gene signatures (see @sec-ind-feature-set-signatures)
+using tools such as `r BiocStyle::Biocpkg("CellAssign")` [@Zhang2019-CellAssign]
+and `r BiocStyle::CRANpkg("scType")` [@Ianevski2022-ScType].
+
+- **Reference-based**:
+For imaging-based ST data in particular (e.g., Xenium, MERFISH), labels from a 
+high-quality, annotated scRNA-seq reference atlas can be "projected" onto the 
+spatial data. Popular R-based tools include `r BiocStyle::Biocpkg("SingleR")` 
+[@Aran2019-SingleR] (Bioconductor), and `r BiocStyle::Githubpkg("satijalab/azimuth")` 
+[@Hao2021-Seurat] (implemented as part of Seurat v5+).
+
+- **Machine & deep learning**:
+These methods leverage either high-capacity statistical models or multi-layered 
+neural networks (e.g., VAEs, GNNs) to learn complex cellular representations. 
+`r BiocStyle::Githubpkg("Teichlab/CellTypist")` [@DominguezConde2022-CellTypist],
+for instance, uses a logistic regression framework and provides a variety of 
+pre-trained models; `r BiocStyle::Githubpkg("scverse/scvi-tools")`'s `scANVI` 
+[@Xu2021-scANVI] employs semi-supervised deep learning for label prediction.
+
+- **Foundation models**:
+More recently, foundation models (FMs) pretrained on very many single cells have emerged. 
+Such models (e.g., `scFoundation` [@Hao2024-scFoundation], `scGPT` [@Cui2024-scGPT], 
+and `Geneformer` [@Theodoris2023-Geneformer]) can be used zero-shot or fine-tuned 
+to classify cell types across diverse tissues and platforms with high accuracy.
+
+### Reference datasets
+
+Some annotation approaches rely on high-quality single-cell reference datasets. 
+In this context, so-called *atlas* efforts aim to generate expert-curated, 
+standardized resources that serve as biological anchors across diverse species, 
+tissues, developmental stages, and disease states. These resources typically 
+provide large collections of molecular profiles, either through dedicated 
+publications or via centralized data portals that harmonize datasets from 
+multiple studies. Below, we highlight several widely known resources, 
+including ongoing efforts towards spatial and multi-modal ones.
+
+- **CELLxGENE** (Chan Zuckerberg Initiative) is a data portal and explorer 
+that provides standardized access to thousands of datasets [@Megill2021-cellxgene]. 
+These can be interactively queried and filtered for downstream tasks including,
+e.g., reference-based annotation, benchmarking, and cross-study integration.
+[The Bioconductor package `r BiocStyle::Biocpkg("cellxgenedp")` provides an 
+alternative, R-based interface, allowing programmatic discovery and retrieval
+of >2000 datasets from 100s of studies as H5AD files, which can be read as 
+`SingleCellExperiment` objects using `r BiocStyle::Biocpkg("anndataR")` 
+[@Deconinck2026-anndataR]; see @sec-bkg-python-interoperability.]{.aside}
+
+- The **Human Cell Atlas (HCA)** is a global consortium that is mapping 
+every cell type in the human body" across health and disease [@Regev2017-HCA]. 
+As part of this effort, multi-organ atlases such as *Tabula Muris* [@TabulaMuris2018],
+*Tabula Muris Senis* [@TabulaSenis2020] and *Tabula Sapiens* [@TabulaSapiens2022] 
+provide high-resolution references for mouse and human, respectively.
+[There are several R/Bioconductor `ExperimentHub` packages that provide programmatic
+access to these atlases, e.g., `r BiocStyle::Biocpkg("TabulaMurisData")` and 
+`r BiocStyle::Biocpkg("TabulaMurisSenisData")`. The `ExperimentHub::query()` 
+command (R) or the [BiocViews browser](https://bioconductor.posit.co/packages/release/BiocViews.html#___ExperimentData) (online)
+can be used to explore current datasets -- for annotation or otherwise.]{.aside}
+
+- The **Human Protein Atlas (HPA)** integrates transcriptomics and proteomics
+data to map their spatial distributions in human tissues and cells [@Thul2018-HPA].
+
+- Still work in progress, the **Spatial Atlas of Human Anatomy (SAHA)** is 
+an effort to generate a multi-modal, subcellular-resolution spatial reference 
+map for millions of cells in their native 3D tissue context [@Park2025-SAHA].
+
+### Evaluation
+
+While automated annotation can greatly accelerate analysis, the quality of labels 
+obtained through such methods depends heavily on the alignment between query and 
+reference. Misalignment can arise from technical effects, biological differences 
+(e.g., healthy vs. diseased), or the presence of "out-of-reference" cell types. 
+Evaluating **reference suitability** and **prediction reliability** is crucial. 
+The `r BiocStyle::Biocpkg("scDiagnostics")` [@Christidis2026-scDiagnostics] 
+R/Bioconductor package provides a systematic framework for this task, e.g.:
+
+- **Assessing distributional congruence** by projecting query data into 
+the reference's subspace to check global alignment between datasets.
+
+- **Marker gene validation** by quantitatively comparing the expression 
+profiles of canonical markers between query and reference clusters to 
+detect gene-level discrepancies.
+
+- **Detection of annotation anomalies** by identifying cells that do not fit 
+the reference; these may represent novel cell states or technical artifacts.
+
 ## Appendix
 
-### Reviews {.unnumbered}
+When choosing among spatial clustering methods, we recommend starting from the biological question and data modality rather than from model complexity alone.
+Simpler spatially aware approaches may be preferable when interpretability, runtime, and reproducibility are priorities.
+Deep learning and graph-based methods may be more appropriate when histology, multi-modal features, or complex local tissue structure are central to the analysis.
+In all cases, spatial domains should be evaluated by marker genes, SVGs, histological concordance, parameter stability, and consistency with known tissue architecture where available.
 
-* @Wang2024-review-spatial-domain categorize ST clustering approaches into probability statistics-, graph neural network- and contrastive learning-based approaches, and review their advantages and limitations for clustering of data from seq- and img-based assays.
+::: {.callout-tip icon="false" title="Further reading"}
 
-### Benchmarks {.unnumbered}
+- The [single-cell best practices](https://www.sc-best-practices.org/spatial/domains) chapter on spatial domains divides methods into two broad categories: (i) methods that identify spatial domains using gene expression together with spatial coordinates, and (ii) methods that additionally incorporate features extracted from histological images.
+Previous chapters also cover single-cell clustering and annotation using Python/scverse.
 
-* @Hu2024-benchmark-clustering compare 16 graph- and statistic-based approaches, including `BayesSpace` and `BANKSY`, across 10 (mostly seq-based) datasets.
-* @Liu2024-network-clustering compare eight GNN-based approaches, including `SpaceFlow`, across four seq- and one img-based dataset.
+- The [OSCA](https://bioconductor.org/books/release/OSCA.basic/clustering.html) chapter on clustering provides an overview of graph-based, hierarchical, and centroid-based clustering methods for scRNA-seq data. Together with the preceding chapter on dimensionality reduction, these concepts underpin many spatial clustering approaches. Marker gene detection and cell type annotation are covered in the following couple chapters.
+
+- @Wang2024-review-spatial-domain categorize ST clustering approaches into probability statistics-, graph neural network- and contrastive learning-based approaches, and review their advantages and limitations for clustering of data from seq- and img-based assays.
+
+- @Sun2025-benchmark-clustering compare 22 methods across 15 datasets spanning 9 technologies and diverse tissue types. Notably, the authors also propose a "consensus-guided workflow [...] to generate consensus representations", moving beyond traditional scoring and comparison of methods based on ground truths.
+
+- @Chen2025-benchmark-clustering compare 14 methods across ~600 datasets from 10 technologies. Several other benchmarking studies have also compared different subsets of methods across different subsets of  platforms and tissue types [@Cheng2022-benchmark-clustering; @Hu2024-benchmark-clustering; @Liu2024-network-clustering; @Xiong2025-benchmark-clustering].
+ 
+:::
 
 ### References {.unnumbered}
 

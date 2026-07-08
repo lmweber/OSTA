@@ -8,6 +8,8 @@ Sequencing-based spatial transcriptomics (ST) platforms combine high-throughput 
 
 Several steps are involved, including tissue preparation, RNA capture, reverse transcription, and high-throughput sequencing. Bioinformatically, reads are mapped to reference transcriptomes (or annotated genomes) and reads are further parsed to determine their original spatial origin.
 
+The remainder of this part follows that analysis path: @sec-seq-reads-to-counts describes the conversion from reads to count matrices, @sec-bkg-importing-data covers reading processed platform outputs into R/Bioconductor objects, and @sec-seq-quality-control and @sec-seq-intermediate-processing demonstrate early count-level analysis steps before the workflow chapters.
+
 
 ## Platforms
 
@@ -17,7 +19,7 @@ The [10x Genomics Visium](https://www.10xgenomics.com/products/spatial-gene-expr
 
 The array dimensions are 6.5 x 6.5 mm, with around 5000 barcoded spots. Spots are 55 µm in diameter and spaced 100 µm center-to-center in a hexagonal (honeycomb) grid arrangement. The number of cells overlapping with each spot depends on the tissue cell density, e.g. around 0-10 for human brain tissue or ~50 for mouse brain tissue. Each Visium slide contains four tissue capture areas. The following figure provides an illustration.
 
-```{r, echo = FALSE, out.width = "70%", fig.cap = "Schematic illustrating the 10x Genomics Visium platform. Source: [10x Genomics Visium](https://www.10xgenomics.com/spatial-transcriptomics/)"}
+```{r fig-visium-platform, echo=FALSE, out.width="70%", fig.cap="Schematic illustrating the 10x Genomics Visium platform. Source: [10x Genomics Visium](https://www.10xgenomics.com/spatial-transcriptomics/)"}
 knitr::include_graphics("../images/Visium.png")
 ```
 

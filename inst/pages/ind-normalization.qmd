@@ -53,6 +53,19 @@ spe$sf_lib <- sizeFactors(spe)
 assayNames(spe)
 ```
 
+::: {.callout-note icon="false" title="Log-library size normalization" collapse="true"}
+Log-library size normalization is the simplest normalization strategy and the default option in several single-cell RNA-seq workflows. It normalizes the data by dividing each count by the column sums and rescaling them so that the original scale of the counts is preserved. Finally, the resulting normalized data are log-transformed after adding a pseudo-count, typically one, to avoid issues with the log of zero.
+
+Specifically, denoting with $y_{ij}$ the count of gene $j$ in cell $i$, with $y_{i.}$ the sum of all gene counts for cell $i$ (*library size*), and with $y_{..}$ the sum of all counts across genes and cells, we define a given cell's size factor as
+$$\text{sf}_i = \frac{y_{i.}}{y_{..}/n}.$$
+
+where $y_{..}/n$ corresponds to the average library size.
+Finally, the log-normalized data are defined as
+$$\tilde{y}_{ij} = \log_2\left(\frac{y_{ij}}{\text{sf}_i}+1\right).$$
+
+Note that more robust normalization methods are available for single-cell RNA-seq data, see e.g., @Vallejos2017-normalization and @Lun2016-scran.
+:::
+
 An alternative that has been suggested is normalization by cell area (or volume). In principle, this is equivalent to assuming a constant transcription rate across cells and focusing on transcript density, rather than transcript counts, as a measure of gene expression.
 
 Nevertheless, it is important to highlight that cell area itself is not known a priori, but rather estimated through segmentation algorithms that may introduce errors, which can impact the final results.
@@ -165,6 +178,28 @@ This is even clearer when looking at the expression of EPCAM stratified by cell 
 `r BiocStyle::Biocpkg("SpaNorm")` [@Salim2025-SpaNorm] is a spatially-aware normalization method that uses spatial information alongside gene expression to decompose spatially-smoothed variation into a technical and biological component. Using generalized linear models and percentile-invariant adjusted counts, `SpaNorm` provides normalized expression values for downstream analyses. [Given the high computational cost of `SpaNorm`, we do not run it here; we refer to the package vignette for details.]{.aside}
 
 ## Appendix
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- @Atta2024-gene-count and @Bhuva2024-library-size highlight normalization as 
+a key challenge in ST: library size–based methods can distort biological signal 
+and downstream analyses, motivating alternative normalization strategies. 
+    
+- @Vallejos2017-normalization highlight why assumptions underlying standard 
+bulk RNA-seq normalization methods (e.g., consistent expression distributions, 
+low sparsity/zero inflation) are often violated in scRNA-seq data.
+
+- @AhlmannEltze2023-normalization compare transformations for scRNA-seq data, 
+including variance-stabilizing approaches (delta method- and residual-based), 
+latent expression models, and count-based factor analysis, and evaluate their 
+impact on downstream analyses such as PCA clustering, and differential expression.
+
+- The [OSCA](https://bioconductor.org/books/release/OSCA.basic/normalization.html) 
+chapter on normalization for scRNA-seq data covers library size and spike-ins 
+normalization, scaling and log-transformation, with practical code examples 
+and discussion of their motivation and implications for downstream analyses.
+
+:::
 
 ### References {.unnumbered}
 

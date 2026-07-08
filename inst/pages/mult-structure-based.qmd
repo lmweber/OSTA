@@ -8,12 +8,13 @@
 
 Spatial omics data allow us to quantify various features that are related to tissue architecture. This allows us to perform comparisons of anatomical structure-derived features. We will refer to this type of analysis as **structure-based analysis**.
 
-We will use the `r BiocStyle::Biocpkg("sosta")` package [@Gunz2025-sosta] to reconstruct and quantify pancreatic islets from human donors suffering different stages of diabetic type 1 (T1D) and healthy controls [@Damond2019-IMC-diabetes]. We will then compare some of the features between conditions.
+We will use the `r BiocStyle::Biocpkg("sosta")` package [@Gunz2025-sosta] to reconstruct and quantify pancreatic islets from human donors with different stages of type 1 diabetes (T1D) and healthy controls [@Damond2019-IMC-diabetes]. We will then compare some of the features between conditions.
 
+This chapter is closely related to the spatial statistics and neighborhood concepts introduced in @sec-ind-spatial-statistics and @sec-img-neighborhood-analysis, but it summarizes those spatial patterns as structure-level geometric features before comparing groups of samples.
 
 ### Dependencies
 
-```{r, load-deps, message=FALSE, warning=FALSE}
+```{r load-deps, message=FALSE, warning=FALSE}
 library(sf)
 library(osfr)
 library(lme4)
@@ -36,7 +37,7 @@ set.seed(8048)
 <!--
 We will load the data directly from `ExperimentHub` and convert it into a `SpatialExperiment` object. To reduce runtime, we will subset the data to 15 images per patient.
 
-```{r, load-data-structs, message=FALSE, eval=FALSE, echo=FALSE}
+```{r load-data-structs, message=FALSE, eval=FALSE, echo=FALSE}
 # load data from ExperimentHub and convert to SpatialExperiment
 # (not run due to computational limitations)
 
@@ -58,7 +59,7 @@ assays(spe) <- list()
 An assay-free version of the dataset is available through our OSF repository
 (used here to reduce runtime as the following analyses do not require assay data):
 
-```{r, load-data}
+```{r load-data}
 # load data from OSF repository (for smaller download)
 osf_repo <- osf_retrieve_node("https://osf.io/5n4q3/")
 osf_files <- osf_ls_files(osf_repo, 
@@ -75,7 +76,7 @@ table(spe$patient_id, spe$patient_stage)
 
 First, we plot a few selected fields of view (FOVs).
 
-```{r, plot-xy1, fig.width=7, fig.height=4.5}
+```{r plot-xy1, fig.width=7, fig.height=4.5}
 # subset to 4 randomly selected FOVs
 fov <- sample(unique(spe$image_name), 4)
 sub <- spe[, spe$image_name %in% fov]
@@ -89,11 +90,11 @@ ggplot(df, aes(cell_x, cell_y, color=cell_category)) +
 ```
 
 
-## Islet reconstrution
+## Islet reconstruction
 
 Next, we will reconstruct or segment the individual islets using a density-based approach implemented in `r BiocStyle::Biocpkg("sosta")`.
 
-```{r, est-params}
+```{r est-params}
 # use 'nImages' randomly samples 
 # images for parameter estimation
 est <- estimateReconstructionParametersSPE(
@@ -116,7 +117,7 @@ The `r BiocStyle::Biocpkg("sosta")` package uses a reconstruction method based o
 - a bandwidth that is used for intensity profile estimation, and 
 - a threshold based on which the islets are reconstructed.
 
-```{r, plot-img, fig.width=8, fig.height=3}
+```{r plot-img, fig.width=8, fig.height=3}
 shapeIntensityImage(
     spe, 
     marks="cell_category", 
@@ -146,7 +147,7 @@ allIslets <- reconstructShapeDensitySPE(
 
 Now we can inspect the reconstruction in the sample images.
 
-```{r, plot-xy2, fig.width=7, fig.height=4.5, message=FALSE}
+```{r plot-xy2, fig.width=7, fig.height=4.5, message=FALSE}
 # subset to selected FOVs
 subIslets <- allIslets[allIslets$image_name %in% fov, ]
 # visualize annotations 
@@ -199,7 +200,7 @@ allIslets <- cbind(allIslets, t(isletMetrics))
 
 PCA can give us an overview of the different features; here, each dot represents one structure.
 
-```{r, plot-pca, warning=FALSE, fig.width=7, fig.height=5}
+```{r plot-pca, warning=FALSE, fig.width=7, fig.height=5}
 #| code-fold: true
 pca <- prcomp(t(isletMetrics), scale.=TRUE)
 autoplot(pca, 
@@ -217,7 +218,7 @@ autoplot(pca,
     scale_color_manual(values=unname(pals::tol(n=3)))
 ```
 
-```{r, plot-mets1, fig.width=6, fig.height=4}
+```{r plot-mets1, fig.width=6, fig.height=4}
 # wrangling
 df <- allIslets |> 
     st_drop_geometry() |> 
@@ -235,7 +236,7 @@ ggplot(df, aes(patient_stage, value, fill=patient_stage)) +
 
 Let's focus on the area of the islets and facet by stage to look at patient variability. As the distribution is very skewed, we will use a 1/4-power transformation on the area of the islets. The transformation was chosen after inspection of the model diagnostics (see below).
 
-```{r, plot-mets2, fig.width=6, fig.height=4}
+```{r plot-mets2, fig.width=6, fig.height=4}
 # wrangling
 df <- allIslets |> 
     st_drop_geometry() |> 
@@ -254,9 +255,9 @@ ggplot(df, aes(patient_id, value^(1/4), fill=patient_stage)) +
 
 ## Between-sample comparison
 
-An important aspect to note is that the individual structure metrics are not independent measurements, since there are generally repeated measurments (i.e., multiple islets) per slide and per patient. Therefore, we need to account for this correlation between measurements.
+An important aspect to note is that the individual structure metrics are not independent measurements, since there are generally repeated measurements (i.e., multiple islets) per slide and per patient. Therefore, we need to account for this correlation between measurements.
 
-To account for this, we will use mixed linear models with random effects for the patient and the individual slides (image name). The `r BiocStyle::CRANpkg("lme4")` package will be use for fitting linear mixed effects models [@Bates2015-lme4] and `r BiocStyle::CRANpkg("lmerTest")` for p-value calculations [@Kuznetsova2017-lmerTest].
+To account for this, we will use mixed linear models with random effects for the patient and the individual slides (image name). The `r BiocStyle::CRANpkg("lme4")` package will be used for fitting linear mixed effects models [@Bates2015-lme4] and `r BiocStyle::CRANpkg("lmerTest")` for p-value calculations [@Kuznetsova2017-lmerTest].
 
 ::: {style="max-height:500px; overflow-y: auto;"}
 
@@ -275,7 +276,7 @@ From the fixed effects section in the model `summary` above, we note that there 
 
 ### Residuals vs. fitted
 
-```{r, plot-resfit1, fig.width=6}
+```{r plot-resfit1, fig.width=6}
 res <- resid(., scaled=TRUE) ~ fitted(.)
 plot(mod, res, 
     pch=12, abline=0, 
@@ -286,7 +287,7 @@ plot(mod, res,
 
 ### Residuals vs. fitted per sample
 
-```{r, plot-resfit2, fig.width=7}
+```{r plot-resfit2, fig.width=7}
 res <- resid(., scaled=TRUE) ~ fitted(.) | patient_id
 plot(mod, res, 
     pch=12, abline=0, 
@@ -296,7 +297,7 @@ plot(mod, res,
 
 ### QQ plot
 
-```{r, plot-qq, fig.width=5}
+```{r plot-qq, fig.width=5}
 qqnorm(resid(mod), pch=16)
 qqline(resid(mod))
 ```
@@ -305,18 +306,19 @@ qqline(resid(mod))
 
 :::
 
-
 ## Appendix
 
-This chapter is based on the `r BiocStyle::Biocpkg("sosta")` vignette 
-"2. Reconstruction and analysis of pancreatic islets from IMC data".
+::: {.callout-tip icon="false" title="Further reading"}
 
-Additional packages to calculate anatomical structure-derived features include:
+- This chapter is based on the `r BiocStyle::Biocpkg("sosta")` vignette "2. Reconstruction and analysis of pancreatic islets from IMC data"; more detail is provided in @Gunz2025-sosta.
 
-* The Bioconductor packages `r BiocStyle::Biocpkg("SPIAT")` and `r BiocStyle::Biocpkg("imcRtools")` offer other functions to quantify features on the anatomical structure level. These could also be input for mixed effect modeling as illustrated above.
+- The Bioconductor packages `r BiocStyle::Biocpkg("SPIAT")` and `r BiocStyle::Biocpkg("imcRtools")` offer other functions to quantify features on the anatomical structure level. These could also be input for mixed effect modeling as illustrated above.
 
-* The packages `r BiocStyle::CRANpkg("vegan")` and `r BiocStyle::Biocpkg("poem")` are useful when calculating diversity metrics within structures and/or border regions. To identify border regions and how to overlap anatomical regions with sample coordinates, please have a look at the `r BiocStyle::Biocpkg("sosta")` vignette.
+- The packages `r BiocStyle::CRANpkg("vegan")` and `r BiocStyle::Biocpkg("poem")` are useful when calculating diversity metrics within structures and/or border regions. To identify border regions and how to overlap anatomical regions with sample coordinates, please have a look at the `r BiocStyle::Biocpkg("sosta")` vignette.
 
+- The Python packages [GRIDGENE](https://demirandalab-gridgen.readthedocs.io) [@Sequeira2025-GRIDGENE] and [CellCharter](https://cellcharter.readthedocs.io) [@Varrone2024-CellCharter] provide complementary approaches for structure-based spatial omics analysis. `GRIDGENE` focuses on analyses based on transcript density, whereas `CellCharter` offers methods for spatial clustering, reconstruction of spatial structures, and quantification of their geometric properties.
+
+:::
 
 ### References {.unnumbered}
 

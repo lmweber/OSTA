@@ -15,6 +15,14 @@ The two technological streams, imaging- and sequencing-based assays, are very di
 
 In the following vignette, the two main exploratory spatial statistics streams, point pattern analysis and lattice data analysis will be introduced.
 
+::: {.callout-note icon="false" title="Statistical inference under spatial autocorrelation" collapse="true"}
+Spatially-resolved gene expression measurements at nearby locations are typically not independent; they exhibit spatial autocorrelation. This violates independence assumptions that are assumed by many classical statistical tests (t-tests, linear regression, PCA), generally leading to underestimated uncertainty and therefore inflated false-positive rates.
+
+As readers will notice in the many approaches proposed for spatial omics data analysis (in and outside of this book), several fundamental strategies are employed. Examples include basic methods such as Moran's $I$ (global for overall clustering, local for hotspots) to quantify directly the spatial dependence [@Moran1950-stochastic]; statistical models such as `SpatialDE` [@Svensson2018-SpatialDE], which implements correlation as a function of distance or `MIMIC` [@Gerber2026-MIMIC], which implements spatially-correlated errors according to neighbors, within standard normal or linear models, respectively; Gaussian process models capture scale-dependent spatial structure and provide uncertainty estimates that respect spatial dependence [@Weber2023-nnSVG]. 
+
+As in all statistical inference, other themes include sufficient sample size to have statistical power (i.e., correlated observations do not represent independent observational units) and considerations for multiple testing still need to be made.
+:::
+
 ### Dependencies
 
 ```{r deps, message=FALSE, warning=FALSE}
@@ -40,7 +48,7 @@ bp <- MulticoreParam(4)
 set.seed(77)
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r load-data, message=FALSE, warning=FALSE}
 # load dataset as SPE & convert to SFE
 spe <- Janesick_breastCancer_Xenium_rep1()
 sfe <- toSpatialFeatureExperiment(spe)
@@ -80,6 +88,32 @@ theme_xy <- list(
 {{< include ind-spatial-statistics-pp.qmd >}}
 
 ## Appendix
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- This chapter has been adapted from the [**Harnessing the Potential of Spatial Statistics for Spatial Omics Data with `pasta`**](https://robinsonlabuzh.github.io/pasta) 
+[@Emons2025-pasta] online resource, which more comprehensively describes concepts from spatial statistics that apply to spatial omics datasets, including point pattern- and 
+lattice-based uni- and multi-variate methods for img- and seq-based ST data.
+Notably, *pasta* also includes Python examples and more statistical detail,
+e.g., formal definitions and equations for different models and statistics.
+
+- [Voyager](https://pachterlab.github.io/voyager/index.html) offers detailed 
+documentation for lattice-based analysis of different data types [@Moses2023-Voyager].
+
+- Point pattern-based content is largely based on the 
+[Spatial Point Patterns: Methodology and Applications with R](https://book.spatstat.org/) 
+textbook [@Baddeley2015-book-point-patterns].
+
+- [**Modern Statistics for Modern Biology**](https://www.huber.embl.de/msmb/index.html) provides background on concepts in modern statistics for high-throughput and high-dimensional biology, including a chapter on [image data and spatial statistics](https://www.huber.embl.de/msmb/Chap-Images.html).
+
+- @zormpasMappingTranscriptomeRealizing2023 review how methods from 
+geographical sciences can be leveraged for the analysis of ST data 
+and where potential challenges lie.
+
+- @bianEstimatingTumourImmune2026 discuss spatial statistics methodology 
+around a specific biological use case: estimating tumor infiltration.
+
+:::
 
 ### References {.unnumbered}
 

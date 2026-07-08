@@ -15,7 +15,7 @@ For more details on the dataset, see @Maynard2021-DLPFC. The full dataset is pub
 
 ### Dependencies
 
-```{r, message=FALSE, warning=FALSE}
+```{r load-libs, message=FALSE, warning=FALSE}
 library(SpatialExperiment)
 library(STexampleData)
 library(ggspavis)
@@ -31,7 +31,7 @@ library(pheatmap)
 
 Load sample 151673 from the DLPFC dataset. This sample is available as a `SpatialExperiment` object from the `r BiocStyle::Biocpkg("STexampleData")` package.
 
-```{r, load-data, message=FALSE}
+```{r load-data, message=FALSE}
 spe <- Visium_humanDLPFC()
 dim(spe)
 ```
@@ -41,7 +41,7 @@ dim(spe)
 
 As an initial check, plot the spatial coordinates (spots) in x-y dimensions, to check that the object has loaded correctly. We use plotting functions from the `r BiocStyle::Biocpkg("ggspavis")` package.
 
-```{r, plt-xy, fig.height=3}
+```{r plt-xy, fig.height=3}
 #| code-fold: true
 plotCoords(spe)
 ```
@@ -75,7 +75,7 @@ names(colData(spe))
 
 Select global filtering thresholds for the QC metrics by examining distributions using histograms.
 
-```{r, plt-qc, fig.height=3.5, fig.width=9}
+```{r plt-qc, fig.height=3.5, fig.width=9}
 #| code-fold: true
 par(mfrow=c(1, 4))
 hist(spe$sum, xlab="sum", main="UMIs per spot")
@@ -99,7 +99,7 @@ sapply(cd[qc], table)
 
 Plot the spatial distributions of the potentially identified low-quality spots, to ensure that they are not concentrated within biologically meaningful regions (which could suggest that the selected thresholds were too stringent).
 
-```{r, plt-ex, fig.height=3.5, fig.width=10}
+```{r plt-ex, fig.height=3.5, fig.width=10}
 #| code-fold: true
 # plot spatial distributions of discarded spots
 p1 <- plotObsQC(spe, 
@@ -120,8 +120,8 @@ wrap_plots(p1, p2, p3, nrow=1, guides="collect") & labs(col="discard")
 
 Select spots to discard by combining the sets of identified low-quality spots according to each metric.
 
-```{r, fig.width=7, fig.height=3}
-# number of identifed spots for each metric
+```{r qc-discard-summary, fig.width=7, fig.height=3}
+# number of identified spots for each metric
 ex <- cbind(spe$qc_lib_size, spe$qc_detected, spe$qc_mito)
 apply(ex, 2, sum)
 # combined set of identified spots
@@ -131,14 +131,14 @@ table(spe$discard)
 
 Plot the spatial distribution of the combined set of identified low-quality spots to discard, to again confirm that they do not correspond to any clearly biologically meaningful regions, which could indicate that we are removing biologically informative spots. Specifically, in this dataset, we want to ensure that the discarded spots do not correspond to a single cortical layer.
 
-```{r, fig.height=3}
+```{r qc-discard-spatial, fig.height=3}
 # check spatial pattern of discarded spots
 plotObsQC(spe, plot_type="spot", annotate="discard")
 ```
 
 Filter out the low-quality spots.
 
-```{r}
+```{r filter-discarded}
 # filter out low-quality spots
 spe <- spe[, !spe$discard]
 dim(spe)
@@ -149,7 +149,7 @@ dim(spe)
 
 Calculate log-transformed normalized counts (logcounts) using library size normalization, as described in @sec-seq-intermediate-processing-norm. We use methods from the `r BiocStyle::Biocpkg("scrapper")` package, making the simplified assumption that spots can be treated as equivalent to single cells. For more details and other options, see @sec-seq-intermediate-processing.
 
-```{r, fig.height=3.5}
+```{r norm-logcounts, fig.height=3.5}
 # calculate logcounts using library size factors
 spe <- normalizeRnaCounts.se(spe)
 
@@ -166,7 +166,7 @@ Apply feature selection methods to identify a set of top highly variable genes (
 
 For details on alternative feature selection methods to identify spatially variable genes (SVGs) instead of HVGs, for example using the `r BiocStyle::Biocpkg("nnSVG")` [@Weber2023-nnSVG] or other packages, see @sec-ind-feature-selection-testing-svgs.
 
-```{r}
+```{r remove-mito}
 # remove mitochondrial genes
 spe <- spe[!is_mito, ]
 dim(spe)
@@ -193,7 +193,7 @@ We use the computationally efficient implementation of PCA from the `r BiocStyle
 
 See @sec-seq-intermediate-processing and @sec-ind-dimensionality-reduction for more details.
 
-```{r}
+```{r run-dr}
 # using 'scrapper' package
 set.seed(123)
 spe <- runPca.se(spe, features=hvg, number=50)
@@ -210,15 +210,13 @@ sapply(reducedDims(spe), dim)
 
 ### Clustering
 
-<!-- To do: maybe flip with seq-processing chapter - move graph-based clustering example to seq-processing chapter, and move BayesSpace example here, since this is more informative for a workflow -->
-
 Next, we apply a clustering algorithm to identify cell types or spatial domains. Note that we are using only molecular features (gene expression) as the input for clustering in this example. Alternatively, we could use a spatially-aware clustering algorithm, as demonstrated in the example in @sec-seq-intermediate-processing-clustering.
 
 Here, we use graph-based clustering using the Leiden method implemented in `r BiocStyle::Biocpkg("scrapper")`, applied to the top 50 PCs calculated on the set of top HVGs from above.
 
 For more details on clustering, see @sec-ind-clustering.
 
-```{r}
+```{r run-clustering}
 # graph-based clustering
 set.seed(123)
 spe <- clusterGraph.se(
@@ -236,7 +234,7 @@ colLabels(spe) <- factor(spe$label)
 
 Visualize the cluster labels by plotting in x-y space, alongside the manually annotated reference labels (`ground_truth`) available for this dataset.
 
-```{r, fig.height=3, fig.width=8}
+```{r plot-clusters-xy, fig.height=3, fig.width=8}
 # plot cluster labels & annotated reference labels in space
 plotCoords(spe, annotate="label", pal="libd_layer_colors") +
 plotCoords(spe, annotate="ground_truth", pal="libd_layer_colors")
@@ -244,7 +242,7 @@ plotCoords(spe, annotate="ground_truth", pal="libd_layer_colors")
 
 We can also plot the cluster labels in the top 2 UMAP dimensions.
 
-```{r, fig.width=4.5, fig.height=4}
+```{r plot-clusters-umap, fig.width=4.5, fig.height=4}
 # plot clusters labels in UMAP dimensions
 plotDimRed(spe, plot_type="UMAP", annotate="label", pal="libd_layer_colors")
 ```
@@ -252,15 +250,13 @@ plotDimRed(spe, plot_type="UMAP", annotate="label", pal="libd_layer_colors")
 
 ### Marker genes
 
-<!-- To do: maybe flip with seq-processing chapter - more details here -->
-
 Identify marker genes for each cluster or spatial domain by scoring candidate marker genes using pairwise effect sizes, specifically selecting genes with higher expression in each cluster or spatial domain.
 
 We use the `r BiocStyle::Biocpkg("scrapper")` package to calculate marker scores, and select genes that are easier to interpret and validate experimentally.
 
 See @sec-seq-intermediate-processing or @sec-ind-clustering for more details.
 
-```{r}
+```{r score-markers}
 # using scrapper package
 mgs <- scoreMarkers.se(spe, groups=spe$label)
 top <- lapply(mgs, \(df) rownames(df)[df$cohens.d.min.rank <= 2])
@@ -269,7 +265,7 @@ length(top <- unique(unlist(top)))
 
 Visualize the marker genes using a heatmap.
 
-```{r, fig.width=9, fig.height=3}
+```{r plot-marker-heatmap, fig.width=9, fig.height=3}
 pbs <- aggregateAcrossCells.se(
     spe[top, ], factors=spe$label, assay.type="logcounts")
 means <- t(t(assay(pbs, "sums")) / pbs$counts)
@@ -296,13 +292,13 @@ The `spatialLIBD` package has a function, `spatialLIBD::run_app(spe)`, which wil
 
 Both options work with continuous and discrete variables such as the gene expression and clusters, respectively. The interactive version for discrete variables such as clusters is useful if you want to manually annotate Visium spots, as in @Maynard2021-DLPFC. `spatialLIBD` allows users to download the annotated spots and resume your spot annotation work later.
 
-```{r, echo=FALSE, out.width = "80%", fig.align="center", fig.cap="Screenshot of the 'clusters (interactive)' section of the 'spot-level data' panel created with the full spatialLIBD dataset. The website was created with `spatialLIBD::run_app(spatialLIBD::fetch_data('spe'))` version 1.4.0 and then using the lasso selection, we selected a set of spots in the UMAP interactive plot colored by the estimated number of cells per spot (`cell_count`) on the bottom left, which automatically updated the other three plots."}
+```{r spatiallibd-full-clusters, echo=FALSE, out.width="80%", fig.align="center", fig.cap="Screenshot of the 'clusters (interactive)' section of the 'spot-level data' panel created with the full spatialLIBD dataset. The website was created with `spatialLIBD::run_app(spatialLIBD::fetch_data('spe'))` version 1.4.0 and then using the lasso selection, we selected a set of spots in the UMAP interactive plot colored by the estimated number of cells per spot (`cell_count`) on the bottom left, which automatically updated the other three plots."}
 knitr::include_graphics("https://raw.githubusercontent.com/lmweber/OSTA-resources/main/images/spatialLIBD_interactive_cluster.png")
 ```
 
 Visualizing genes or clusters across multiple tissue sections can be useful. For example, here we show the expression levels of _PCP4_ across two sets of spatially adjacent replicates. _PCP4_ is a marker gene for layer 5 in the gray matter of the DLPFC in the human brain. Spatially adjacent replicates are about 10 μm apart from each other and visualizations like the one below help assess the technical variability in the Visium technology.
 
-```{r, echo=FALSE, out.width = "80%", fig.align="center", fig.cap="Screenshot of the 'gene grid (static)' section of the 'spot-level data' panel created with the full spatialLIBD dataset. The website was created with `spatialLIBD::run_app(spatialLIBD::fetch_data('spe'))` version 1.4.0, selecting the _PCP4_ gene, selecting the _paper_ gene color scale, changing the number of rows and columns in the grid 2, selecting two pairs of spatially adjacent replicate samples (151507, 151508, 151673, and 151674), and clicking on the _upgrade grid plot_ button. Note that the default _viridis_ gene color scale is color-blind friendly."}
+```{r spatiallibd-full-gene-grid, echo=FALSE, out.width="80%", fig.align="center", fig.cap="Screenshot of the 'gene grid (static)' section of the 'spot-level data' panel created with the full spatialLIBD dataset. The website was created with `spatialLIBD::run_app(spatialLIBD::fetch_data('spe'))` version 1.4.0, selecting the _PCP4_ gene, selecting the _paper_ gene color scale, changing the number of rows and columns in the grid 2, selecting two pairs of spatially adjacent replicate samples (151507, 151508, 151673, and 151674), and clicking on the _upgrade grid plot_ button. Note that the default _viridis_ gene color scale is color-blind friendly."}
 knitr::include_graphics("https://raw.githubusercontent.com/lmweber/OSTA-resources/main/images/spatialLIBD_gene_grid.png")
 ```
 
@@ -318,7 +314,7 @@ For this demo, we will re-use the `spe` object (in `r BiocStyle::Biocpkg("Spatia
 
 We also load some additional dependency packages.
 
-```{r, message=FALSE, warning=FALSE}
+```{r spatiallibd-load-libs, message=FALSE, warning=FALSE}
 library(BiocFileCache)  # for downloading and storing data
 library(rtracklayer)  # for importing gene annotation files
 ```
@@ -513,7 +509,7 @@ if (interactive()) {
 }
 ```
 
-```{r, echo=FALSE, out.width = "80%", fig.align="center", fig.cap="Screenshot of the 'clusters (interactive)' section of the 'spot-level data' panel created with with the data from this workflow."}
+```{r spatiallibd-demo-result, echo=FALSE, out.width="80%", fig.align="center", fig.cap="Screenshot of the 'clusters (interactive)' section of the 'spot-level data' panel created with the data from this workflow."}
 knitr::include_graphics("https://raw.githubusercontent.com/lmweber/OSTA-resources/main/images/spatialLIBD_demo_result.png")
 ```
 
@@ -534,7 +530,7 @@ cat(paste0(readLines("https://raw.githubusercontent.com/lmweber/OSTA-resources/m
 
 You can then open R in a new session in the same directory where you saved the `app.R` file, run the code and click on the "publish" blue button at the top right of your RStudio window. You will then need to upload the `app.R` file, your `.rds` file containing the `spe` object, and the files under the `www` directory which enable you to customize your `spatialLIBD` website.
 
-```{r, echo=FALSE, out.width = "80%", fig.align="center", fig.cap="Screenshot of the RStudio window for publishing your spatialLIBD-powered website to shinyapps.io"}
+```{r spatiallibd-publish-screenshot, echo=FALSE, out.width="80%", fig.align="center", fig.cap="Screenshot of the RStudio window for publishing your spatialLIBD-powered website to shinyapps.io"}
 knitr::include_graphics("https://raw.githubusercontent.com/lmweber/OSTA-resources/main/images/spatialLIBD_publish.png")
 ```
 

@@ -8,7 +8,7 @@ Methods discussed in this book are usually available as either R or Python packa
 
 [R's application to statistical analysis of spatial data dates back decades, primarily in epidemiological and geospatial research. As a result, various tools for spatial analyses have been established. For example, `r BiocStyle::CRANpkg("sp")` provides a "coherent set of classes and methods for \[...\] points, lines, polygons, and grids"; `r BiocStyle::CRANpkg("spatstat")` and, more recently, `r BiocStyle::CRANpkg("sf")` provide tools for spatial point pattern and vector data, respectively.]{.aside} For single-cell and spatial omics data analysis, being able to leverage different ecosystems is especially powerful. On the one hand, Python offers superb infrastructure for image analysis and machine learning-based approaches. On the other hand, the R programming language has been historically dedicated to statistical computing; as a result, many modern R methods for spatial omics data build on a solid foundation of tools for spatial statistics and statistical modeling in general.
 
-Different data structures, although standardized within a given framework, make switching between languages and tools somewhat cumbersome. In the realm of single-cell and spatial omics, all Bioconductor tools are built around `r BiocStyle::Biocpkg("SummarizedExperiment")`-derived classes, while [Seurat](https://satijalab.org/seurat/) [@Hao2023-Seurat], [Giotto](https://giottosuite.com/) [@Chen2025-Giotto-Suite], and `r BiocStyle::Githubpkg("BIMSBbioinfo/VoltRon")` each rely on their own object definitions. In Python, [Scanpy](https://scanpy.readthedocs.io/) [@Wolf2018-Scanpy] and [Squidpy](http://squidpy.readthedocs.io/) [@Palla2022-Squidpy] use [AnnData](https://anndata.readthedocs.io/). Attempts to alleviate the problem are being made -- e.g. `r BiocStyle::Biocpkg("zellkonverter")`, [anndataR](https://github.com/scverse/anndataR) [@Deconinck2025-anndataR], and functions from `Seurat` allow for conversion between Python's `AnnData` and R/Bioconductor's `r BiocStyle::Biocpkg("SingleCellExperiment")` or `r BiocStyle::Biocpkg("SpatialExperiment")`.
+Different data structures, although standardized within a given framework, make switching between languages and tools somewhat cumbersome. In the realm of single-cell and spatial omics, all Bioconductor tools are built around `r BiocStyle::Biocpkg("SummarizedExperiment")`-derived classes, while [Seurat](https://satijalab.org/seurat/) [@Hao2023-Seurat], [Giotto](https://giottosuite.com/) [@Chen2025-Giotto-Suite], and `r BiocStyle::Githubpkg("BIMSBbioinfo/VoltRon")` each rely on their own object definitions. In Python, [Scanpy](https://scanpy.readthedocs.io/) [@Wolf2018-Scanpy] and [Squidpy](http://squidpy.readthedocs.io/) [@Palla2022-Squidpy] use [AnnData](https://anndata.readthedocs.io/). Attempts to alleviate the problem are being made -- e.g. `r BiocStyle::Biocpkg("zellkonverter")`, `r BiocStyle::Biocpkg("anndataR")` [@Deconinck2026-anndataR], and functions from `Seurat` allow for conversion between Python's `AnnData` and R/Bioconductor's `r BiocStyle::Biocpkg("SingleCellExperiment")` or `r BiocStyle::Biocpkg("SpatialExperiment")`.
 
 [[Quarto](https://quarto.org/) is the successor to [R Markdown](https://rmarkdown.rstudio.com/) (by Posit, formerly known as RStudio). Similar to *.Rmd* files, *.qmd* files can include scientific content (e.g. cross-referencing, LaTeX-based equations), and can be published in multiple output formats (HTML, PDF, etc.). This book is built using Quarto.]{.aside} On a higher level, tools that enable interoperability between programming languages have become available. For example, [reticulate](https://rstudio.github.io/reticulate/) provides an R interface to Python, including support to translate between objects from both languages; `r BiocStyle::Biocpkg("basilisk")` facilitates Python environment management within the Bioconductor ecosystem, and can also be interfaced with `reticulate`; and Quarto can generate dynamic reports from code in different languages.
 
@@ -240,30 +240,32 @@ plt.gca().set_aspect("equal")
 plt.title("ERBB2")
 ```
 
-```{r, include=FALSE}
+```{r cleanup-h5ad, include=FALSE}
 # clean up by removing the `spe.h5ad` file
 file.remove("spe.h5ad")
 ```
 
 ## Appendix
 
-Following are links to several key packages and tools relating to 
-R-Python interoperability, which were mentioned in the sections above:
+::: {.callout-tip icon="false" title="Further reading"}
 
-- `r BiocStyle::Githubpkg("scverse/anndataR")` [@Deconinck2025-anndataR]: 
+- This [single-cell best practices](https://www.sc-best-practices.org/introduction/interoperability.html)
+Python book chapter covers interoperability from Python/scverse's view, 
+including H5AD file handling plus a few general remarks on file formats, 
+and disk-based vs. in-memory interoperability.
+
+- `r BiocStyle::Biocpkg("anndataR")` [@Deconinck2026-anndataR]: 
 R package and community project to work with `AnnData` objects in R, including 
-conversion to and from `SingleCell/SpatialExperiment` and `Seurat` objects
-
-- `r BiocStyle::Biocpkg("zellkonverter")` [@Zappia2020-zellkonverter]: 
-R package to convert between `AnnData` and `SingleCellExperiment` objects, 
-as well as reading from and writing to H5AD
+conversion to and from `SingleCell/SpatialExperiment` and `Seurat` objects.
 
 - [reticulate](https://rstudio.github.io/reticulate/) [@Ushey2017-reticulate]: 
 R package and framework to call Python and run Python code in R, translate 
-between R and Python objects, and manage virtual and Conda environments
+between R and Python objects, and manage virtual and Conda environments.
 
 - `r BiocStyle::Biocpkg("basilisk")` [@Lun2022-basilisk]: 
-R package to install and manage Python environments in R packages and sessions
+R package to install and manage Python environments in R packages and sessions.
+
+:::
 
 ### References {.unnumbered}
 

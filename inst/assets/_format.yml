@@ -1,8 +1,8 @@
 format: 
   html:
     grid:
-      sidebar-width: 350px
-      body-width: 950px
+      sidebar-width: 400px
+      body-width: 900px
     theme: 
       - cosmo
       - assets/book.scss

@@ -29,16 +29,18 @@ including their details (e.g., authors) and (monthly) download statistics.
 
 `biocExplore()` provides an interactive way to explore the package space:
 
-```{r message=FALSE}
+```{r load-lib, message=FALSE}
 library(BiocPkgTools)
-biocExplore()
+foo <- tryCatch(
+    biocExplore(), 
+    error=\(e) NULL) # protext against unstable connection
 ```
 
 `biocPkgList()` retrieves the full Bioconductor software package listing
 (at the time of calling the function), including associated metadata.
 These include `biocViews`, which we can use to identify packages of interest:
 
-```{r message=FALSE, echo=-1}
+```{r load-dat, message=FALSE, echo=-1}
 options(width = 100)
 # retrieve current package record
 df <- biocPkgList()
@@ -51,7 +53,7 @@ df$Package[.f("Spatial")]
 
 We can also browse for packages that also include more specific terms, for example:
 
-```{r}
+```{r filt-dat}
 # view "Spatial Clustering" packages
 df$Package[.f(c("Spatial", "Clustering"))]
 ```
@@ -74,7 +76,7 @@ available through Bioconductor; some packages might have been deprecated
 at one point or another.
 :::
 
-```{r message=FALSE, results="hide"}
+```{r numb-pkg-prep, message=FALSE, results="hide"}
 #| code-fold: true
 # dependencies
 library(dplyr)
@@ -101,7 +103,7 @@ gg <- lapply(ids, \(id) {
 }) |> bind_rows(.id="biocViews")
 ```
 
-```{r message=FALSE, fig.width=5, fig.height=4}
+```{r numb-pkg-plot, message=FALSE, fig.width=5, fig.height=4}
 #| code-fold: true
 ggplot(gg, aes(date, n, col=biocViews)) + 
     geom_line(linewidth=0.8) +
@@ -117,9 +119,9 @@ ggplot(gg, aes(date, n, col=biocViews)) +
 
 To get an idea of the project's "growth" in this space, we can regress the 
 number of packages against time using a linear model (LM). We here skip 
-dates at which very few packages were availabile/being developed:
+dates at which very few packages were available/being developed:
 
-```{r echo=-c(3, 4)}
+```{r perc-pgk, echo=-c(3, 4)}
 #| code-fold: true
 # fit linear model where x = 'date', y = # packages
 # (starting at 'date' where at least 5 packages exist)
@@ -150,7 +152,7 @@ Bioconductor Build System (BBS), provided its maintainer is unresponsive and
 does not take action to fix the package before the next (six-monthly) release. 
 :::
 
-```{r results="hold", message=FALSE, fig.width=5, fig.height=4}
+```{r pkg-life, results="hold", message=FALSE, fig.width=5, fig.height=4}
 #| code-fold: true
 gg <- lapply(ids, \(id) {
     nm <- df$Package[.f(id)]
@@ -183,16 +185,16 @@ ggplot(gg, aes(years, fill=biocViews)) +
 Finally, let's investigate more specific `biocViews`, e.g., the type of work tasks 
 different packages cover. We will first count the number of packages that list
 specific terms that might be of interest in the context of single cell and
-spatial omics data analysis. Secondly, we will visualize their co-occurence.
+spatial omics data analysis. Secondly, we will visualize their co-occurrence.
 
 ::: aside
 
-Note that packages can list an arbitary number of terms so that packages can be 
+Note that packages can list an arbitrary number of terms so that packages can be
 counted in more than one category; e.g., "Visualization" appears in *most*.
 
 :::
 
-```{r fig.width=5, fig.height=4}
+```{r pkg-catego-one, fig.width=5, fig.height=4}
 #| code-fold: true
 i <- c("SingleCell", "Spatial")
 j <- c(
@@ -229,7 +231,7 @@ together; i.e., `biocViews` contain "Spatial" OR "SingleCell", together with
 "Clustering" AND "Visualization", etc. (For concise labeling, we abbreviate
 `biocViews` to capital letters only; e.g., "BatchEffects" becomes "BE".)
 
-```{r fig.width=5, fig.height=4}
+```{r pkg-catego-two, fig.width=5, fig.height=4}
 #| code-fold: true
 gg <- lapply(i, \(i) {
     lapply(seq_along(j), \(n) {
@@ -257,6 +259,22 @@ ggplot(gg, aes(n, j)) +
 ```
 
 ## Appendix
+
+::: {.callout-tip icon="false" title="Further reading"}
+
+- The **Bioconductor project** has been described approximately once per decade,
+summarizing the project's current status, challenges, and future perspectives
+[@Gentleman2004-Bioconductor; @Huber2015-Bioconductor; @Carey2025-Bioconductor].
+
+- Many additional e-books, resources, and publications capture additional 
+aspects of the project, such as educational efforts [@Drnevich2025-bioc-edu];
+see [here](https://www.bioconductor.org/help/publications/) for a full list.
+
+- The **scverse project** was first describes in 2023 and, arguably inspired
+by R/Bioconductor, set out to build a unified computational ecosystem for 
+single-cell and spatial omics data analysis in Python [@Virshup2023-scverse].
+
+:::
 
 ### References {.unnumbered}
 
