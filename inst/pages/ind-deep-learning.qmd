@@ -1,4 +1,4 @@
-# Deep Learning {#sec-ind-foundation-models}
+# Deep Learning {#sec-ind-deep-learning}
 
 {{< include _start.qmd >}}
 
@@ -16,16 +16,19 @@ recur throughout single-cell and spatial omics analysis:
   across an image to detect local patterns (edges, textures, nuclei shapes);
   they are the workhorse behind most cell/nucleus segmentation and image
   classification tools (@sec-ind-image-analysis).
+
 - **Graph neural networks (GNNs)** operate on data structured as graphs (e.g.,
   cells connected to their spatial neighbors) and propagate information along
   edges, making them a natural fit for modeling spatial neighborhoods and
   cell-cell interactions (@sec-ind-clustering, @sec-img-neighborhood-analysis).
+
 - **Transformers** rely on self-attention to weigh the relevance of every
   element of an input (e.g., a gene, a token, an image patch) with respect to
   every other element, without the locality constraints of CNNs. Transformers
   underlie most large language models (LLMs) as well as the majority of
   recent foundation models discussed below, including for non-text data such
   as single-cell profiles or histology images.
+
 - **Large language models (LLMs)** are transformer-based models trained on
   massive text corpora; while not designed for omics data, the same
   self-attention machinery has been repurposed to model genes, cells, or
@@ -36,7 +39,7 @@ models** (FMs), which extend the same principles to (pre-)training at scale.
 The Stanford Institute for Human-Centered Artificial Intelligence describes an
 FM, in essence, as a model trained on broad data-typically via
 self-supervision, at scale-that can subsequently be adapted (e.g., fine-tuned)
-to a wide variety of downstream tasks.[@bommasani2021opportunities]
+to a wide variety of downstream tasks. [@bommasani2021opportunities]
 
 "Self-supervision" here means that the model learns from unlabeled data by
 solving a proxy task derived from the data itself, without requiring manual
@@ -110,11 +113,13 @@ common strategies, in increasing order of computational cost:
   training, either by extracting embeddings directly for tasks like
   clustering or nearest-neighbor search, or, for vision-language models such
   as CONCH, by prompting the model with natural-language class descriptions.
+
 - **Linear probing** keeps the pre-trained weights frozen and trains only a
   small linear (or otherwise simple) classifier/regressor on top of the
   extracted embeddings for a specific labeled task-cheap to run, and often
   used as the standard way to benchmark how informative a given FM's
   embeddings are.
+
 - **Fine-tuning** updates some or all of the pre-trained weights on
   task-specific labeled data. This typically yields the best task-specific
   performance but requires more labeled data and compute, and risks
@@ -136,9 +141,11 @@ clinical outcomes, or spatial domains. Prominent examples include:
   over a billion tiles from more than 170,000 whole-slide images, combining
   tile-level self-supervised pre-training with slide-level aggregation to
   capture both local and long-range tissue context.
+
 - **UNI** [@chen2024towards], a general-purpose pathology encoder trained via
   self-supervision on over 100 million histopathology image patches, designed
   to transfer well across a broad range of diagnostic tasks.
+
 - **CONCH** [@lu2024visual], a vision-*language* foundation model (not
   graph-based) trained on more than a million histology image-caption pairs,
   allowing it to be queried with text as well as images (e.g., zero-shot
@@ -166,6 +173,7 @@ varies across experiments and platforms. Two representative approaches are:
   heterogeneous markers. KRONOS extracts 384-dimensional embeddings per image
   patch, usable for cell phenotyping, artifact detection, tissue-region
   classification, or outcome prediction.
+
 - **Nimbus** [@rumberger2025automated], a model that operates marker-by-marker
   (rather than jointly across all channels) to classify, for each cell,
   whether a given marker is positive or negative directly from raw pixel
@@ -182,10 +190,12 @@ role of "tokens" and "sentences":
 - **Geneformer** [@theodoris2023transfer], a transformer pre-trained on
   ~30 million single-cell transcriptomes, representing each cell as a ranked
   sequence of gene tokens.
+
 - **scGPT** [@cui2024scgpt], a generative pre-trained transformer for
   single-cell biology trained across tens of millions of cells; a
   spatially-aware extension (`scGPT-spatial`) has been proposed but is not
   yet broadly integrated into spatial workflows.
+
 - **scFoundation** [@hao2024large], a large-scale model covering
   close to the full human transcriptome (~20,000 genes) as input, rather than
   a reduced gene set.
@@ -208,6 +218,7 @@ mind include:
 - **Novae** [@blampey2025novae], a graph-based deep learning model for
   spatial domain and niche assignment across samples and technologies,
   discussed further in @sec-ind-clustering.
+
 - **Nicheformer** [@chen2025visual], a transformer-based FM
   jointly pre-trained on over 110 million dissociated single-cell and
   spatially resolved cells across 73 tissues. By encoding modality, organism,
@@ -249,6 +260,7 @@ user:
   downloaded, whereas CONCH's weights are comparatively more openly
   accessible. Always check a model's license and any usage restrictions
   before relying on it, particularly for clinical or commercial applications.
+
 - **Compute requirements.** Pre-trained checkpoints for these models are
   often several hundred megabytes to a few gigabytes in size, and while
   extracting embeddings from a pre-trained model ("inference") is far cheaper
@@ -256,6 +268,7 @@ user:
   reasonable runtimes on large whole-slide images or large cell atlases; CPU-
   only inference is usually possible but considerably slower. Fine-tuning, in
   particular, generally requires GPU resources.
+
 - **Reproducibility.** Because most FMs evolve quickly (new checkpoints,
   architecture variants), it is good practice to record the exact model
   version/checkpoint used, in addition to the usual software versions, when
@@ -270,18 +283,22 @@ it is worth pausing before defaulting to one. As a rule of thumb:
 - **Use one when annotated data are scarce.** FMs are most valuable when you
   have little or no labeled data for your specific task, since their
   pre-trained representations can substitute for large labeled training sets.
+
 - **Use one when transfer learning is desirable.** If you need to compare or
   combine data across studies, platforms, or technologies, FM embeddings
   provide a shared representation space that a bespoke, dataset-specific
   model would not.
+
 - **Benchmark against simpler baselines.** As discussed in
   [Outlook](#outlook), FMs do not always outperform linear models or PCA on a
   given task-always compare against a simple baseline before committing to
   an FM-based pipeline.
+
 - **Verify that your tissue, species, and platform are represented in
   pre-training.** FM performance degrades outside the domain(s) seen during
   pre-training; check the original publication's training data before
   assuming embeddings will transfer to your data.
+
 - **Record the checkpoint and version used.** FMs are updated frequently;
   note the exact model checkpoint/version alongside your usual software
   versions to keep results reproducible.

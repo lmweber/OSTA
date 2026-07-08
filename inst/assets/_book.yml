@@ -42,7 +42,7 @@ book:
         - pages/ind-feature-set-signatures.qmd
         - pages/ind-spatial-statistics.qmd
         - pages/ind-image-analysis.qmd
-        - pages/ind-foundation_models.qmd
+        - pages/ind-deep-learning.qmd
     - part: "Multiple-sample analyses"
       chapters:
         - pages/mult-diff-spatial-patterns.qmd
