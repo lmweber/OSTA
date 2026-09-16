@@ -31,6 +31,7 @@ Lastly, we will save the post-QC Xenium dataset for use in later chapters.
 library(dplyr)
 library(ggplot2)
 library(ggspavis)
+library(grid)
 library(OSTA.data)
 library(patchwork)
 library(scrapper)
@@ -255,7 +256,7 @@ df_cos <- data.frame(colData(cos), spatialCoords(cos))
 df_xen <- data.frame(colData(xen), spatialCoords(xen))
 p2 <- .p(df_cos, c("Area_um", "total"))
 p1 <- .p(df_xen, c("cell_area", "total_counts"))
-p1 + ggtitle("CosMx") | p2 + ggtitle("Xenium")
+p1 + ggtitle("Xenium") | p2 + ggtitle("CosMx")
 ```
 
 Similarly, we can visualize the distribution of these metrics in the tissue 
