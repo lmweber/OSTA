@@ -253,8 +253,8 @@ there are `r nrow(cos)` features but only `r nrow(xen)` for Xenium.
 }
 df_cos <- data.frame(colData(cos), spatialCoords(cos))
 df_xen <- data.frame(colData(xen), spatialCoords(xen))
-p2 <- .p(df_cos, c("Area_um", "total"))
-p1 <- .p(df_xen, c("cell_area", "total_counts"))
+p1 <- .p(df_cos, c("Area_um", "total"))
+p2 <- .p(df_xen, c("cell_area", "total_counts"))
 p1 + ggtitle("CosMx") | p2 + ggtitle("Xenium")
 ```
 
