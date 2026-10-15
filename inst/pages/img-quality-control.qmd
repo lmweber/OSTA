@@ -31,6 +31,7 @@ Lastly, we will save the post-QC Xenium dataset for use in later chapters.
 library(dplyr)
 library(ggplot2)
 library(ggspavis)
+library(grid)
 library(OSTA.data)
 library(patchwork)
 library(scrapper)
@@ -178,7 +179,7 @@ lapply(flu, \(.) {
     wrap_plots(nrow=1) &
     theme(
         legend.position="bottom", 
-        legend.key.height=unit(0.4, "lines")) &
+        legend.key.height=grid::unit(0.4, "lines")) &
     scale_color_gradientn(colors=pals::jet())
 ```
 
@@ -255,7 +256,7 @@ df_cos <- data.frame(colData(cos), spatialCoords(cos))
 df_xen <- data.frame(colData(xen), spatialCoords(xen))
 p2 <- .p(df_cos, c("Area_um", "total"))
 p1 <- .p(df_xen, c("cell_area", "total_counts"))
-p1 + ggtitle("CosMx") | p2 + ggtitle("Xenium")
+p1 + ggtitle("Xenium") | p2 + ggtitle("CosMx")
 ```
 
 Similarly, we can visualize the distribution of these metrics in the tissue 
@@ -270,7 +271,7 @@ lapply(c("cell_area", "total_counts"), \(.) {
     val <- ifelse(val < qs[1], qs[1], ifelse(val > qs[2], qs[2], val))
     xen[[.]] <- val
     plotCoords(xen, annotate=., point_size=0, y_reverse = FALSE) +
-        theme(legend.key.width=unit(0.5, "lines")) +
+        theme(legend.key.width=grid::unit(0.5, "lines")) +
         scale_color_gradientn(colors=unname(pals::jet()), trans="log10")
 }) |> wrap_plots(nrow=1)
 ```
@@ -429,7 +430,7 @@ cos$ex <- df$dist_border < r
 plotCentroids(cos, colourBy="ex", sampleId=NULL) +
     scale_color_manual(values=c("lavender", "blue")) +
     guides(col=guide_legend(override.aes=list(size=2))) +
-    theme_void() + theme(legend.key.size=unit(0, "pt"))
+    theme_void() + theme(legend.key.size=grid::unit(0, "pt"))
     
 # zoom in on subset of FOVs
 # visualizing cell boundaries
@@ -508,7 +509,7 @@ plotCentroids(cos, colourBy="QC_score") + thm +
 plotCentroids(cos, colourBy="low_qcscore") + thm +
     guides(col=guide_legend(override.aes=list(size=2))) +
     scale_color_manual(values=c("lavender", "blue")) +
-    theme(legend.key.size=unit(0, "pt")) 
+    theme(legend.key.size=grid::unit(0, "pt")) 
 ```
 
 We can see how the QC score flags several cells close to the tissue border as well as cells close to the FOVs borders. 
@@ -581,7 +582,7 @@ xen$ex <- ex; cos$ex <- cos$low_qcscore
 plotCoords(xen, annotate="ex", point_size=0, y_reverse = FALSE) + ggtitle("Xenium") +
 plotCoords(cos, annotate="ex", point_size=0, y_reverse = FALSE) + ggtitle("CosMx") +
     plot_layout(guides="collect") &
-    theme(legend.key.size=unit(0, "pt")) &
+    theme(legend.key.size=grid::unit(0, "pt")) &
     scale_color_manual(values=c("lavender", "blue")) &
     guides(col=guide_legend(override.aes=list(size=2)))
 xen$ex <- cos$ex <- NULL # drop for saving
