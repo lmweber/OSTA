@@ -52,7 +52,7 @@ By now, a few methods have been proposed to rectify segmentation boundaries and/
 
 - `r BiocStyle::Githubpkg("Nanostring-Biostats/FastReseg")` [@Wu2024-FastReseg] (R) detects and corrects segmentation errors based on transcript locations by (i) scoring cells in terms of segmentation inaccuracies, (ii) scoring transcripts within erroneous cells in terms of misassignments, and (iii) reassigning mislocated transcripts.
 
-- `r BiocStyle::Githubpkg("EliHei2/segger_dev")` [@Heidari2025-segger] (Python) relies on graph neural networks (GNNs), where nodes represent nuclei and transcripts, and edges connect proximal instances, thereby letting the model learn from the co-occurrence of nucleic and cytoplasmic molecules.
+- `r BiocStyle::Githubpkg("dpeerlab/segger")` [@Heidari2025-segger] (Python) relies on graph neural networks (GNNs), where nodes represent nuclei and transcripts, and edges connect proximal instances, thereby letting the model learn from the co-occurrence of nucleic and cytoplasmic molecules. The maintained version is in `dpeerlab/segger` (the earlier `EliHei2/segger_dev` repository is superseded).
 
 ## Segmentation-free
 

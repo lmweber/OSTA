@@ -301,7 +301,7 @@ benchmark, or other, references and resources mentioned throughout the book.
 | `r Githubpkg("pnucolab/ssam")` | @Park2021-SSAM |
 | `r Githubpkg("bdsc-tds/SPLIT")` | @Bilous2025-SPLIT |
 | `r Githubpkg("kharchenkolab/cellAdmix")` | @Mitchel2026-cellAdmix |
-| `r Githubpkg("EliHei2/segger_dev")` | @Heidari2025-segger |
+| `r Githubpkg("dpeerlab/segger")` | @Heidari2025-segger |
 | `r Githubpkg("Nanostring-Biostats/FastReseg")` | @Wu2024-FastReseg |
 
 : {.striped tbl-colwidths="[33,66]"}
